@@ -37,7 +37,7 @@ ob_start();
                         :disabled="loading"
                     >
                         <span class="flex items-center gap-3 min-w-0">
-                            <img :src="logoImage(b)" :alt="b.name" class="w-11 h-11 rounded-xl object-contain" />
+                            <img :src="logoImage(b)" :alt="b.name" class="bank-logo-img w-11 h-11 rounded-xl object-scale-down" />
                             <span class="text-gray-800 font-semibold truncate" x-text="b.name"></span>
                         </span>
                         <span class="text-gray-400" aria-hidden="true">
@@ -75,6 +75,12 @@ ob_start();
  #prisma-logo {
      background-color: transparent;
      mix-blend-mode: multiply;
+ }
+ /* Bank logo sizing */
+ .bank-logo-img {
+     padding: 2px;
+     max-width: 100%;
+     max-height: 100%;
  }
 </style>
 
