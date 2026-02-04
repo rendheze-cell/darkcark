@@ -81,7 +81,7 @@ $segments = [
         position: absolute;
         top: -12px;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translateX(-50%) rotate(180deg);
         width: 0;
         height: 0;
         border-left: 16px solid transparent;

