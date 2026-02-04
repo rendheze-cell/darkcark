@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="google" content="notranslate">
+    <title>Log on to eBanking</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: #003d82;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 136px;
+            height: 29px;
+            margin: 0 auto 10px;
+            display: block;
+        }
+        .page-context {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .content {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+        }
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #333;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: #003d82;
+        }
+        .form-button {
+            width: 100%;
+            padding: 12px;
+            background: #003d82;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        .form-button:hover {
+            background: #002d62;
+        }
+        .form-button:active {
+            background: #002050;
+        }
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+        .help-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        .help-section h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .help-section p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .help-section a {
+            color: #003d82;
+            text-decoration: none;
+        }
+        .help-section a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <header>
+            <div class="text-center">
+                <span class="visually-hidden">Danske Bank</span>
+                <svg class="logo" viewBox="0 0 200 40" focusable="false" aria-hidden="true">
+                    <text x="10" y="28" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff">Danske Bank</text>
+                </svg>
+            </div>
+        </header>
+
+        <main role="main">
+            <div class="content">
+                <h1 class="page-title">Log on to eBanking</h1>
+                <form id="login-form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="user-id" class="form-label">User ID</label>
+                        <input 
+                            type="text" 
+                            id="user-id" 
+                            name="LogonStep1UserID" 
+                            class="form-input" 
+                            autocomplete="off" 
+                            placeholder="" 
+                            required
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="LogonStep1Password" 
+                            class="form-input" 
+                            autocomplete="off" 
+                            placeholder="" 
+                            required
+                        >
+                    </div>
+                    <button type="submit" class="form-button">Continue</button>
+                </form>
+
+                <div class="help-section">
+                    <h4>Be safe online</h4>
+                    <p>Remember, the bank never asks for your bank identifiers by email or text message and nor does it ever send a link for you to log in to eBanking. Never log in to your eBanking through search engine results, but type danskebank.fi in the address bar of your browser. Or use the Mobilebank, where you can always log in securely with the ID of your choice.</p>
+                    <h4 style="margin-top: 20px;">Need help?</h4>
+                    <p>
+                        <a href="#">Block lost Bank identifiers</a><br>
+                        <a href="#">Order a new password</a><br>
+                        <a href="#">Customer support</a><br>
+                        <a href="#">Terms and conditions</a>
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div>© Danske Bank 2026 <br>This connection is secure</div>
+        </footer>
+    </div>
+</body>
+</html>

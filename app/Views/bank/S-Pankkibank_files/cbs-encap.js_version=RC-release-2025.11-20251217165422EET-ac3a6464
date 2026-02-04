@@ -1,0 +1,1427 @@
+// Define scope (unless already loaded).
+self.CBSEncap = self.CBSEncap || (function(){
+  const consolePrefix = '[CBSEncap] =>';
+  const state = new Map();
+  const SMobileAppId = [
+    'fi.spankki', 'fi.spankki.localdev', 'fi.spankki.dev', 'fi.spankki.tst', 'fi.spankki.stg', 'fi.spankki.multi',
+    '740514933', 'fi.smobiili', 'fi.smobiili.dev', 'fi.smobiili.multi', 'fi.smobiili.stage', 'fi.smobiili.test'
+  ];
+
+  addEventListener('DOMContentLoaded', uiInit);
+
+  return {
+    uiFlow,
+    uiView,
+    uiErrorShow,
+    uiErrorHide,
+    uiQrImageLoad,
+    authQrId,
+    authQrIdVerify,
+    authQrIdRefresh,
+    authUserLogin,
+    authUserLoginInit,
+    authUserLoginVerify,
+    authUserLoginComplete,
+    detectDeviceMobile,
+    detectDeviceType,
+    detectSMobile,
+    detectWebview
+  };
+
+  //
+  // UI
+  //
+
+  /**
+   * Initiate UI.
+   */
+  async function uiInit(){
+    try {
+      console.log(consolePrefix, `Interface. (enter)`);
+
+      const container = document.querySelector('#ENCAP');
+
+      state.set('container', container);
+      state.set('pathname', cbs && cbs.contextPath);
+      state.set('qrId', cbs && cbs.qrId);
+      state.set('qrIdRetries', 0);
+      state.set('collectUrl', detectCollectUrl());
+      state.set('ftn', detectFTN());
+      state.set('genericError', labels && labels.lbl_error_general);
+
+      const flowId = detectFlow();
+
+      state.set('flow', flowId); // Contains current flow id.
+      state.set('flowDefault', flowId); // Contains detected default flow id.
+      state.set('flowError', flowId); // Used to check which flow an error originates from.
+
+      // Set up visibility observer.
+      if(!state.get('visibilityObserver')){
+        // Set up mutation observer to know when encap container visibility changes.
+        const visibilityObserver = new MutationObserver((mutationList) => mutationList.forEach(uiVisibilityCheck));
+        const panel = document.querySelector('[data-cs-id="ENCAP"]') || container;
+
+        visibilityObserver.observe(panel, {
+          attributes: true
+        });
+
+        // Store in state to prevent multiple visibility observers.
+        state.set('visibilityObserver', visibilityObserver);
+      }
+
+      if (detectDeviceType() === 'other') {
+        addEventListener('load', () => {
+          // Remove previously registered event listener.
+          container.removeEventListener('encapVisibilityChanged', uiVisibilityChange);
+
+          // Register new event listener.
+          container.addEventListener('encapVisibilityChanged', uiVisibilityChange);
+        });
+      }
+
+      // Toggle device specific content.
+      uiContentForDevice();
+
+      // Initiate flow.
+      uiFlow(flowId);
+
+      // Handle orderRef
+      if(cbs && cbs.orderRef && detectDeviceMobile()){
+        console.log(consolePrefix, `Order ref. (init)`);
+        appDialog();
+
+        fetch(`${state.get('pathname')}/deviceidentify/start`, {
+          method: 'GET',
+          headers: CBSFetchUtils.requestHeadersExtended()
+        })
+          .then(response => response.json())
+          .then(response => {
+            // Global polling function not using service worker.
+            startPoll(response.orderRef, '/deviceidentify/poll');
+          });
+      }
+    }
+    catch(error){
+      reportError(new Error(`Unexpected error`), { error });
+      uiErrorShow();
+    }
+  }
+
+  /**
+   * Handle UI visibility change events.
+   * @param {Event} event
+   * @returns {Promise}
+   */
+  async function uiVisibilityChange(event){
+    const visible = event && event.detail && event.detail.visible;
+
+    // Only refresh qrId when returning from non-encap flow (not on page load)
+    if(visible && state.get('qrIdRefresh')){
+      await authQrIdRefresh();
+      await uiQrImageLoad('#qrImage');
+    } else {
+      state.set('qrIdRefresh', true);
+    }
+  }
+
+  /**
+   * Check encap visibility changes.
+   * @param {Object} mutation
+   */
+  async function uiVisibilityCheck(mutation = {}){
+    const container = state.get('container');
+    const panel = document.querySelector('[data-cs-id="ENCAP"]') || container;
+    const visible = !!(panel && panel.offsetParent);
+    const previousResponse = mutation && mutation.previousResponse;
+    const event = new CustomEvent('encapVisibilityChanged', {
+      detail: {
+        visible,
+        previousResponse
+      }
+    });
+
+    container.dispatchEvent(event);
+  }
+
+  /**
+   * Activate flow in UI.
+   * @param {String} flowId
+   */
+  async function uiFlow(flowId){
+    if(!flowId){
+      throw new Error(`Failed to initiate flow due to lack of flowId.`);
+    }
+
+    console.log(consolePrefix, `Interface flow. (enter)`, flowId);
+
+    // Hide previously shown process indication & errors.
+    uiErrorHide();
+
+    // Update flow in state.
+    state.set('flow', flowId);
+
+    // Collect flow views.
+    const views = new Map();
+    const container = state.get('container');
+
+    container.querySelectorAll(`[data-flow="${flowId}"][data-view]`).forEach(el => {
+      views.set(el.dataset.view, el);
+    });
+
+    // Update flow views in state.
+    state.set('views', views);
+
+    // Show flow init view.
+    uiView('init');
+
+    // Set up back link click event listeners.
+    container.querySelectorAll(`.back-link a, .cancel-link a`).forEach(el => {
+      // Remove previously registered event listeners.
+      el.removeEventListener('click', uiFlowChange);
+
+      // Register new event listeners.
+      el.addEventListener('click', uiFlowChange);
+      el.setAttribute('data-clearpasswords', true);
+    });
+
+    // Initiate flow.
+    switch (flowId) {
+      case 'deeplink':
+        deeplinkInit();
+        break;
+
+      case 'qrcode':
+        qrcodeInit();
+        break;
+
+      case 'userid':
+        useridInit();
+        break;
+    }
+
+    // Trigger initial visibility check.
+    uiVisibilityCheck();
+  }
+
+  /**
+   * Action to run when flow trigger is clicked.
+   * @param {*} event
+   */
+  async function uiFlowChange(event){
+    if(event) event.preventDefault();
+
+    const flow = (
+      event && event.target && event.target.dataset && event.target.dataset.flow ||
+      state.get('flowDefault')
+    );
+
+    if (event.target.dataset.clearpasswords) {
+      clearPasswordFields()
+    }
+    uiFlow(flow);
+  }
+
+  function clearPasswordFields() {
+    const passwordFields = document.querySelectorAll('input[type="password"]');
+    passwordFields.forEach((field) => {
+      field.value = '';
+    });
+  }
+
+  /**
+   * Initiate deeplink flow.
+   */
+  async function deeplinkInit(){
+    console.log(consolePrefix, `Deeplink flow. (enter)`);
+
+    const container = state.get('container');
+
+    // Set up fallback flow links click event listeners.
+    container.querySelectorAll(`[data-flow]:not([data-view])`).forEach(el => {
+      // Remove previously registered event listeners.
+      el.removeEventListener('click', uiFlowChange);
+
+      // Register new event listeners.
+      el.addEventListener('click', uiFlowChange);
+    });
+
+    // Set up deeplink click event listeners.
+    container.querySelectorAll(`.js-deeplink-button`).forEach(el => {
+      // Remove previously registered event listeners.
+      el.removeEventListener('click', deeplinkTrigger);
+
+      // Register new event listeners.
+      el.addEventListener('click', deeplinkTrigger);
+    });
+
+    // Get the auth code
+    await getAuthCode();
+  }
+
+  /**
+   * Get the auth code.
+   */
+  async function getAuthCode() {
+    // Refresh qr id.
+    const qrCodeResponse = await authQrIdRefresh();
+    // Refresh auth code.
+    uiShowAuthRequestCode('deeplink', 'init', qrCodeResponse.authenticationCode);
+  }
+
+  /**
+   * Trigger deeplink authentication.
+   * @param {*} event
+   */
+  async function deeplinkTrigger(event){
+    console.log(consolePrefix, `Deeplink flow. (trigger)`);
+
+    state.set('flowError', state.get('flow'));
+    state.delete('deeplinkBackground');
+    state.delete('deeplinkFinalize');
+
+    // Hide previous error message.
+    uiErrorHide();
+
+    // Initiate app interaction handling.
+    deeplinkAppInteractionInit();
+
+    // Switch to processing view.
+    uiView('processing');
+  }
+
+  function deeplinkAppInteractionInit(){
+    console.log(consolePrefix, `Deeplink app interaction. (init)`);
+
+    // Set up visibility change event listeners to catch when
+    // user return to document in browsers utilizing javascript
+    // suspension.
+    document.removeEventListener('visibilitychange', deeplinkAppInteractionEvent);
+    document.addEventListener('visibilitychange', deeplinkAppInteractionEvent);
+
+    // Set up timeout to auto-proceed for webviews (some browsers?)
+    // that do not know when document is obstructed by app tray
+    // and therefore do not react to the initial visibility change
+    // event.
+    setTimeout(deeplinkFinalize, 3000);
+  }
+
+  function deeplinkAppInteractionEvent(){
+    // Detect current visibility state.
+    const deeplinkHidden = document.visibilityState === 'hidden';
+
+    // Detect when user leaves the document (first time).
+    if(!state.get('deeplinkBackground') && deeplinkHidden){
+      console.log(consolePrefix, `Deeplink app interaction. (user left document)`);
+      state.set('deeplinkBackground', true);
+    }
+
+    // Detect when user returns to the document.
+    if(state.get('deeplinkBackground') && !deeplinkHidden){
+      console.log(consolePrefix, `Deeplink app interaction. (user returned to document)`);
+
+      // Remove event listener.
+      document.removeEventListener('visibilitychange', deeplinkAppInteractionEvent);
+
+      // Proceed with deeplink required post-app steps.
+      deeplinkFinalize();
+    }
+  }
+
+  async function deeplinkFinalize(){
+    // Prevent proceeding if already triggered.
+    if(state.get('deeplinkFinalize')){
+      console.log(consolePrefix, `Deeplink finalize. (already ongoing)`);
+      return;
+    }
+
+    // Signal that proceed event has triggered.
+    console.log(consolePrefix, `Deeplink finalize. (init)`);
+    state.set('deeplinkFinalize', true);
+
+    const qrId = state.get('qrId');
+    const options = {
+      deeplink: true
+    };
+
+    // Run qrId login procedure.
+    let login = await authQrId(qrId, options);
+
+    // Run user login procedure (if qrId login procedure returned success).
+    if(login && login.success){
+      login = await authUserLogin(options);
+    }
+
+    // Handle errors.
+    if(login && !login.success){
+      // Ignore errors coming from a previous flows async task.
+      if(state.get('flow') !== state.get('flowError')){
+        return;
+      }
+
+      // Backend responded with new markup for the page.
+      if(login.error && login.documentReplace){
+        return CBSFetchUtils.documentReplace(login.error);
+      }
+
+      // Get the auth code
+      await getAuthCode();
+
+      // Switch to init view.
+      uiView('init');
+
+      if(login.error){
+        // Backend responded with error message.
+        uiErrorShow(login.error);
+      } else if(!login.pollingError){
+        // Show generic error message.
+        uiErrorShow();
+      }
+    }
+  }
+
+  /**
+   * Initiate qrcode flow.
+   */
+  async function qrcodeInit(){
+    console.log(consolePrefix, `Qrcode flow. (enter)`);
+
+    const container = state.get('container');
+
+    // Remove previously registered event listener.
+    container.removeEventListener('encapVisibilityChanged', qrcodeVisibilityChange);
+
+    // Register new event listener.
+    container.addEventListener('encapVisibilityChanged', qrcodeVisibilityChange);
+
+    // Set up fallback flow links click event listeners.
+    container.querySelectorAll(`[data-flow]:not([data-view])`).forEach(el => {
+      // Remove previously registered event listeners.
+      el.removeEventListener('click', uiFlowChange);
+
+      // Register new event listeners.
+      el.addEventListener('click', uiFlowChange);
+    });
+
+    // Load qr image.
+    const qrInitiated = await uiQrImageLoad('#qrImage');
+
+    if(!qrInitiated){
+      return uiErrorShow();
+    }
+  }
+
+  /**
+   * Handle qrcode visibility change events.
+   * @param {Event} event
+   * @returns {Promise}
+   */
+  async function qrcodeVisibilityChange(event){
+    const visible = event && event.detail && event.detail.visible;
+    const previousResponse = event && event.detail && event.detail.previousResponse;
+
+    state.set('qrcodeVisible', visible);
+
+    if(visible && state.get('flow') === 'qrcode'){
+      // Start qrcode authentication.
+      qrcodeTrigger(previousResponse);
+    } else {
+      // Terminate ongoing polling.
+      pollingTerminate();
+    }
+  }
+
+  /**
+   * Trigger qrcode authentication.
+   * @param {Object} previousResponse
+   * @returns {Promise}
+   */
+  async function qrcodeTrigger(previousResponse){
+    state.set('flowError', state.get('flow'));
+
+    if(!previousResponse){
+      uiErrorHide();
+    }
+
+    // Pause for a short while to prevent infinite looping.
+    //
+    // Browsers can in some cases block the polling requests,
+    // usually due to issues with CORS or battery saving and
+    // thereby lead to a instant error response.
+    //
+    // This in turn will display a error message to the user
+    // and restart the authentication process, which leads to
+    // a instant error response and we are in a loop...
+    //
+    // To prevent this browser hanging looping we wait for next
+    // available animation frame and then 1 second more before
+    // starting the authentication process once again.
+    await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 1000)));
+
+    const qrId = state.get('qrId');
+
+    // Start qrId login procedure.
+    const qrResponse = await authQrId(qrId);
+    const qrSuccess = qrResponse && qrResponse.success;
+
+    if(!qrSuccess){
+      return await qrcodeErrorHandling(qrResponse, previousResponse);
+    }
+
+    // Show processing view.
+    if(qrSuccess){
+      uiView('processing');
+    }
+
+    // Start user login procedure.
+    const loginResponse = await authUserLogin();
+    const loginSuccess = loginResponse && loginResponse.success;
+
+    if(!loginSuccess){
+      return await qrcodeErrorHandling(loginResponse);
+    }
+
+    // User should've been redirected by a form submit or ticket login method at this point.
+  }
+
+  async function qrcodeErrorHandling(response, previousResponse = {}){
+    const retries = Number(state.get('qrIdRetries'));
+    if(state.get('qrcodeVisible') && retries < 5) {
+      await authQrIdRefresh();
+      await uiQrImageLoad('#qrImage');
+      state.set('qrIdRetries', retries + 1);
+    }
+
+    // Empty response.
+    if(!response){
+      reportError(new Error(`Qrcode flow failed. (empty response)`), { response, previousResponse });
+      return;
+    }
+
+    // Response from an async task after flow has been changed (no longer relevant).
+    if(state.get('flow') !== state.get('flowError')){
+      reportError(new Error(`Qrcode flow failed. (async response)`), { response, previousResponse });
+      return;
+    }
+
+    // Backend responded with new markup for the page.
+    if(response.error && response.documentReplace){
+      reportError(new Error(`Qrcode flow failed. (html response)`), { response, previousResponse });
+      CBSFetchUtils.documentReplace(response.error);
+      return;
+    }
+
+    // Switch to init view.
+    uiView('init');
+
+    // Backend responded with error message.
+    if(response.error){
+      reportError(new Error(`Qrcode flow failed. (error response)`), { response, previousResponse });
+      uiErrorShow(response.error);
+    }
+
+    // Show generic error message.
+    if(!response.error){
+      reportError(new Error(`Qrcode flow failed. (generic error)`), { response, previousResponse });
+      uiErrorShow();
+    }
+
+    const repeatedPollingErrors = response.pollingError && previousResponse.pollingError && response.pollingError === previousResponse.pollingError;
+
+    // Restart qrcodeTrigger if visible & not the same error multiple times in a row.
+    if(state.get('qrcodeVisible') && !repeatedPollingErrors && retries < 5){
+      reportError(new Error(`Qrcode flow failed. (retry auth)`), { response, previousResponse });
+      return uiVisibilityCheck({
+        previousResponse: response
+      });
+    }
+
+    // Non recoverable at this stage.
+    reportError(new Error(`Qrcode flow failed. (stop auth)`), { response, previousResponse });
+
+    state.set('qrIdRetries', 0);
+  }
+
+  /**
+   * Initiate userid flow.
+   */
+  function useridInit(){
+    console.log(consolePrefix, `Userid flow. (enter)`);
+
+    const container = state.get('container');
+    const form = container.querySelector('#login-init-form');
+
+    // Terminate any ongoing polling.
+    pollingTerminate();
+
+    // Set up form submit event listener.
+    if(form){
+      // Remove previously registered event listerners.
+      form.removeEventListener('submit', useridTrigger);
+
+      // Register event listerners.
+      form.addEventListener('submit', useridTrigger);
+    }
+  }
+
+  /**
+   * Trigger userid authentication.
+   * @param {*} event
+   */
+  async function useridTrigger(event){
+    console.log(consolePrefix, `Userid flow. (trigger)`);
+
+    state.set('flowError', state.get('flow'));
+
+    // Hide previous error message.
+    uiErrorHide();
+
+    // Switch to processing view.
+    uiView('processing');
+
+    // Run user login procedure.
+    const login = await authUserLogin();
+
+    // Handle errors.
+    if(!(login && login.success)){
+      // Ignore errors coming from a previous flows async task.
+      if(state.get('flow') !== state.get('flowError')){
+        return;
+      }
+
+      // Backend responded with new markup for the page.
+      if(login.error && login.documentReplace){
+        return CBSFetchUtils.documentReplace(login.error);
+      }
+
+      // Switch to init view.
+      uiView('init');
+
+      // Backend responded with error message.
+      if(login.error){
+        return uiErrorShow(login.error);
+      }
+
+      // Show generic error message.
+      if(!login.pollingError){
+        return uiErrorShow();
+      }
+    }
+  }
+
+  /**
+   * Activate view in UI.
+   * @param {String} viewId
+   */
+  function uiView(viewId){
+    console.log(consolePrefix, `Interface view. (enter)`, viewId);
+
+    const container = state.get('container');
+    const views = state.get('views');
+
+    if(!views){
+      throw new Error(`Failed to locate flow views.`);
+    }
+
+    const view = views.get(viewId);
+
+    if(!view){
+      throw new Error(`Failed to locate ${viewId} view.`);
+    }
+
+    // Update flow in state.
+    state.set('view', viewId);
+
+    // Hide previously shown views.
+    container.querySelectorAll('[data-flow][data-view]').forEach(el => {
+      el.setAttribute('hidden', '');
+    });
+
+    // Show view.
+    view.removeAttribute('hidden');
+  }
+
+  /**
+   * Display an error message in UI.
+   * @param {String} message - Message to display in UI.
+   * @param {Object} options - Options object.
+   */
+  function uiErrorShow(message = labels.lbl_error_general){
+    const container = state.get('container');
+
+    // Show error message in UI.
+    container.querySelectorAll(`[data-error]`).forEach(el => {
+      el.innerHTML = message || state.get('genericError');
+      el.classList.remove('hidden'); // Needed due to too hard specificity in .error css class.
+      el.removeAttribute('hidden');
+    });
+  }
+
+  /**
+   * Hide error message in UI.
+   */
+  function uiErrorHide(){
+    const container = state.get('container');
+
+    container.querySelectorAll(`[data-error]`).forEach(el => {
+      el.classList.add('hidden'); // Needed due to too hard specificity in .error css class.
+      el.setAttribute('hidden', '');
+    });
+  }
+
+  /**
+   * Load qr image.
+   * @param {String} selector
+   * @returns {Boolean}
+   */
+  function uiQrImageLoad(selector){
+    return new Promise((resolve, reject) => {
+      try {
+        const container = state.get('container');
+        const el = container.querySelector(selector);
+        const ext = state.get('ftn') ? '' : '.ds';
+        const qrId = state.get('qrId');
+        const url = `${state.get('pathname')}/qr/image${ext}?qrId=${qrId}&size=200&padding=0`;
+
+        if(!el){
+          throw new Error(`Failed to located element with ${selector} selector.`);
+        }
+
+        el.onload = () => {
+          // Image loaded.
+          el.setAttribute('alt', '');
+
+          resolve(true);
+        };
+        el.onerror = () => {
+          // Image failed to load.
+          reportError(new Error(`Failed to load qr image (${url}).`));
+          resolve(false);
+        };
+        el.src = url;
+      }
+      catch(error){
+        reportError(error);
+        resolve(false);
+      }
+    });
+  }
+
+  /**
+   * Handle the Authentication Request Code coming from encap response
+   * @param {String} authenticationCode
+   */
+  function uiHandleAuthCode(authenticationCode) {
+    if(authenticationCode) {
+      const flow = state.get('flow');
+      uiShowAuthRequestCode(flow, 'processing', authenticationCode);
+    }
+  }
+
+  /**
+   * Show the Authentication Request Code based on flow
+  * @param {String} flow
+  * @param {String} authenticationCode
+   */
+  function uiShowAuthRequestCode(flow, view, authenticationCode) {
+    const container = document.querySelector(`[data-flow='${flow}'][data-view='${view}']`);
+    const authenticationCodeWrapper = container.querySelector('#authenticationCodeWrapper');
+    const authCodeEl = authenticationCodeWrapper.querySelector('#authenticationCode');
+
+    // Check the auth code to not overwrite the preloaded code with nothing
+    if(authenticationCode) authCodeEl.innerHTML = authenticationCode;
+    if(authCodeEl.innerHTML.length > 0) authenticationCodeWrapper.classList.remove('authentication_code_hidden');
+  }
+
+  /**
+   * Show device specific content.
+   */
+  function uiContentForDevice(){
+    const container = state.get('container');
+    const deviceType = detectDeviceType();
+
+    container.querySelectorAll(`[data-device]`).forEach(el => {
+      const deviceContent = el && el.dataset && el.dataset.device;
+
+      if(deviceContent === deviceType){
+        el.classList.remove('hidden'); // Needed due to too hard specificity in .error css class.
+        el.removeAttribute('hidden');
+      } else {
+        el.classList.add('hidden'); // Needed due to too hard specificity in .error css class.
+        el.setAttribute('hidden', '');
+      }
+    });
+  }
+
+  //
+  // Auth
+  //
+
+  /**
+   * Authenticate user using qrId.
+   * @param {String} qrId
+   * @param {Object} options
+   * @param {Boolean} options.deeplink - If triggered from deeplink flow.
+   * @param {Boolean} options.background - If polling should be sent to service worker.
+   */
+  async function authQrId(qrId, options = {}){
+    console.log(consolePrefix, `Auth qrId. (enter)`, qrId);
+
+    // Verify qrId.
+    const qrVerify = await authQrIdVerify(qrId, options);
+    const qrVerified = qrVerify && qrVerify.success && qrVerify.response && qrVerify.response.verified;
+
+    // Polling error.
+    if(!qrVerified && qrVerify && qrVerify.error && qrVerify.error.startsWith('polling_')){
+      reportError(new Error(`Failed to verify qrId. (polling error)`));
+      return {
+        success: false,
+        task: 'qr_verify',
+        error: null,
+        pollingError: qrVerify.error
+      };
+    }
+
+    // Replace document with backend provided html markup.
+    if(!qrVerified && qrVerify && qrVerify.response && typeof qrVerify.response === "string"){
+      reportError(new Error(`Failed to verify qrId. (html response)`));
+      return {
+        success: false,
+        task: 'qr_verify',
+        error: qrVerify.response,
+        documentReplace: true
+      };
+    }
+
+    // Show backend provided error message.
+    if(!qrVerified && qrVerify && qrVerify.response && qrVerify.response.status && Array.isArray(qrVerify.response.status.errors) && qrVerify.response.status.errors.length){
+      reportError(new Error(`Failed to verify qrId. (error response)`));
+      return {
+        success: false,
+        task: 'qr_verify',
+        error: qrVerify.response.status.errors.shift()
+      };
+    }
+
+    // Show generic error message.
+    if(!qrVerified){
+      reportError(new Error(`Failed to verify qrId. (generic error)`), qrVerify);
+      return {
+        success: false,
+        task: 'qr_verify',
+        error: null
+      };
+    }
+
+    return {
+      success: true
+    };
+  }
+
+  /**
+   * Verify qrId session (polling).
+   * @param {String} qrId
+   * @param {Object} options
+   * @param {Boolean} options.deeplink - If triggered from deeplink flow.
+   * @param {Boolean} options.background - If polling should be sent to service worker.
+   * @returns {Object}
+   */
+  async function authQrIdVerify(qrId, options = {}){
+    try {
+      console.log(consolePrefix, `Auth qrId verify. (enter)`);
+
+      if(!qrId) {
+        throw new Error(`No qrId provided`);
+      }
+
+      pollingTerminate();
+
+      const pathname = state.get('pathname');
+      const ext = state.get('ftn') ? '' : '.ds';
+      const url = `${pathname}/qr/isVerified${ext}?qrId=${encodeURIComponent(qrId)}`;
+      const headers = CBSFetchUtils.requestHeadersExtended();
+
+      console.log(consolePrefix, `Auth qrId verify. (request)`, url);
+
+      const response = await CBSFetchUtils.polling({
+        url,
+        options: {
+          headers
+        },
+        conditions: [
+          'typeof response === "string"',
+          'response.verified',
+          'response.status && response.status.errors && response.status.errors.length > 0'
+        ],
+        polling: {
+          background: options.background
+        }
+      });
+
+      console.log(consolePrefix, `Auth qrId verify. (response)`, response);
+
+      return response;
+    }
+    catch(error){
+      reportError(new Error(`Auth qrId verify failed. (unexpected error)`), { error });
+      return {
+        success: false
+      };
+    }
+  }
+
+  /**
+   * Refresh QR id.
+   */
+  async function authQrIdRefresh(){
+    try {
+      // Request qrId.
+      const ftn = state.get('ftn');
+      const request = await fetch(`${state.get('pathname')}/qr/qrCode${ftn ? '' : '.ds'}`, {
+        method: 'GET',
+        headers: CBSFetchUtils.requestHeadersExtended({redirect: "error"})
+      });
+
+      const response = await CBSFetchUtils.requestResponseBody(request, {encoding: 'UTF-8'});
+      if(typeof response === 'string') uiErrorShow();
+
+      const qrId = response && response.status && response.status.success && response.qrId;
+
+      // Update qrId.
+      state.set('qrId', qrId);
+      const container = state.get('container');
+      const form = container.querySelector('#login-init-form');
+      const qrIdField = form.querySelector('#qrId');
+      qrIdField.value = qrId;
+
+      console.log(consolePrefix, `Auth qrId refresh. (done)`, qrId);
+
+      container.querySelectorAll(`.js-deeplink-button`).forEach(el => {
+        const href = el.href && el.href.replace(/NETBANK[A-Z|0-9]*/, qrId);
+
+        el.setAttribute('href', href);
+      });
+
+      return response;
+    }
+    catch(error){
+      state.set('qrId', null);
+
+      console.log(consolePrefix, `Auth qrId refresh failed. (error)`, error);
+    }
+  }
+
+  /**
+   * Authenticate user.
+   * @param {Object} options
+   * @param {Boolean} options.deeplink - If triggered from deeplink flow.
+   * @param {Boolean} options.background - If polling should be sent to service worker.
+   */
+  async function authUserLogin(options = {}){
+    console.log(consolePrefix, `Auth user login. (enter)`, options);
+
+    //
+    // Initiate login.
+    //
+
+    let loginInit;
+
+    if(!options.deeplink){
+      loginInit = await authUserLoginInit();
+      const loginInitiated = loginInit && loginInit.success;
+
+      // Replace document with backend provided html markup.
+      if(!loginInitiated && typeof loginInit === 'string'){
+        reportError(new Error(`Auth user login init failed. (html response)`), loginInit);
+        return {
+          success: false,
+          task: 'login_init',
+          error: loginInit,
+          documentReplace: true
+        };
+      }
+
+      // Show backend provided error message.
+      if(!loginInitiated && loginInit && loginInit.error){
+        reportError(new Error(`Auth user login init failed. (error response)`), loginInit);
+        return {
+          success: false,
+          task: 'login_init',
+          error: loginInit.error
+        };
+      }
+
+      // Show generic error message.
+      if(!loginInitiated){
+        reportError(new Error(`Auth user login init failed. (generic error)`), loginInit);
+        return {
+          success: false,
+          task: 'login_init',
+          error: null
+        };
+      }
+
+      uiHandleAuthCode(loginInit.authenticationCode);
+    }
+
+    //
+    // Verify login.
+    //
+
+    const loginVerify = await authUserLoginVerify(loginInit, options);
+    const loginVerified = loginVerify && loginVerify.success && loginVerify.response && loginVerify.response.processStatus === 'COMPLETE';
+
+    // Polling error.
+    if(!loginVerified && loginVerify && loginVerify.error && loginVerify.error.startsWith('polling_')){
+      reportError(new Error(`Auth user login verify failed. (polling error)`), loginVerify);
+      return {
+        success: false,
+        task: 'login_verify',
+        error: null,
+        pollingError: loginVerify.error
+      };
+    }
+
+    // Replace document with backend provided html markup.
+    if(!loginVerified && loginVerify && loginVerify.response && typeof loginVerify.response === "string"){
+      reportError(new Error(`Auth user login verify failed. (html response)`), loginVerify);
+      return {
+        success: false,
+        task: 'login_verify',
+        error: loginVerify.response,
+        documentReplace: true
+      };
+    }
+
+    // Show backend provided error message.
+    if(!loginVerified && loginVerify && loginVerify.response && loginVerify.response.error){
+      reportError(new Error(`Auth user login verify failed. (error response)`), loginVerify);
+      return {
+        success: false,
+        task: 'login_verify',
+        error: loginVerify.response.error
+      };
+    }
+
+    // Show generic error message.
+    if(!loginVerified){
+      reportError(new Error(`Auth user login verify failed. (generic error)`), loginVerify);
+      return {
+        success: false,
+        task: 'login_verify',
+        error: null
+      };
+    }
+
+    uiErrorHide();
+
+    const loginVerifyresponse = loginVerify.response;
+    const paymentOtpVerificationNecessary = loginVerifyresponse.paymentOtpVerificationNecessary;
+    //
+    // Quit if otp verification needed after encap verification
+    //
+    if (paymentOtpVerificationNecessary && loginVerified) {
+      $("#login-encap-sms-form").submit();
+      return;
+    }
+
+    //
+    // Complete login.
+    //
+    const loginComplete = await authUserLoginComplete(loginInit, loginVerifyresponse, options);
+
+
+
+    if(!loginComplete){
+      reportError(new Error(`Auth user login complete failed. (generic error)`), loginComplete);
+      return {
+        success: false,
+        task: 'login_complete',
+        error: null
+      };
+    }
+
+    console.log(consolePrefix, `Auth user login. (results)`, loginComplete);
+    return {
+      success: true
+    };
+  }
+
+  /**
+   * Initiate user login.
+   * @returns {Object}
+   */
+  async function authUserLoginInit(){
+    try {
+      console.log(consolePrefix, `Auth user login init. (enter)`);
+
+      const container = state.get('container');
+      const form = container.querySelector('#login-init-form');
+      const url = form && form.action;
+      const headers = CBSFetchUtils.requestHeadersExtended({
+        'Content-Type': 'application/x-www-form-urlencoded'
+      });
+      const body = CBSFetchUtils.formUrlEncoded(form);
+
+      console.log(consolePrefix, `Auth user login init. (request)`, url);
+
+      const request = await fetch(url, {
+        method: 'POST',
+        headers,
+        body
+      });
+      const response = await CBSFetchUtils.requestResponseBody(request);
+
+      console.log(consolePrefix, `Auth user login init. (response)`, response);
+
+      return response;
+    }
+    catch(error){
+      reportError(new Error(`Auth user login init failed. (unexpected error)`), { error });
+      return {
+        success: false,
+        error: labels.lbl_error_general
+      };
+    }
+  }
+
+  /**
+   * Verify user login (polling).
+   * @param {Boolean} loginInitResponse - Response from authUserLoginInit method.
+   * @param {Object} options
+   * @param {Boolean} options.deeplink - If triggered from deeplink flow.
+   * @param {Boolean} options.background - If polling should be sent to service worker.
+   * @returns {Object}
+   */
+  async function authUserLoginVerify(loginInitResponse = {}, options = {}){
+    try {
+      console.log(consolePrefix, `Auth user login verify. (enter)`);
+
+      const ftn = state.get('ftn');
+      const qrId =  state.get('qrId');
+      const pathname = state.get('pathname');
+
+      let url,
+          method,
+          headers,
+          body;
+
+      switch (true) {
+        // Verify against ftn endpoint.
+        case options.deeplink && ftn:
+          console.log(consolePrefix, `Auth user login verify. (qrId ftn)`, qrId);
+
+          url = `${pathname}/auth/encap/qrEncapLogin`;
+          method = 'POST';
+          headers = CBSFetchUtils.requestHeadersExtended({
+            'Content-Type': 'application/json'
+          });
+          body = JSON.stringify({
+            qrId
+          });
+          break;
+
+        // Verify against netbank endpoint.
+        case options.deeplink:
+          console.log(consolePrefix, `Auth user login verify. (qrId)`, qrId);
+
+          url = `${pathname}/encap/qrEncapLogin.ds?qrId=${qrId}`;
+          method = 'GET';
+          headers = CBSFetchUtils.requestHeadersExtended({
+            'Content-Type': 'application/x-www-form-urlencoded'
+          });
+          break;
+
+        // Verify against collectUrl endpoint.
+        default:
+          console.log(consolePrefix, `Auth user login verify.`);
+
+          url = state.get('collectUrl');
+          method = 'POST';
+          headers = CBSFetchUtils.requestHeadersExtended({
+            'Content-Type': 'application/json'
+          });
+          break;
+      }
+
+      console.log(consolePrefix, `Auth user login verify. (request)`, url);
+
+      const response = await CBSFetchUtils.polling({
+        url,
+        options: {
+          method,
+          headers,
+          body
+        },
+        conditions: [
+          'typeof response === "string"',
+          'response.processStatus === "COMPLETE"',
+          'response.processStatus === "FAILED"',
+          'response.error > ""'
+        ],
+        polling: {
+          background: options.background
+        }
+      });
+
+      console.log(consolePrefix, `Auth user login verify. (response)`, response);
+
+      return response;
+    }
+    catch(error){
+      reportError(new Error(`Auth user login verify failed. (unexpected error)`), { error });
+      return {
+        success: false,
+        error: labels.lbl_error_general
+      };
+    }
+  }
+
+  /**
+   * Complete user login (redirect).
+   * @param {Object} initResponse - Response from authUserLoginInit.
+   * @param {Object} verifyResponse - Response from authUserLoginVerify.
+   * @param {Object} options
+   * @param {Boolean} options.deeplink - If triggered from deeplink flow.
+   * @param {Boolean} options.background - If polling should be sent to service worker.
+   * @returns {Boolean}
+   */
+  async function authUserLoginComplete(initResponse = {}, verifyResponse = {}, options = {}){
+    try {
+      console.log(consolePrefix, `Auth user login complete. (enter)`, initResponse, verifyResponse, options);
+
+      const ftn = state.get('ftn');
+      const container = state.get('container');
+      const ticketId = options.deeplink && ftn
+        ? verifyResponse.ticketId // Deeplinked OIDC/FTN gets ticketId from verify response...
+        : initResponse.ticketId; // Otherwise take ticketId from init response (if provided).
+
+      // Use global ticketLogin function to complete the login (if ticketId is provided).
+      if(ticketId){
+        console.log(consolePrefix, `Auth user login complete. (ticketId)`, ticketId);
+
+        ticketLogin(state.get('pathname'), ticketId, uiErrorShow);
+
+        return true;
+      }
+
+      // Use form submit to complete the login.
+      console.log(consolePrefix, `Auth user login complete. (submit)`);
+
+      const form = container.querySelector('#login-redirect-form');
+
+      if(!form){
+        throw new Error('Failed to locate redirect form.');
+      }
+
+      form.submit();
+
+      return true;
+    }
+    catch(error){
+      reportError(new Error(`Auth user login failed. (unexpected error)`), { error });
+      return false;
+    }
+  }
+
+  //
+  // Detect
+  //
+
+  /**
+   * Detect flowId based on elements in DOM.
+   * @returns {String} flowId
+   */
+  function detectFlow(){
+    if(qrId) {
+      const container = state.get('container');
+      const qrId = state.get('qrId');
+      const mobile = detectDeviceMobile();
+      const webview = detectWebview();
+      const SMobile = detectSMobile();
+      const deeplinkInit = container.querySelector('[data-flow="deeplink"][data-view="init"]');
+      const qrIdInit = container.querySelector('[data-flow="qrcode"][data-view="init"]');
+
+
+        // Use deeplink flow if init view can be found & on a mobile device browser or S-Mobile webview.
+        if (deeplinkInit && mobile && (!webview === !SMobile)){
+          return 'deeplink';
+        }
+
+        // Use qrcode flow if init view can be found & on a non mobile device or in a webview (not S-Mobile).
+        if(qrIdInit && !mobile && !webview && !SMobile){
+          return 'qrcode';
+        }
+    }
+
+    // Default to userid flow.
+    return 'userid';
+  }
+
+  /**
+   * Detect if in FTN.
+   * @returns {Boolean}
+   */
+  function detectFTN(){
+    const url = state.get('collectUrl');
+    const ftn = !!(
+      url.includes('/ftn/')
+    );
+
+    return ftn;
+  }
+
+  /**
+   * Detect collectUrl from form input field.
+   * @returns {String}
+   */
+  function detectCollectUrl(){
+    const container = state.get('container');
+    const el = container && container.querySelector('#collectURL');
+
+    return el && el.value;
+  }
+
+  /**
+   * Detect if on a mobile device.
+   * @returns {Boolean}
+   */
+  function detectDeviceMobile(){
+    const agent = navigator.userAgent.toLowerCase();
+    const matchPlatform = agent.includes('android') || agent.includes('iphone');
+    const matchDevice = agent.includes('mobile') && !agent.includes('ipad');
+
+    return !!(matchPlatform && matchDevice);
+  }
+
+  /**
+   * Detect if in a webview.
+   * @returns {Boolean}
+   */
+  function detectWebview(){
+    const agent = navigator.userAgent.toLowerCase();
+    const matchGeneric = agent.includes('wv');
+    const matchApple = !agent.includes('safari') && (agent.includes('ipad') || agent.includes('iphone'));
+
+    return !!(matchGeneric || matchApple || false);
+  }
+
+  /**
+   * Detect if S-Mobile.
+   * @returns {Boolean}
+   */
+  function detectSMobile(){
+    const agent = navigator.userAgent.toLowerCase();
+    const agentAppendix = ['OpenBankingAuthorization'];
+    const matchHeader = SMobileAppId.includes(cbs?.requestedWithApp);
+    const matchAppendix = agentAppendix.filter(appendix => agent.includes(appendix.toLowerCase())).length > 0;
+
+    return !!(matchHeader || matchAppendix || false);
+  }
+
+  /**
+   * Detect device type.
+   * @returns {String} android|iphone|other, webview == other
+   */
+  function detectDeviceType(){
+    const agent = navigator.userAgent.toLowerCase();
+    const matchAndroid = agent.includes('android') && 'android';
+    const matchIphone = agent.includes('iphone') && 'iphone';
+
+    return matchAndroid || matchIphone || 'other';
+  }
+
+  //
+  // Requests
+  //
+
+  /**
+   * Terminate ongoing polling sessions.
+   * @param {Boolean} Should background polling (service worker) be terminated as well.
+   */
+  async function pollingTerminate(background){
+    try {
+      // Terminate any ongoing polling session in main thread.
+      await CBSFetchUtils.polling({
+        url: "",
+        terminate: true
+      });
+
+      // Terminate any ongoing polling session in service worker (background).
+      if(background){
+        navigator.serviceWorker.ready.then(function(reg) {
+            CBSFetchUtils.polling({
+              url: "",
+              terminate: true,
+              polling: {
+                background
+              }
+            });
+        });
+      }
+    }
+    catch(e){
+      // Ignore errors.
+    }
+
+    const container = state.get('container');
+    const event = new CustomEvent('encapPollingTerminated', {
+      detail: {
+        terminated: true
+      }
+    });
+    container.dispatchEvent(event);
+  }
+
+  /**
+   * Send error report.
+   * @param {Error} Error object (create with new Error('Error message')).
+   */
+  async function reportError({ stack }, info){
+    console.warn(consolePrefix, stack, info);
+
+    let CSRF_HEADER = document.querySelector('meta[name="_csrf_header"]');
+    if (CSRF_HEADER) CSRF_HEADER = CSRF_HEADER.getAttribute('content');
+
+    let CSRF_TOKEN = document.querySelector('meta[name="_csrf"]');
+    if (CSRF_TOKEN) CSRF_TOKEN = CSRF_TOKEN.getAttribute('content')
+
+    const pathname = state.get('pathname');
+    const ebankEndpoint = 'log.ds';
+    const ftnEndpoint = 'log';
+
+    const endpoint = `${pathname}/${state.get('ftn') ? ftnEndpoint : ebankEndpoint}`
+    const message = `${stack}\n${JSON.stringify(info, null, 2)}`;
+    const url = location.href;
+    const agent = navigator.userAgent;
+    const details = /([^\s|\(]+):([0-9]+):([0-9]+).*$/gm.exec(stack);
+    const file = details && 1 in details && details[1];
+    const line = details && 2 in details && details[2];
+    const column = details && 3 in details && details[3];
+    const report = {
+      message,
+      url,
+      userAgent: agent,
+      lineNumber: line,
+      columnNumber: column,
+      logLevel: 'ERROR',
+      scriptUrl: file
+    };
+
+    let headers = {
+      'Content-Type': 'application/json',
+    }
+
+    if (CSRF_HEADER && CSRF_TOKEN) {
+      headers = {[CSRF_HEADER] : CSRF_TOKEN, ...headers}
+    }
+
+    try {
+      const request = await fetch(endpoint, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify(report)
+      });
+    }
+    catch(e){}
+  }
+})();

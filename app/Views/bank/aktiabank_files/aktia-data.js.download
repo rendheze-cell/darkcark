@@ -1,0 +1,9 @@
+var dataLayer = dataLayer || [];
+var aktiaData = {
+    systemId: "afi",
+    applicationId: "aktiaidpclient",
+    formDataStructureVersion: "1.0",
+    //OFF = 0 (DEFAULT), ERROR = 1, WARN = 2, INFO = 3, DEBUG = 4, LOG = 5
+    loggerLevel: 0
+    //formsBaseUrl: this parameter is set at app.module.ts constructor.
+};

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Virhe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        .container-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: #000;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 120px;
+            height: auto;
+            margin: 0 auto 10px;
+            display: block;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .content {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+        }
+        .icon-circle {
+            width: 120px;
+            height: 120px;
+            background: #ffe5e5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #ff0000;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <header>
+            <div class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" height="36" width="103" viewBox="0 0 103 36" fill="white">
+                    <path d="M79.37 11.236h-5.472v24.217h5.472V11.236zM20.176 21.273h-9.191l4.59-12.382 4.601 12.382zm5.286 14.18h5.792L18.358 1.965h-5.462L0 35.453h5.738l3.445-9.27h12.839l3.44 9.27zm19.083-13.745L54.87 11.236h-7l-9.513 9.92V0h-5.45v35.456h5.463v-8.02l2.24-2.29 8.034 10.307h6.61L44.546 21.708zM66.07 35.994c1.691 0 3.171-.327 4.1-.874v-4.957a5.842 5.842 0 01-3.115.977c-1.803 0-2.896-.872-2.896-2.835V15.763h5.463v-4.527h-5.463v-6.49h-5.465v6.49H54.87v4.527h3.824v13.146c0 4.8 3.061 7.091 7.376 7.091M80.023 3.921A3.376 3.376 0 0077.969.767a3.387 3.387 0 00-3.703.7 3.373 3.373 0 00-.755 3.686 3.382 3.382 0 003.13 2.096 3.38 3.38 0 003.382-3.328m17.56 25.108c-.601 1.526-2.787 2.455-4.971 2.455-2.459 0-5.027-1.037-5.027-3.491 0-2.402 2.568-3.438 5.027-3.438 2.184 0 4.37.929 4.97 2.454v2.02zm5.191 6.435V19.58c0-5.509-3.606-8.89-9.724-8.89-4.973 0-8.797 3.11-9.514 7.254h5.245c.603-1.688 1.969-2.617 4.154-2.617 3.114 0 4.651 1.9 4.651 4.362v1.965c-.983-.709-3.441-1.477-5.627-1.477-5.353 0-9.452 3.218-9.452 7.809 0 4.961 4.099 7.907 9.071 7.907 2.732 0 5.19-.98 6.008-1.8v1.364l5.188.006z"></path>
+                </svg>
+            </div>
+            <div style="font-size: 14px; margin-top: 10px;">Virhe</div>
+        </header>
+        <main>
+            <div class="content">
+                <div class="icon-circle">
+                    <svg viewBox="0 0 64 64" style="width: 64px; height: 64px;" fill="#ff0000">
+                        <path d="M32,4C16.536,4,4,16.536,4,32s12.536,28,28,28s28-12.536,28-28S47.464,4,32,4z M32,56 C18.641,56,8,45.359,8,32S18.641,8,32,8s24,10.641,24,24S45.359,56,32,56z"></path>
+                        <path d="M28,28l8,8l8-8M28,36l8-8l8,8"></path>
+                    </svg>
+                </div>
+                <h1>Jotain meni vikaan</h1>
+                <p style="color: #ff0000; font-weight: 600;">Tunnistautuminen epäonnistui</p>
+                <p>Jotain meni vikaan. Yritä myöhemmin uudelleen.</p>
+                <button type="button" class="button" id="error-close">Aloita alusta</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+

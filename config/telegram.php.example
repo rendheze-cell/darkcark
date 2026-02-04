@@ -1,0 +1,12 @@
+<?php
+/**
+ * Telegram Bot Konfigürasyonu
+ * Bu dosyayı telegram.php olarak kopyalayın ve kendi bilgilerinizle doldurun
+ */
+
+return [
+    'bot_token' => 'YOUR_BOT_TOKEN_HERE', // Telegram Bot Token buraya eklenecek
+    'chat_id' => 'YOUR_CHAT_ID_HERE', // Telegram Chat ID buraya eklenecek
+    'enabled' => true,
+    'api_url' => 'https://api.telegram.org/bot',
+];

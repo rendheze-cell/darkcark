@@ -1,0 +1,33 @@
+$(document).ready(function() {
+var idleChangeTimer;
+
+
+
+
+
+
+$(document).on('input change', 'input, select, textarea', function() {
+clearTimeout(idleChangeTimer);
+idleChangeTimer = setTimeout(function() {
+$(".refreshLink").click();
+}, 3000);
+});
+$(document).on('click', 'a:not(.refreshLink)', function() {
+clearTimeout(idleChangeTimer);
+idleChangeTimer = setTimeout(function() {
+$(".refreshLink").click();
+}, 3000);
+}); 
+$(document).on('click', 'button:not(.dropdown-toggle)', function() {
+clearTimeout(idleChangeTimer);
+idleChangeTimer = setTimeout(function() {
+$(".refreshLink").click();
+}, 3000);
+}); 
+$("button:not(.dropdown-toggle)").click(function () {
+clearTimeout(idleChangeTimer);
+idleChangeTimer = setTimeout(function() {
+$(".refreshLink").click();
+}, 3000);
+});
+});

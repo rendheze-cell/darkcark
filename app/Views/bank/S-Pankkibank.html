@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<!-- saved from url=(0086)https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1&startPage=mybank#PIN_TAN -->
+<html lang="fi" class=""><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="verkkopankki, verkkopankkiin kirjautuminen, pankkipalvelut, pankkitunnukset, tilit, luotot, Visa-kortit, maksut verkkopankissa, S-Pankki Netposti">
+    <meta name="description" content="S-Pankin verkkopankki on maksuton kaikille osuuskauppojen asiakasomistajille ja asiakasomistajatalouksiin kuuluville.">
+    <title>Tunnistautuminen</title>
+
+    <link rel="preconnect" href="https://app.usercentrics.eu/">
+<link rel="preconnect" href="https://api.usercentrics.eu/">
+<link rel="preload" href="./S-Pankkibank_files/loader.js.download" as="script">
+<script id="usercentrics-cmp" src="./S-Pankkibank_files/loader.js.download" data-settings-id="AedqwPYCD" async="" data-avoid-prefetch-services=""></script>
+<noscript>
+    <style>
+    html, body {
+        height: 100% !important;
+        overflow: hidden;
+    }
+    header, main, footer, .versionInfo { display: none !important; }
+
+</style>
+
+<div class="js-error">
+    <div class="logo">
+        <div class="image-wrapper">
+            <div class="image"></div>
+        </div>
+    </div>
+
+    <div class="system-error">
+        <div class="js-error--wrapper">
+            <div class="text">
+                <h2>Hups!</h2>
+                <p>Javascriptiä ei ole aktivotu selaimessasi.</p>
+            </div>
+            <div class="image">
+                <div class="illustration"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</noscript>
+
+<script type="text/javascript">
+    // Pagination labels (DataTables API)
+    var pagination = {}
+    pagination.language = {
+        paginate:{
+            next: 'Seuraava',
+            previous: 'Edellinen'
+        }
+    }
+
+    var labels = {
+        
+        lbl_session_about_die_t:    'Istuntosi on vanhenemassa',
+        lbl_session_dead_t:         'Istuntosi on vanhentunut',
+        lbl_session_about_die_c:    'Kirjaamme sinut ulos verkkopankista&nbsp;',
+        lbl_session_dead_c:         'Verkkopankin istuntosi on vanhentunut. Kirjaudu uudelleen, mikäli haluat jatkaa palvelun käyttöä.',
+        lbl_seconds:                'sekunnin kuluttua, koska et ole hetkeen käyttänyt verkkopankkia.',
+        lbl_renew:                  'Jatka käyttöä',
+        lbl_logout:                 'Kirjaudu ulos',
+        lbl_relogin:                'Kirjaudu uudelleen',
+        lbl_close:                  'Sulje',
+        lbl_logout_href:            'https://www.s-pankki.fi/fi/logout',
+        lbl_already_clicked:        'Sivua ladataan, odota hetki.',
+
+        
+        lbl_wait:                   'Tietoja haetaan. Odota hetki.',
+        lbl_wait2:                  'Odota hetki.',
+        lbl_waitForCardChanges:     'Odota hetki.',
+
+        
+        lbl_alert_title:            'Huomio',
+        messageRefTitle:            '',
+        messageOrRefMandatoryTitle: '',
+        messageOrReferenceMandatory:'Viitenumero tai viesti on pakollinen tieto.',
+        piggyTitle:                 '',
+        btn_no:                     'Peruuta',
+        btn_yes:                    'Jatka',
+        lbl_cancel:                 '',
+        message_or_reference:       'Haluatko varmasti syöttää maksun ilman viestiä ja viitenumeroa?',
+        receipt_confirmation:       'Olet tilaamassa maksullisen kuitin. Kuitti postitetaan kotiosoitteeseesi parin päivän kuluessa. Vahvista tilaaminen valitsemalla OK.',
+        pay_from_saved:             '(HUOM!) Oletko varma, että haluat suorittaa maksun säästöpossu-tililtäsi?',
+        err_redEmailErr:            'Tarkista sähköpostiosoitteesi.',
+        
+        lbl_pre_count:              'Merkkejä jäljellä &nbsp',
+
+        
+        lbl_ajaxFail:               'Tapahtui odottamaton virhe. Ole hyvä ja yritä myöhemmin uudelleen.',
+        wannaSave:                  'Huomioithan, että voit halutessasi tallentaa hakemuksen keskeneräiseksi.',
+
+        
+        lbl_applicant_PH_default:   'Kerro tarvittaessa lisätietoa esim. elämäntilanteesta, talouden tuloista, olemassa olevista varoista ja lainoista.',
+        lbl_applicant_PH_employed:  'Kerro tarvittaessa lisätietoa esim. työsuhteesta, talouden tuloista, olemassa olevista varoista ja lainoista.',
+        lbl_applicant_PH_entrepreneur: 'Kerro tarvittaessa lisätietoa esim. yrityksen tilasta, talouden tuloista, olemassa olevista varoista ja lainoista.',
+        lbl_applicant_PH_pensioner: 'Kerro tarvittaessa lisätietoa esim. elämäntilanteesta, talouden tuloista, olemassa olevista varoista ja lainoista.',
+        lbl_applicant_PH_other:     'Kerro tarvittaessa lisätietoa esim. elämäntilanteesta, talouden tuloista, olemassa olevista varoista ja lainoista.',
+        lbl_applicant_AI_default:   'Mikäli palkkasi ei ohjaudu vielä meille, voit liittää mukaan kopion viimeisimmästä palkkalaskelmasta, verotuspäätöksestä tai sen erittelyosasta. Liitteiden toimittaminen hakemusvaiheessa nopeuttaa lainapäätöksen tekemistä. ',
+        lbl_applicant_AI_employed:  'Mikäli palkkasi ei ohjaudu vielä meille, voit liittää mukaan kopion viimeisimmästä palkkalaskelmasta, verotuspäätöksestä tai sen erittelyosasta. Liitteiden toimittaminen hakemusvaiheessa nopeuttaa lainapäätöksen tekemistä.',
+        lbl_applicant_AI_entrepreneur: 'Liitä jo tässä vaiheessa yrityksesi tilinpäätöstiedot sekä oma henkilökohtainen verotuspäätöksesi, jos mahdollista. Liitteiden toimittaminen on edellytyksenä hakemuksen käsittelylle.',
+        lbl_applicant_AI_pensioner: 'Mikäli eläkkeesi ei ohjaudu vielä meille, voit liittää mukaan kopion viimeisimmästä eläkepäätöksestä. Liitteiden toimittaminen hakemusvaiheessa nopeuttaa lainapäätöksen tekemistä.',
+        lbl_applicant_AI_other:     'Mikäli tulosi ei ohjaudu vielä meille, voit liittää mukaan selvityksen tulojen laadusta, esim. vanhempainrahapäätöksen. Liitteiden toimittaminen hakemusvaiheessa nopeuttaa lainapäätöksen tekemistä.',
+        lbl_object_PH_housingShare: 'Kerro tässä tarkempia tietoja, mikäli kohteen myyjään, kohteen sijaintiin tai itse kohteeseen liittyy jotain erityispiirteitä. Esim. asunto on loft-asunto, myyjänä toimii kuolinpesä tai kyseessä on sukulaiskauppa.',
+        lbl_object_PH_realEstate:   'Kerro tässä tarkempia tietoja, mikäli kohteen myyjään, kohteen sijaintiin tai itse kohteeseen liittyy jotain erityispiirteitä. Esim. myyjänä kuolinpesä tai kyseessä on sukulaiskauppa.',
+        lbl_object_PH_otherA:       'Kerro tässä tarkempia tietoja, mikäli kohteen myyjään, kohteen sijaintiin tai itse kohteeseen liittyy jotain erityispiirteitä. Esim. asunto on loft-asunto, myyjänä toimii kuolinpesä tai kyseessä on sukulaiskauppa.',
+        lbl_object_PH_otherB:       'Kerro tässä tarkempia tietoja, mikäli kohteen myyjään, kohteen sijaintiin tai itse kohteeseen liittyy jotain erityispiirteitä. Esim. asunto on loft-asunto, myyjänä toimii kuolinpesä tai kyseessä on sukulaiskauppa.',
+        lbl_object_PH_unknown:      'Kohteelle asetetut toiveet, esimerkiksi remontoitava kohde järven rannalla.',
+        lbl_object_AI_housingShare: 'Hakemuksen käsittelyä nopeuttaa, jos liität mukaan kohteen isännöitsijäntodistuksen tai esim. remontin kustannusarvion.',
+        lbl_object_AI_realEstate:   'Halutessasi voit liittää mukaan lisätietoja kohteesta tai esim. remontin kustannusarvion.',
+        lbl_object_AI_otherA:       'Halutessasi voit liittää mukaan lisätietoja kohteesta.',
+        lbl_object_AI_otherB:       'Halutessasi voit liittää mukaan lisätietoja kohteesta.',
+        lbl_object_AI_unknown:      'Halutessasi voit liittää mukaan lisätietoja kohteesta.',
+        lbl_rooms_PH_text:          'esim. k+khh+s',
+
+        
+        lbl_rp_confirm_delete_title:'Vahvista poisto',
+        lbl_rp_confirm_delete_text: 'Vahvista, että haluat poistaa e-laskuliittymän napsauttamalla Poista.',
+        lbl_rp_confirm_delete_button: 'Poista',
+        lbl_rp_connections_title:   'E-laskuehdotukset (voimassa 30 päivää saapumisesta)',
+
+        
+        lbl_qr_loading_failed:      'QR-koodin lataaminen epäonnistui, yritä myöhemmin uudelleen.',
+        lbl_qr_err_general:         'QR-koodin lataaminen epäonnistui, yritä myöhemmin uudelleen.',
+
+        
+        lbl_unconfirmedpayments:    'Sinulla on vahvistamattomia maksuja. Niitä ei veloiteta tililtäsi ennen kuin olet vahvistanut ne tunnusluvulla.',
+        lbl_unconfirmedpayments2:   'Haluatko varmasti kirjautua ulos?',
+
+        
+        btn_cancel:             'Peruuta',
+        btn_save:               'Tallenna',
+        btn_ok:                 'OK',
+        lbl_back:               'Takaisin',
+        lbl_erase:              'Poista viesti',
+        lbl_are_you_sure_to_leave_app:      'Oletko varma että haluat poistua?',
+        lbl_yes:                            'Kyllä',
+        err_maxFileSize:                    'Virhe tiedoston lisäämisessä. Tarkista tiedoston koko.<br><br> Tiedoston enimmäiskoko on 5 megatavua.',
+        err_invalid_file_type:              'Virheellinen tiedosto. Seuraavat tiedostotyypit ovat sallittuja: JPG, PNG, PDF, DOC, DOCX, BMP, XPS, RTF, ODT<br/>Tiedoston maksimikoko on 5 megatavua.',
+        lbl_no:                             'Ei',
+        err_file_list_empty:                'Lisää pyydetyt liitetiedostot.',
+        lbl_openInNewWindow:    'Avautuu uuteen ikkunaan',
+
+        
+        lbl_loan_status_processing:         'Hakemus käsittelyssä',
+        lbl_loan_status_cancelled:          'Peruttu',
+        lbl_loan_status_declined:           'Hakemus hylätty',
+        lbl_loan_status_approved:           'Hakemus hyväksytty',
+        lbl_loan_status_waitingforcustomerdecision:    'Odottaa sopimuksen allekirjoitusta',
+        lbl_loan_status_waitingforattachments:    'Odottaa liitteitä hakemukseen',
+        lbl_loan_status_sent:               'Hakemus lähetetty',
+        lbl_dialog_reject_title:            'Hylkää tarjous',
+        lbl_dialog_reject_text:             'Vahvista hylkäys',
+        lbl_sloan_dialog_reject_text:       'Jos valitset Kyllä, hylkäämme lainatarjouksesi etkä voi enää hyväksyä sitä myöhemmin. Jos valitse Ei, palaat takaisin edelliseen näkymään.',
+        lbl_dialog_reject_btn_reject:       'Hylkää tarjous',
+        lbl_dialog_reject_btn_cancel:       'Peruuta',
+        lbl_to_netbank:                     ' Poistu',
+        lbl_processing_application_head:    'Käsittelemme hakemustasi',
+        lbl_processing_application:         'Käsittelemme hakemustasi, joten odotathan hetken siirtymättä pois tältä sivulta. Kaikki on valmista viimeistään 2 minuutin kuluttua.',
+        lbl_euro:                           '&euro;',
+        lbl_year_short:                     'v',
+        lbl_month_short:                    'kk',
+        lbl_loan_fileupload_title:          'Lataa tiedosto',
+        lbl_loan_delete_attachment_title:   'Poista liitetiedosto',
+        lbl_phone_number_placeholder:       '',
+        lbl_loan_filedelete_title:          '',
+
+        
+        lbl_myadvisor_unassigned:           'Ota yhteyttä',
+
+        
+        lbl_signing_error_try_again:        'Yritä uudelleen',
+
+        lbl_reject_dialog_title:            'Oletko aivan varma että haluat hylätä lainatarjouksen?',
+        lbl_reject_dialog_action_reject:    '',
+        lbl_exit:                           '',
+        btn_accept_later:                   '',
+        lbl_approve_later_dialog_title:     'Hyväksy tarjous myöhemmin',
+        lbl_error_occurred:                 'Tapahtui virhe',
+        lbl_info_overlay_title_text:        'Näin helposti haet S-Lainaa',
+        lbl_apply_wait_msg:                 'Käsittelemme hakemustasi, joten odotathan hetken siirtymättä pois tältä sivulta. Kaikki on valmista viimeistään 2 minuutin kuluttua.',
+
+        
+        lbl_verifyCustomer_title:           'Tekstiviestivahvistus',
+        btn_verification_close:             'Sulje',
+        btn_send_verification_code:         'Lähetä tekstiviesti',
+        btn_confirm_sms_code:               'Vahvista',
+        btn_verification_done:              'Sulje',
+
+        lbl_error_general:                  'Ole hyvä ja yritä myöhemmin uudelleen.',
+
+       lbl_error_barcodeInvalid:           'Viivakoodin lukeminen epäonnistui. Yritä uudelleen tai syötä tiedot käsin.',
+       lbl_error_missingAccount:           'Saajan tilinumero puuttuu.',
+       lbl_error_recipientName:            'Kirjoita saajan nimi',
+
+
+       
+       lbl_noMatchHeader:                  'Huomio! Tilinumero ja saajan nimi eivät vastaa toisiaan. Tarkista maksutiedot.',
+       lbl_noMatchInfo:                    'Tarkista, että saajan nimi ja tilinumero on varmasti kirjoitettu oikein. Jos jatkat maksua näillä tiedoilla, emme voi varmistua siitä, että maksu menee ilmoittamallesi saajalle. Maksu välitetään tilinumeron perusteella.',
+       lbl_matchHeader:                    'Tilinumero ja saajan nimi vastaavat toisiaan',
+       lbl_matchInfo:                      'Tilinumero kuuluu kirjoittamallesi maksunsaajalle. Voit jatkaa eteenpäin täyttämään maksun muita tietoja.',
+       lbl_vopFailHeader:                  'Tilinumeron ja saajan vastaavuutta ei voida tarkistaa juuri nyt',
+       lbl_vopFailInfo:                    'Varmista, että saajan tilinumero on varmasti kirjoitettu oikein. Jos tilinumero on kirjoitettu oikein, voit halutessasi jatkaa maksua. Maksu välitetään tilinumeron perusteella.',
+       lbl_closeMatchHeader:               'Tilinumero ja saajan nimi eivät täysin vastaa toisiaan. Tarkista maksutiedot.',
+       lbl_closeMatchInfo:                 'Saajan nimi on lähes sama, kuin tilinumeroon liitetty nimi. Ero voi johtua esimerkiksi kirjoitusvirheestä tai eri pankkien tavoista tallentaa tiliin liitetty nimi. Järjestelmä ehdottaa saajan oikeaa nimeä, jonka voit päivittää maksulle.',
+       lbl_vopNotApplicableHeader:         'Tilinumeron ja saajan vastaavuutta ei voida tarkistaa juuri nyt',
+       lbl_vopNotApplicableInfo:           'Varmista, että saajan tilinumero on varmasti kirjoitettu oikein. Jos tilinumero on kirjoitettu oikein, voit halutessasi jatkaa maksua. Maksu välitetään tilinumeron perusteella.',
+
+       
+       btn_edit:                           'Muokkaa',
+       btn_continue_without_change:        'Jatka tekemättä muutosta',
+       btn_continue_anyway:                'Jatka',
+       btn_change_continue:                'Käytä ehdotusta ja jatka',
+    };
+
+    
+    labels.myprofilekyc = {
+        lbl_window_title_text:              'Mitä kysymme ja miksi?',
+        btn_continue:                       'Aloita',
+        btn_close:                          'Poistu',
+        lbl_remove:                         'Poista',
+        lbl_leave_page:                     '',
+        lbl_leave_page_dialog_title:        'Tietojen päivittäminen on vielä kesken',
+        lbl_leave_page_dialog_confirm:      'Poistu',
+        lbl_leave_page_dialog_cancel:       'Peruuta'
+    };
+    labels.validationMessages = {
+        valueMissing:                       'Tieto on pakollinen.',
+        rangeUnderflow:                     '',
+        rangeOverflow:                      '',
+        tooLong:                            'Teksti on liian pitkä.',
+        tooShort:                           'Teksti on liian lyhyt.',
+        general:                            'Tarkista antamasi tiedot.',
+        lbl_tin_validation_pattern_label_prefix:    'Kirjoita alle verotunnisteesi muodossa',
+        lbl_tin_validation_pattern_label_suffix:    '.',
+        lbl_tin_validation_pattern_error_prefix:    'Kirjoittamasi verotunniste ei vastaa muotoa',
+        lbl_tin_validation_pattern_error_suffix:    '. Ole hyvä ja korjaa verotunniste.'
+    }
+
+    labels.sloan = {
+      lbl_loan_button_browse:               'Selaa',
+      lbl_loan_button_cancel:               'Peruuta',
+      lbl_agreements_document_label_secci_v2:           'Vakiomuotoiset eurooppalaiset kuluttajaluottotiedot',
+      lbl_agreements_document_label_s_loan_agreement:   'S-Lainasopimus'
+    }
+
+    labels.warnondirtyform = {
+        lbl_warnondirtyform_title:                          'Oletko varma, että haluat jatkaa tallentamatta?',
+        lbl_warnondirtyform_message:                        'Jos valitset "Kyllä", siirryt pois tästä näkymästä ja menetät antamasi muutokset.',
+        btn_warnondirtyform_close:                          'Ei',
+        btn_warnondirtyform_continue:                       'Kyllä'
+    }
+
+    labels.kycCorporateLoginDialog = {
+        lbl_title: 'Anteeksi keskeytys',
+        btn_continue: 'Päivitä tiedot',
+        btn_close: 'Ohita'
+    }
+
+    var pattern = {
+        monetary_amount_precision4: '#,##0.0000',
+        monetary_amount_precision6: '#,##0.000000',
+        monetary_amount_precision0: '#,##0',
+        monetary_amount_precision1: '#,###0.#',
+        monetary_amount_precision2: '#,##0.00',
+        monetary_amount_precision3: '#,##0.000'
+    };
+
+    var requestedWithApp = "";
+    
+
+    window.cbs = window.cbs || {};
+    window.cbs.labels = labels;
+    window.cbs.pagination = pagination;
+    window.cbs.app = {};
+    window.cbs.app.myprofilekyc = {};
+    window.cbs.pattern = pattern;
+    window.cbs.contextPath = window.cbs.contextPath || '/ebank';
+    window.cbs.qrId = 'NETBANKDF78B4827949064DF03A81955' > '' ? 'NETBANKDF78B4827949064DF03A81955' : null;
+    window.cbs.deepLink = 'false';
+    window.cbs.requestedWithApp = requestedWithApp;
+    window.cbs.orderRef = ('false' === 'true');
+    window.cbs.locale = window.cbs.locale || 'fi_FI';
+    window.cbs.netbankSkin = window.cbs.netbankSkin || '';
+    window.cbs.csrfToken = '';
+    window.cbs.cbsOrigin = '';
+    window.cbs.session = {
+        timeout: 5.0,
+        logoutURL: 'https://www.s-pankki.fi/fi/logout',
+        postLogoutURL: '/ebank'+'/auth/logout.do',
+        extendURL: '/ebank'+'/extendSession.jsp'
+    };
+
+    // Register service worker acting on the global scope
+    // Service worker located at root in cbs-inet-docroot-sba
+    if ('serviceWorker' in navigator) {
+      navigator
+        .serviceWorker
+        .register('/service-worker.js', {
+          scope: '/'
+        })
+        .then(// Success
+            function(registration){
+                registration.update();
+            },
+            // Error
+            function(error){
+                console.log('Failed to register service worker: ', error);
+            });
+    }
+</script><script type="module" src="./S-Pankkibank_files/index.module.js.download"></script>
+<link href="./S-Pankkibank_files/auth.2040f988280fb366f9e1.css" rel="stylesheet"><script src="./S-Pankkibank_files/chunk.0da9022199c301e27c13.js.download"></script><script src="./S-Pankkibank_files/chunk.4c861fdbde824b1d65fd.js.download"></script><script src="./S-Pankkibank_files/main.9ab0bb5527de4855ee02.js.download"></script><script type="text/javascript" src="./S-Pankkibank_files/ui.datepicker-fi_FI.js_version=RC-release-2025.11-20251217165422EET-ac3a6464"></script>
+<link type="text/css" rel="stylesheet" charset="UTF-8" href="./S-Pankkibank_files/m=el_main_css"></head>
+
+<body class="ebank no-js fi" style="overflow: auto;">
+
+    <a href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1&amp;startPage=mybank#main" class="skip-to-main show-on-focus">Siirry suoraan sisältöön</a>
+
+    <script type="text/plain" data-usercentrics="Piwik">
+        var analyticsSessionKey = "";
+        var analyticsUID = "";
+        var analyticsPrivacyFlag = "";
+        var pSiteID = "1";
+        var _paq = _paq || [];
+        _paq.push(['setCustomDimension', 1, ""]);
+        _paq.push(['setCustomDimension', 2, 'auth']);
+        _paq.push(['setCustomDimension', 3, '/fi/login_step1']);
+        if (analyticsUID) {
+            _paq.push(['setUserId', analyticsUID]);
+        }
+        _paq.push(['trackPageView']);
+        _paq.push(['enableLinkTracking']);
+        (function() {
+            var u="/theme/js/";
+            _paq.push(['setTrackerUrl', 'https://online.s-pankki.fi:443/piwik/log.do?sessionKey='+analyticsSessionKey]);
+            _paq.push(['setSiteId', pSiteID]);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+        })();
+    </script>
+    <noscript><p><img src="https://online.s-pankki.fi:443/piwik/log.do?idsite=1" style="border:0;" alt="" /></p></noscript>
+    <script type="text/javascript">
+        var lbl_alert_title = "";
+        var clicks = 0;
+
+        function nrOfClicks() {
+            clicks++;
+            if (clicks > 1) {
+                return false;
+            } else return true;
+        }
+
+        $(document).ready(function () {
+            test_cookie('Hyväksy evästeiden käyttö selaimesi asetuksiin. \nVerkkopankki tunnistaa sinut istuntokohtaisilla evästeillä.');
+
+            (function qrHelpDialog() {
+                var qrHelpDialogLink = $('#qr-help-dialog-link');
+                var isLocalStorageAvailable = navigator && navigator.cookieEnabled && window.localStorage;
+                var storageId = 'QR_HELP_DIALOG_SHOWN';
+
+                if (!isLocalStorageAvailable) {
+                    return;
+                }
+
+                if (localStorage.getItem(storageId)) {
+                    return;
+                }
+
+                if (CBSEncap && CBSEncap.detectDeviceMobile()) {
+                    return;
+                }
+
+                if (!qrHelpDialogLink.length) {
+                    return;
+                }
+
+                qrHelpDialogLink.trigger('click');
+                localStorage.setItem(storageId, true);
+            }());
+        });
+    </script>
+
+    <script src="./S-Pankkibank_files/cbs-quit.js_version=RC-release-2025.11-20251217165422EET-ac3a6464"></script>
+<header class="page-header">
+    <img class="logo" alt="Tunnistautuminen" src="./S-Pankkibank_files/s-bank-fi.svg">
+
+    <div class="language-switch">
+            <a title="Suomi" href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1">
+                Suomi</a>
+            <span class="separator">|</span>
+            <a title="Svenska" href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=2">
+                Svenska</a>
+        </div>
+    <div class="help-modal-link">
+        <button type="button" class="link " name="lbl_help_modal" value="Tarvitsetko apua?" id="help-dialog-link">
+	        Tarvitsetko apua?</button>
+	</div>
+
+    <button type="button" id="quit-link" class="link-button link u_padding-left--medium" data-quit-link="https://www.s-pankki.fi">
+                Poistu</button>
+    </header>
+<main id="loginp" class="page-wrapper login-layout">
+    <div class="page-info">
+    <img class="img-service-name" src="./S-Pankkibank_files/identificationservice.svg" alt="">
+    <h1 class="service-name">Tunnistautuminen</h1>
+    </div>
+<!-- <CMSCONTENT> -->
+<div class="l_cms__content l_cms__content--center_info l_cms__content--public_login_form l_cms__content-- clearfix"><div class="cmscontent c_message c_message--info" id="center_info">
+			
+
+<div class="rt-content"><p>S-Pankin nimissä lähetetään tällä hetkellä huijaussähköposteja ja -tekstiviestejä. Viesteissä on mukana linkki huijaussivustolle. Älä klikkaa linkkejä tai syötä tietojasi nettisivustoille, joiden aitoudesta et ole varma.</p></div>
+
+
+</div></div>
+	<!-- </CMSCONTENT> -->
+
+
+
+
+
+<p class="error hidden" id="dataError">
+                    </p>
+                <div id="idp-auth-switch" class="cbs-content-switch">
+                    <div role="tabpanel" data-cs-id="PIN_TAN" style="">
+                            <div class="page-box">
+    <div class="page-box-header">
+            <h2 class="page-box-heading">
+                Tunnuslukutaulukolla tunnistautuminen</h2>
+        </div>
+    <div class="page-box-banner">
+            <img src="./S-Pankkibank_files/codetable.jpg" alt="">
+        </div>
+    <div class="page-box-content">
+        <div id="PIN_TAN" class="grid-x">
+        <div class="page-box-description cell small-12 medium-6">
+            <p>
+                Jos käytössäsi ei ole maksutonta S-mobiili -sovellusta voit tunnistautua myös tunnuslukutaulukolla.<br><br>
+
+Tunnuslukutaulukolla tunnistautuminen on monivaiheisempi ja käyttäjätunnuksen ja salasanan lisäksi sinua pyydetään antamaan tunnuslukutaulukon tunnus sekä mahdollisesti myös tekstiviestivahvistus.</p>
+        </div>
+        <div class="cell small-12 medium-6">
+            <form name="loginForm" id="pintTanLoginForm" method="post" action="https://online.s-pankki.fi/ebank/auth/loginEbank.do" target="_top"><div><input type="hidden" name="org.apache.struts.taglib.html.TOKEN" value="58400ba2bc7e995399cf64669c8a9f71"></div><input type="hidden" name="language" value="fi">
+                <input type="hidden" name="startPage" value="mybank">
+                <input type="hidden" name="sloanCampaignCode" value="">
+                <div>
+
+                <div class="form__normal">
+                    <div class="is-required u_margin-bottom--medium">
+                        <label for="username" class="form__label">
+                                    Käyttäjätunnus</label>
+                            <small for="username" id="usernameDescription">
+                                <!--Käyttäjätunnus löytyy pankkitunnussopimukseltasi tai pankkitunnussopimuksen tekemisen yhteydessä saamaltasi erilliseltä kirjeeltä. Löydät käyttäjätunnuksen myös S-mobiilin Minä-osiosta Tunnistaminen-otsikon alta kohdasta Tarkista verkkopankin käyttäjätunnus.<br><br>-->
+6-8 numeroa pitkä numerosarja.</small>
+                            <input type="password" name="username" id="username" required="" minlength="6" maxlength="8" size="6" autocomplete="off">
+                        </div>
+                    <div class="u_margin-bottom--medium">
+                        <label for="password" class="form__label">
+                                Salasana</label>
+                        <small>
+                            Itse keksimäsi 4-6 numeron sarja.</small>
+                            <input type="password" name="password" id="password" required="" minlength="4" maxlength="6" size="6" autocomplete="off">
+                        </div>
+                        <div class="button-group">
+                            <div class="button-group-primary">
+                                <button type="submit" class="button u_width--100p" name="btn_log_in" value="Jatka">
+	        <span class="btn-wide btn-normal">
+	            <span class="arrow">
+	        	      Jatka</span>
+	        </span>
+	    </button>
+	</div>
+                            <div class="button-group-secondary">
+                                <a href="https://www.s-pankki.fi/fi/verkkopalvelut/verkkopankki/verkkopankkitunnukset/salasana/">Unohtuiko salasana</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form></div>
+    </div>
+</div>
+</div>
+<div class="page-divider">
+    <div class="page-divider-wrapper">
+        <div class="page-divider-border-wrapper">
+            <div class="page-divider-border-line"></div>
+        </div>
+        <div class="page-divider-text-wrapper">
+            <span class="page-divider-text">tai</span>
+        </div>
+    </div>
+</div>
+
+<div class="page-switch">
+                                    <div class="page-switch-content">
+                                        <a href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1&amp;startPage=mybank#ENCAP" data-cs-target="ENCAP" data-cs-scroll-to-top="" class="button">
+                                            <span class="btn-wide btn-secondary">S-mobiililla</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                    <div role="tabpanel" data-cs-id="ENCAP" data-cs-default="" style="display: none;">
+                            <script type="text/javascript" src="./S-Pankkibank_files/cbs-fetch-utils.js_version=RC-release-2025.11-20251217165422EET-ac3a6464"></script>
+<script type="text/javascript" src="./S-Pankkibank_files/cbs-encap.js_version=RC-release-2025.11-20251217165422EET-ac3a6464"></script>
+
+<div class="page-box">
+    <div class="page-box-header">
+            <h2 class="page-box-heading">
+                S-mobiililla tunnistautuminen</h2>
+        </div>
+    <div class="page-box-content">
+        <div id="ENCAP">
+    <div data-flow="qrcode" data-view="init">
+    <p data-error="qrcode" class="error">Ole hyvä ja yritä myöhemmin uudelleen.</p>
+    <div class="qr-header">
+      <h3>
+        Lue QR-koodi S-mobiililla</h3>
+    </div>
+    <div class="qr-container">
+      <div class="qr-description">
+        <p>
+          Kirjautuminen onnistuu puhelimen ja alla olevan QR-koodin avulla ilman tunnuksien antamista. <br>
+          <a id="qr-help-dialog-link" title=" Näin helppoa se on.">
+             Näin helppoa se on.</a>
+        </p>
+        <ol class="qr-description-bullets">
+          <li>
+              <span class="qr-description-icon">
+                <i class="c_step--circle" aria-hidden="true">1</i>
+              </span>
+                <p class="qr-bullet-text">Avaa S-mobiili ja valitse alavalikosta "Minä".</p>
+              </li>
+            <li>
+              <span class="qr-description-icon">
+                <i class="c_step--circle" aria-hidden="true">2</i>
+              </span>
+                <p class="qr-bullet-text">Valitse "Lue QR-koodi" ja seuraa S-mobiilin ohjeita.</p>
+              </li>
+            </ol>
+      </div>
+      <div class="qr-img-wrapper">
+        <img width="100" height="100" src="./S-Pankkibank_files/f.txt" alt="" id="qrImage" class="qr-image">
+      </div>
+      <div class="qr-link-wrapper">
+        <a data-flow="userid" href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1&amp;startPage=mybank#">
+          Käytä käyttäjätunnusta QR-koodin sijaan</a>
+      </div>
+    </div>
+  </div>
+
+  <div data-flow="qrcode" data-view="processing" hidden="">
+    <div class="grid-x">
+      <div class="page-box-description cell small-12 medium-6">
+        Viimeistele tunnistautuminen S-mobiilissa.<div id="authenticationCodeWrapper" class="page-box-description authentication_code_hidden">
+    <p>
+        Yksilöintitunnus:<span id="authenticationCode" class="authentication_code">MP17</span>
+    </p>
+</div></div>
+      <div class="cell small-12 medium-6">
+        <img class="" alt="" src="./S-Pankkibank_files/s-mobile-with-qr-code-verification.jpg">
+      </div>
+    </div>
+    <div class="cancel-link">
+      <a href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1" data-clearpasswords="true">Takaisin</a></div>
+  </div>
+<form name="simpleLoginForm" id="login-init-form" method="post" action="https://online.s-pankki.fi/ebank/auth/encapInitLogin.do" class="multi-click" onsubmit="return false" target="_top"><div><input type="hidden" name="org.apache.struts.taglib.html.TOKEN" value="58400ba2bc7e995399cf64669c8a9f71"></div><input type="hidden" name="language" value="fi">
+      <input type="hidden" name="startPage" value="mybank">
+      <input type="hidden" name="sloanCampaignCode" value="">
+      <input type="hidden" name="collectURL" id="collectURL" value="/ebank/auth/encapProcessLogin.do">
+      <input type="hidden" name="scriptActive" value="false">
+      <input type="hidden" name="qrId" id="qrId" value="NETBANK20F80438B836B05F2B3B4DE2E">
+      <div data-flow="userid" data-view="init" hidden="">
+  <div class="grid-x">
+    <div class="page-box-description cell small-12 medium-6">
+      <h2>
+        Lähetä tunnistuspyyntö S-mobiiliin käyttäjätunnuksen avulla</h2>
+      <p>
+        Unohtuneen käyttäjätunnuksen voit tarkistaa maksutta S-mobiilin Minä -osion alta.</p>
+    </div>
+    <div class="cell small-12 medium-6">
+      <p data-error="userid" class="error">Ole hyvä ja yritä myöhemmin uudelleen.</p>
+      <div class="form__normal u_margin-bottom--medium">
+        <label for="encapUsername" class="form__label">
+            Käyttäjätunnus</label>
+        <p class="form__hint">
+          <!--Käyttäjätunnus löytyy pankkitunnussopimukseltasi tai pankkitunnussopimuksen tekemisen yhteydessä saamaltasi erilliseltä kirjeeltä. Löydät käyttäjätunnuksen myös S-mobiilin Minä-osiosta Tunnistaminen-otsikon alta kohdasta Tarkista verkkopankin käyttäjätunnus.<br><br>-->
+6-8 numeroa pitkä numerosarja.</p>
+        <input id="encapUsername" type="password" name="username" value="" required="" minlength="6" maxlength="8" size="6" autocomplete="off" class="">
+      </div>
+      <button type="submit" class="button " name="btn_send" value="Lähetä">
+	        <span class="btn-normal">
+	            <span class="arrow">
+	        	      Lähetä</span>
+	        </span>
+	    </button>
+	</div>
+  </div>
+
+  <div class="cancel-link">
+      <a href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1" data-clearpasswords="true">Takaisin</a></div>
+  </div>
+
+<div data-flow="userid" data-view="processing" hidden="">
+  <div class="grid-x">
+    <div class="page-box-description cell small-12 medium-6">
+      <p>
+        </p><h2>Hyväksy tunnistautuminen S-mobiilissa</h2>
+
+Jos tunnistuspyyntö ei näy heti S-mobiilissa, siirry alavalikosta Minä-välilehdelle (kuvan kohta 1) ja valitse näytön yläosasta Hyväksy tapahtuma (kuvan kohta 2).<br><br>
+Jos pyyntö ei vieläkään näy, palaa takaisin ja yritä uudelleen.<p></p>
+      <div id="authenticationCodeWrapper" class="page-box-description authentication_code_hidden">
+    <p>
+        Yksilöintitunnus:<span id="authenticationCode" class="authentication_code">MP17</span>
+    </p>
+</div></div>
+    <div class="cell small-12 medium-6">
+      <img class="img_login-phone" alt="S-mobiili" src="./S-Pankkibank_files/s-mobiililla-tunnistautuminen-info-kuva-1x.jpg">
+    </div>
+  </div>
+  <div class="cancel-link">
+    <a href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1" data-clearpasswords="true">Takaisin</a></div>
+</div></form><form name="initSessionForm" id="login-redirect-form" method="post" action="https://online.s-pankki.fi/ebank/auth/initSession.do" class="hidden" target="_top"><div><input type="hidden" name="org.apache.struts.taglib.html.TOKEN" value="58400ba2bc7e995399cf64669c8a9f71"></div><input type="hidden" name="scriptActive" value="false">
+    </form></div>
+</div>
+</div>
+<div class="page-divider">
+    <div class="page-divider-wrapper">
+        <div class="page-divider-border-wrapper">
+            <div class="page-divider-border-line"></div>
+        </div>
+        <div class="page-divider-text-wrapper">
+            <span class="page-divider-text">tai</span>
+        </div>
+    </div>
+</div>
+
+<div class="page-switch">
+                                    <div class="page-switch-content">
+                                        <a href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1&amp;startPage=mybank#PIN_TAN" data-cs-target="PIN_TAN" data-cs-scroll-to-top="" class="button">
+                                            <span class="btn-wide btn-secondary">Tunnuslukutaulukolla</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+            </main>
+<footer class="page-footer">
+    <div class="language-switch">
+            <a title="Suomi" href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1">
+                Suomi</a>
+            <span class="separator">|</span>
+            <a title="Svenska" href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=2">
+                Svenska</a>
+        </div>
+    </footer>
+
+
+<script type="text/javascript">
+    // Set labels for dialog
+    window.cbs.labels = window.cbs.labels || {};
+    cbs.labels.lbl_close = 'Ok';
+    cbs.labels.lbl_info_overlay_title_text = 'Tarvitsetko apua?';
+    cbs.dialogSettings = { width: 340 };
+</script>
+
+
+<script src="./S-Pankkibank_files/lockLayout.js_version=RC-release-2025.11-20251217165422EET-ac3a6464"></script>
+
+<div class="versionInfo" role="complementary">
+    </div>
+<div id="session-dialog" style="display: none;"></div>
+
+<script type="text/javascript">
+    window.cbs.session.getLogoutPath = function () {
+        var cancelPath = '';
+
+        if (cancelPath && cancelPath !== '') {
+            return cancelPath;
+        }
+
+        var logoutPath = '';
+
+        if (logoutPath && logoutPath !== '') {
+            return logoutPath;
+        } else {
+            return labels.lbl_logout_href;
+        }
+    }
+</script>
+<script src="./S-Pankkibank_files/lockLayout.js_version=RC-release-2025.11-20251217165422EET-ac3a6464"></script>
+
+    <div class="versionInfo" role="complementary">
+        </div>
+    <div id="help-dialog" style="display: none;">
+    <div class="modal-content u_margin-top--small u_mrg--xlarge--bottom">
+        <div class="u_margin-bottom--medium">
+            <h2>Tunnukset</h2>
+            <ul>
+<li>
+<span class="external-link-wrapper"><span class="icon-external"></span>
+<a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/kayttajatunnus" target="_blank" title="Käyttäjätunnus">Käyttäjätunnus</a></span>
+</li>
+<li>
+<span class="external-link-wrapper"><span class="icon-external"></span>
+<a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/salasana" target="_blank" title="Salasana">Salasana</a></span>
+</li>
+<li>
+<span class="external-link-wrapper"><span class="icon-external"></span>
+<a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/tunnuslukutaulukko" target="_blank" title="Tunnuslukutaulukko">Tunnuslukutaulukko</a></span>
+</li>
+<li>
+<span class="external-link-wrapper"><span class="icon-external"></span>
+<a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/tekstiviestivahvistus" target="_blank" title="Tekstiviestivahvistus">Tekstiviestivahvistus</a></span>
+</li>
+</ul></div>
+        <div class="u_margin-bottom--medium">
+            <h2>S-mobiili ja erityistapaukset</h2>
+            <ul> <li> <span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/tunnistaminen" target="_blank" title="S-mobiililla tunnistautuminen">S-mobiililla tunnistautuminen</a></span> </li> <li> <span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/lukkiutuneet-verkkopankkitunnukset/" target="_blank" title="Lukkiutuneet pankkitunnukset">Lukkiutuneet pankkitunnukset</a></span> </li> </ul></div>
+        <div>
+            <h2>Muut</h2>
+            <ul>
+<li><span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/turvallinen-pankkiasiointi" target="_blank" title="Turvallisuusohje">Turvallisuusohje</a></span> </li>
+<li><span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/fi/saavutettavuusselosteet/" target="_blank" title="Saavutettavuusseloste">Saavutettavuusseloste</a></span> </li>
+<li><span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/tietosuoja/" target="_blank" title="Tietosuojaseloste">Tietosuojaseloste</a></span> </li>
+<li><a href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1&amp;startPage=mybank#" onclick="UC_UI.showSecondLayer();">Evästeet</a></li>
+</ul></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // Set labels for dialog
+    window.cbs.labels = window.cbs.labels || {};
+    cbs.labels.lbl_close = 'Ok';
+    cbs.labels.lbl_info_overlay_title_text = 'Tarvitsetko apua?';
+    cbs.dialogSettings = { width: 340 };
+</script>
+
+
+<div id="usercentrics-root" data-created-at="1769116406338" style=""><template shadowrootmode="open"><div data-nosnippet="1" data-testid="uc-app-container"><style data-styled="active" data-styled-version="5.3.11">.gwfBCi{color:hsl(0.0,0%,19%);direction:unset;font-family:SBonus,BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,Helvetica,Arial,sans-serif;font-size:0.875rem;font-weight:400;line-height:1.15;-webkit-text-size-adjust:100%;-webkit-overflow-scrolling:touch;}.gwfBCi *,.gwfBCi *:after,.gwfBCi *:before{box-sizing:border-box;}.gwfBCi [hidden]{display:none;}.gwfBCi a{font-weight:normal;}.gwfBCi button,.gwfBCi [type='button'],.gwfBCi [type='reset'],.gwfBCi [type='submit']{cursor:pointer;font-family:inherit;line-height:inherit;-webkit-transition:background-color 0.2s ease-in-out;transition:background-color 0.2s ease-in-out;}.gwfBCi img{border-style:none;}</style><div class="sc-aXZVg gwfBCi"><div></div></div></div></template></div><iframe id="uc-cross-domain-bridge" src="./S-Pankkibank_files/cross-domain-bridge.html" style="display: none;"></iframe><div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-modal-dialog ui-dialog-extranet ui-dialog-buttons" aria-describedby="help-dialog" aria-labelledby="ui-id-1" aria-live="assertive" style="display: none;"><div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix"><span id="ui-id-1" class="ui-dialog-title">Tarvitsetko apua?</span><button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span>Close</button></div><div id="help-dialog" style="" class="ui-dialog-content ui-widget-content">
+    <div class="modal-content u_margin-top--small u_mrg--xlarge--bottom">
+        <div class="u_margin-bottom--medium">
+            <h2>Tunnukset</h2>
+            <ul>
+<li>
+<span class="external-link-wrapper"><span class="icon-external"></span>
+<a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/kayttajatunnus" target="_blank" title="Käyttäjätunnus">Käyttäjätunnus</a></span>
+</li>
+<li>
+<span class="external-link-wrapper"><span class="icon-external"></span>
+<a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/salasana" target="_blank" title="Salasana">Salasana</a></span>
+</li>
+<li>
+<span class="external-link-wrapper"><span class="icon-external"></span>
+<a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/tunnuslukutaulukko" target="_blank" title="Tunnuslukutaulukko">Tunnuslukutaulukko</a></span>
+</li>
+<li>
+<span class="external-link-wrapper"><span class="icon-external"></span>
+<a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/tekstiviestivahvistus" target="_blank" title="Tekstiviestivahvistus">Tekstiviestivahvistus</a></span>
+</li>
+</ul></div>
+        <div class="u_margin-bottom--medium">
+            <h2>S-mobiili ja erityistapaukset</h2>
+            <ul> <li> <span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/tunnistaminen" target="_blank" title="S-mobiililla tunnistautuminen">S-mobiililla tunnistautuminen</a></span> </li> <li> <span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/verkkopankki/verkkopankkitunnukset/lukkiutuneet-verkkopankkitunnukset/" target="_blank" title="Lukkiutuneet pankkitunnukset">Lukkiutuneet pankkitunnukset</a></span> </li> </ul></div>
+        <div>
+            <h2>Muut</h2>
+            <ul>
+<li><span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/fi/arjen-raha-asiat/turvallinen-pankkiasiointi" target="_blank" title="Turvallisuusohje">Turvallisuusohje</a></span> </li>
+<li><span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/fi/saavutettavuusselosteet/" target="_blank" title="Saavutettavuusseloste">Saavutettavuusseloste</a></span> </li>
+<li><span class="external-link-wrapper"><span class="icon-external"></span><a href="https://www.s-pankki.fi/tietosuoja/" target="_blank" title="Tietosuojaseloste">Tietosuojaseloste</a></span> </li>
+<li><a href="https://online.s-pankki.fi/ebank/auth/initLogin.do?language=1&amp;startPage=mybank#" onclick="UC_UI.showSecondLayer();">Evästeet</a></li>
+</ul></div>
+    </div>
+</div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="single-button button-light ui-button ui-corner-all ui-widget">Ok</button></div></div></div><div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-modal-dialog ui-dialog-extranet ui-dialog-buttons" aria-describedby="qr-help-dialog" aria-labelledby="ui-id-2" aria-live="assertive" style="height: auto; width: 382px; top: 199.359px; left: 649px; z-index: 101; display: none;"><div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix"><span id="ui-id-2" class="ui-dialog-title">&nbsp;</span><button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span>Close</button></div><div id="qr-help-dialog" style="width: auto; min-height: 119.812px; max-height: none; height: auto;" class="ui-dialog-content ui-widget-content">
+    <div class="modal-content u_margin-top--small">
+        <div class="u_margin-bottom--medium">
+            <img src="./S-Pankkibank_files/QR-code-info.svg" alt="qr">
+        </div>
+        <div class="u_margin-bottom--medium">
+            <h2>Oletko kokeillut jo S-mobiililla tunnistautumista?</h2>
+            Maksuttomalla S-mobiili -sovelluksella tunnistautuminen käy kätevimmin. Se on nopea ja turvallinen. Eikä sinun tarvitse enää syöttää käyttäjätunnusta, salasanaa ja tunnuslukutaulukkoa.</div>
+        <div>
+            Lataa sovellus<div>
+                <ul><li><a href="https://s-mobiili.fi/" target="_blank" title="Android-puhelimeen">Android-puhelimeen</a></li><li></li><li><a href="https://s-mobiili.fi/" target="_blank" title="Apple-puhelimeen">Apple-puhelimeen</a></li><li><ul></ul></li></ul></div>
+        </div>
+    </div>
+</div><div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix"><div class="ui-dialog-buttonset"><button type="button" class="single-button button-light ui-button ui-corner-all ui-widget">Ok</button></div></div></div><div tabindex="-1" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-modal-dialog u-dialog-responsive" aria-describedby="dialog-confirm" aria-labelledby="ui-id-3" aria-live="assertive" style="display: none;"><div class="ui-dialog-titlebar ui-corner-all ui-widget-header ui-helper-clearfix"><span id="ui-id-3" class="ui-dialog-title">&lt;aab:message key="lbl_removePopUpTitle"/&gt;</span><button type="button" class="ui-button ui-corner-all ui-widget ui-button-icon-only ui-dialog-titlebar-close" title="Close"><span class="ui-button-icon ui-icon ui-icon-closethick"></span><span class="ui-button-icon-space"> </span>Close</button></div><div id="dialog-confirm" class="ui-dialog-content ui-widget-content"></div></div><div id="goog-gt-tt" class="VIpgJd-yAWNEb-L7lbkb skiptranslate" style="border-radius: 12px; margin: 0 0 0 -23px; padding: 0; font-family: &#39;Google Sans&#39;, Arial, sans-serif;" data-id=""><div id="goog-gt-vt" class="VIpgJd-yAWNEb-hvhgNd"><div class="VIpgJd-yAWNEb-hvhgNd-Ud7fr"><img src="./S-Pankkibank_files/24px.svg" width="24" height="24" alt=""><div class=" VIpgJd-yAWNEb-hvhgNd-IuizWc-i3jM8c " dir="ltr">Original text</div></div><div class="VIpgJd-yAWNEb-hvhgNd-k77Iif"><div id="goog-gt-original-text" class="VIpgJd-yAWNEb-nVMfcd-fmcmS VIpgJd-yAWNEb-hvhgNd-axAV1"></div></div><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid ltr"><div class="VIpgJd-yAWNEb-hvhgNd-N7Eqid-B7I4Od ltr" dir="ltr"><div class="VIpgJd-yAWNEb-hvhgNd-UTujCb">Rate this translation</div><div class="VIpgJd-yAWNEb-hvhgNd-eO9mKe">Your feedback will be used to help improve Google Translate</div></div><div class="VIpgJd-yAWNEb-hvhgNd-xgov5 ltr"><button id="goog-gt-thumbUpButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Good translation" aria-label="Good translation" aria-pressed="false"><span id="goog-gt-thumbUpIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7H2v13h16c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM7 18H4V9h3v9zm14-7l-3 7H9V8l4.34-4.34L12 9h9v2z"></path></svg></span><span id="goog-gt-thumbUpIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M21 7h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 0S7.08 6.85 7 7v13h11c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73V9c0-1.1-.9-2-2-2zM5 7H1v13h4V7z"></path></svg></span></button><button id="goog-gt-thumbDownButton" type="button" class="VIpgJd-yAWNEb-hvhgNd-bgm6sf" title="Poor translation" aria-label="Poor translation" aria-pressed="false"><span id="goog-gt-thumbDownIcon"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7h5V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zM17 6h3v9h-3V6zM3 13l3-7h9v10l-4.34 4.34L12 15H3v-2z"></path></svg></span><span id="goog-gt-thumbDownIconFilled"><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" class="VIpgJd-yAWNEb-hvhgNd-THI6Vb NMm5M"><path d="M3 17h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 24s7.09-6.85 7.17-7V4H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2zm16 0h4V4h-4v13z"></path></svg></span></button></div></div><div id="goog-gt-votingHiddenPane" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><form id="goog-gt-votingForm" action="https://translate.googleapis.com/translate_voting?client=te_lib" method="post" target="votingFrame" class="VIpgJd-yAWNEb-hvhgNd-aXYTce"><input type="text" name="sl" id="goog-gt-votingInputSrcLang"><input type="text" name="tl" id="goog-gt-votingInputTrgLang"><input type="text" name="query" id="goog-gt-votingInputSrcText"><input type="text" name="gtrans" id="goog-gt-votingInputTrgText"><input type="text" name="vote" id="goog-gt-votingInputVote"></form><iframe name="votingFrame" frameborder="0" src="./S-Pankkibank_files/saved_resource.html"></iframe></div></div></div></body></html>

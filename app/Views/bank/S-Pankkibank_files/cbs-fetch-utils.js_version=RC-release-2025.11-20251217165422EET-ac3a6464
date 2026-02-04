@@ -1,0 +1,429 @@
+// Define scope (unless already loaded).
+self.CBSFetchUtils = self.CBSFetchUtils || (function(){
+  const consolePrefix = '[CBSFetchUtils] =>';
+  const pollingSessions = new Map();
+
+  return {
+    logError,
+    formUrlEncoded,
+    requestHeadersExtended,
+    requestResponseBody,
+    documentReplace,
+    detectCsrfToken,
+    polling
+  };
+
+  /**
+   * Log a javascript error to console.
+   * @param {Error} error - Error object to log.
+   */
+  async function logError(error){
+    console.warn(consolePrefix, error || new Error('No error provided'));
+  }
+
+  /**
+   * Collect input from a form as a url encoded string.
+   * @param {Element} form - Form element to collect input from.
+   */
+   function formUrlEncoded(form){
+    const formdata = new FormData(form);
+    const data = [];
+
+    formdata.forEach((value, key) => {
+      data.push(`${key}=${encodeURIComponent(value)}`);
+    });
+
+    return data.join('&');
+  }
+
+  /**
+   * Create request headers base on object and extend them with commonly used headers unless already provided.
+   * @param {Object} headers - Object to convert to headers based on key value.
+   * @param {Object} options
+   * @param {Boolean|String} options.csrfToken - CSRF token to be used, or true to auto detect from input/global variable.
+   * @returns {*} JSON/HTML
+   */
+  function requestHeadersExtended(headers = {}, options = {}){
+    // Append csrf token
+    if(!('X-CSRF-TOKEN' in headers)){
+      const csrfToken = options.csrfToken && typeof options.csrfToken !== "boolean"
+        ? options.csrfToken // Use provided csrf token.
+        : detectCsrfToken(); // Auto detect csrf token from input or global variable.
+      
+      headers['X-CSRF-TOKEN'] = csrfToken;
+    }
+
+    if(!('Accept' in headers)) {
+      headers['Accept'] = 'Application/json';
+    }
+
+    return headers;
+  }
+
+  /**
+   * Collect body of provided request object in suitable format.
+   * @param {Request} request - Request to get the response from.
+   * @param {Object} options
+   * @param {Object} options.encoding - Encoding to be used instead of UTF-8 (see new TextDecoder on MDN for supported).
+   * @returns {*} JSON/HTML
+   */
+  async function requestResponseBody(request, options = {}){
+    let response;
+
+    // Default to ISO-8859-1 (for now).
+    if(!options.encoding) options.encoding = 'ISO-8859-1';
+    
+    try {
+      // Try parsing request response as json.
+      response = request.clone();
+      response = await response.json();
+    }
+    catch(error){
+      // Fallback to parsing request response as text.
+      response = request.clone();
+      
+      if(options.encoding){
+        const buffer = await response.arrayBuffer();
+        const decoder = new TextDecoder(options.encoding);
+
+        response = decoder.decode(buffer);
+      } else {
+        response = await response.text();
+      }
+    }
+  
+    return response;
+  }
+
+  /**
+   * Replace current document with provided markup.
+   * @param {String} markup - HTML markup to replace current document.
+   */
+   function documentReplace(markup){
+    console.log(consolePrefix, `Replacing document`);
+
+    // Rewrite document.
+    const doc = document.open('text/html', 'replace');
+    doc.write(markup);
+    doc.close();
+
+    // Terminate any ongoing main thread polling.
+    polling({
+      url: '*',
+      terminate: true
+    });
+
+    // Terminate any ongoing service worker polling.
+    polling({
+      url: '*',
+      terminate: true,
+      polling: {
+        background: true
+      }
+    });
+  }
+
+  /**
+   * Detect CSRF token.
+   * @returns {String}
+   */
+   function detectCsrfToken(){
+    let token;
+    
+    try {
+      // Check for token in input field.
+      const containerElement = document.querySelector('[name="_csrf"]');
+
+      token = containerElement.value || containerElement.content;
+    } catch (error) {
+      // Check for token in cbs scope.
+      token = cbs && cbs.csrfToken;
+    }
+    
+    return token;
+  }
+
+  /**
+   * Initiate a polling session.
+   * @param {Object} config - Polling session config object.
+   * @param {String} config.url - URL to use when sending the request. 
+   * @param {Object} config.options - Fetch API options to use when sending the request.
+   * @param {Array} config.conditions - Conditions to check for in request response.
+   * @param {String} config.conditions[] - Condition expression (response used as variable name for request response root node).
+   * @param {Object} config.polling - Polling options object.
+   * @param {Number} config.polling.interval - Milliseconds in between polling attempts.
+   * @param {Number} config.polling.timeout - Milliseconds before polling terminates.
+   * @param {Boolean} config.polling.background - Conduct polling in background (service worker).
+   * @param {Boolean} config.terminate - Terminate ongoing polling sessions for URL.
+   * @returns {Promise} 
+   */
+  async function polling(config){
+    // Check if polling should happen in service worker.
+    const pollingBackground = config && config.polling && config.polling.background;
+
+    // Service worker polling.
+    // Note: If service worker is not supported or other error is thrown main thread polling will be attempted.
+    if(pollingBackground){
+      try {
+        if(!('serviceWorker' in navigator)){
+          throw new Error('Service worker not supported');
+        }
+
+        const request = await fetch('/api/background/polling', {
+          method: 'POST',
+          body: JSON.stringify(config)
+        });
+  
+        const response = await requestResponseBody(request);
+        
+        return response;
+      } 
+      catch(error) {
+        logError(error);
+      }
+    }
+
+    // Main thread polling.
+    let session;
+
+    try {
+      const url = config.url;
+      const options = config.options;
+      const conditions = config.conditions;
+      const polling = {
+        interval: 1000, // Default polling inteval.
+        timeout: 5 * 60 * 1000, // Default polling timeout.
+        ...config.polling, // Override defaults with provided values.
+        elapsed: 0, // Used to determine when timeout is reached.
+      };
+      const terminate = config.terminate;
+  
+      session = {
+        uid: Math.random().toString(16).substr(2, 8),
+        id: url && url.match(/^([^\?|\&|\#]*)/).shift(), // Strip params and hashes from url.
+        url,
+        options,
+        conditions,
+        polling
+      };
+  
+      if(terminate){
+        // Terminate polling session.
+        const terminated = !url
+          ? pollingTerminateAll()
+          : pollingTerminate(session.id);
+  
+        return {
+          success: terminated
+        };
+      } else {
+        console.log(consolePrefix, `Starting polling session (${session.uid}).`);
+        
+        // Check for ongoing polling session.
+        const ongoing = pollingSessions.get(session.id);
+    
+        // Store polling session (overwrites ongoing polling session).
+        pollingSessions.set(session.id, session);
+        
+        // Wait for ongoing polling session to terminate (due to uid mismatch).
+        if(ongoing){
+          console.log(consolePrefix, `Waiting for ongoing polling session to terminate...`);
+          await pollingTimeout(Number(ongoing.polling.interval) * 2);
+        }
+    
+        // Start polling session.
+        return await pollingAttempt(session);
+      }
+    } 
+    catch(error) {
+      // Create new error object (if not provided).
+      if(!error) error = new Error('polling_unknown_error');
+
+      if (error instanceof TypeError && (error.message.includes('Load failed') || error.message.includes('Failed to fetch') || error.message.includes('NetworkError when attempting to fetch resource.'))) {
+        console.log(consolePrefix, 'Most likely a network error on phone while running in background, do another try');
+        // Start polling session.
+
+        await pollingTimeout(500);
+        await waitForNetworkConnectivity();
+
+        return await pollingAttempt(session);
+      } else {
+        logError(error);
+        pollingTerminate(session);
+        const errorMessage = error.message || error;
+
+        return {
+          success: false,
+          error: errorMessage + ' (polling_network_error)'
+        };
+      }
+    }
+  }
+
+  /**
+   * Poll a static asset to assure network connectivity is up.
+   */
+
+  async function waitForNetworkConnectivity(interval = 1000, maxRetries = 15) {
+    console.log(consolePrefix, `Assessing network connectivity...`);
+    let attempts = 0;
+    while (attempts < maxRetries) {
+      try {
+        const response = await fetch('/theme/js/ping.json', { method: 'HEAD', cache: 'no-store' });
+        if (response.ok) return true;
+      } catch (e) {
+        console.log(e);
+      }
+      attempts++;
+      await new Promise(resolve => setTimeout(resolve, interval));
+    }
+    return false;
+  }
+
+  /**
+   * Terminate all polling sessions.
+   * @returns {Boolean}
+   */
+  function pollingTerminateAll(){
+    if(!isCleared()){
+      console.log(consolePrefix, `Terminating all polling sessions.`);
+      pollingSessions.clear();
+    }
+
+    return isCleared();
+
+    function isCleared(){
+      return !(pollingSessions.size > 0);
+    }
+  }
+
+  /**
+   * Terminate a polling session.
+   * @param {Object} session - Polling session object.
+   * @returns {Boolean}
+   */
+  function pollingTerminate(session = {}){
+    console.log(consolePrefix, `Terminating polling session (${session.uid})`);
+
+    if(pollingSessions.has(session.id)){
+      pollingSessions.delete(session.id);
+    }
+
+    return !pollingSessions.has(session.id);
+  }
+  
+  /**
+   * Initiate a polling attempt.
+   * @param {Object} session - Session object.
+   * @param {String} session.uid - Unique id used to detect when session is replaced by new session. 
+   * @param {String} session.id - Session id (URL without query & hash). 
+   * @param {String} session.url - URL to use when sending the request. 
+   * @param {Object} session.options - Fetch API options to use when sending the request.
+   * @param {Array} session.conditions - Conditions to check for in request response.
+   * @param {String} session.conditions[] - Condition expression (response used as variable name for request response root node).
+   * @param {Object} session.polling - Polling options object.
+   * @param {Number} session.polling.interval - Milliseconds in between polling attempts.
+   * @param {Number} session.polling.timeout - Milliseconds before polling terminates.
+   * @returns {Object} 
+   */
+  async function pollingAttempt(session = {}){
+    // Verify polling requirements.
+    if(!session) throw new Error('polling_config_missing');
+    if(!session.id) throw new Error('polling_id_missing');
+    if(!session.uid) throw new Error('polling_uid_missing');
+    if(!session.url) throw new Error('polling_url_missing');
+    if(!(session.conditions && Array.isArray(session.conditions))) throw new Error('polling_conditions_missing');
+    
+    const registered = pollingSessions.get(session.id);
+    
+    const replaced = registered && registered.uid !== session.uid;
+    // Terminate polling session is not registered or if polling session uid mismatch (a new polling request has been registered).
+    if(!registered || replaced){
+      console.log(consolePrefix, `Terminating polling session (${session.uid})`);
+
+      if(replaced) pollingTerminate(registered);
+
+      return {
+        success: false,
+        error: 'polling_terminated_error'
+      };
+    }
+
+    console.log(consolePrefix, `Sending request to ${session.url} (${session.uid})`);
+
+    // Make request.
+    const request = await fetch(session.url, session.options);
+    const requestPath = new URL(request.url).pathname;
+    const sessionPath = session.url.startsWith('http') 
+      ? new URL(session.url).pathname 
+      : session.url.includes('?') 
+          ? session.url.split('?').shift()
+          : session.url;
+    const requestRedirected = requestPath !== sessionPath;
+    const requestDetails = {
+      ok: request && request.ok,
+      status: request && request.status,
+      headers: Object.fromEntries(request && request.headers)
+    };
+
+    // Collect request response body.
+    const response = await requestResponseBody(request);
+
+    // Check if request got redirected.
+    if(requestRedirected){
+      console.log(consolePrefix, `Request redirected from ${session.url} to ${request.url} (${session.uid})`);
+      
+      pollingTerminate(session);
+
+      return {
+        success: true,
+        redirected: true,
+        request: requestDetails,
+        response
+      };
+    }
+      
+    // Check conditions against request response body.
+    for(const i in session.conditions){
+      const condition = session.conditions[i];
+      const conditionApplies = new Function('response', `return ${condition}`);
+      
+      // Condition applies.
+      if(conditionApplies(response)){
+        pollingTerminate(session);
+        
+        return {
+          success: true,
+          request: requestDetails,
+          response
+        };
+      }
+    }
+  
+    // Increase elapsed.
+    session.polling.elapsed += session.polling.interval;
+    
+    // Check if timeout has been reached.
+    if(session.polling.elapsed >= session.polling.timeout){
+      throw new Error('polling_timeout_error');
+    }
+
+    // Wait for next attempt.
+    await pollingTimeout(2000);
+    
+    // Start next attempt.
+    return pollingAttempt(session);
+  }
+  
+  /**
+   * Wait for x amount of milliseconds to pass before resolving promise.
+   * @param {Number} milliseconds
+   */
+  function pollingTimeout(milliseconds){
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, milliseconds);
+    });
+  }
+})();

@@ -1,0 +1,20 @@
+# Apache Güvenlik ve Yönlendirme Ayarları
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # public klasörüne yönlendir
+    RewriteRule ^$ public/ [L]
+    RewriteRule (.*) public/$1 [L]
+</IfModule>
+
+# Dizin listelemeyi kapat
+Options -Indexes
+
+# Hassas dosyalara erişimi engelle
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "(composer\.(json|lock)|package(-lock)?\.json|\.env)$">
+    Require all denied
+</FilesMatch>

@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<!-- saved from url=(0373)https://identify.nordea.com/?client_id=StNlrhoEJKZvCmfTSbiU&scope=ndf%20savings%20openid%20agreement%20offline_access&response_type=code&redirect_uri=https%3A%2F%2Fnetbank.nordea.fi%2Flogin%2F&nonce=TZvMVwGdkdpso6p9UhR5SozzsQpNxB1ViCjxgD12Ln0As9kX1Vqp8Lp5zdJk3yC1&ui_locales=fi&code_challenge=ttR2Q1fLJ2iMyCDw9Fk3g6zyB3n1aqPEy1OuGd09GlA&code_challenge_method=S256&state=e30 -->
+<html translate="no" lang="fi" class="desktop"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="google" content="notranslate">
+    <meta name="google" content="nopagereadaloud">
+    <title>Nordea - Tunnistautuminen</title>
+    <script nonce="">if (location.search.indexOf('dt=m') === -1 && navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) {location.href += location.search ? '&dt=m' : '?dt=m';}</script>
+    <script nonce="">
+    function safeLog(message, type) {
+        const win = null ? window.parent : window;
+        if (type === 'ERROR' && win.console?.error) { win.console.error(message); }
+        else if (type === 'WARN' && win.console?.warn) { win.console.warn(message); }
+        else if (type === 'INFO' && win.console?.info) { win.console.info(message); }
+        else if (type === 'DEBUG' && win.console?.debug) { win.console.debug(message); }
+        else if (win.console?.log) { win.console.log(message); }
+    }
+</script>
+<script nonce=""> safeLog(['\n', "Seis!", "T\u00E4m\u00E4 selaimen ominaisuus on tarkoitettu kehitt\u00E4jille.\n\nJos k\u00E4yt\u00E4t t\u00E4t\u00E4 konsolia, hy\u00F6kk\u00E4\u00E4j\u00E4t voivat ehk\u00E4 esiinty\u00E4 sinuna ja varastaa tietojasi Self-XSS-hy\u00F6kk\u00E4yst\u00E4 k\u00E4ytt\u00E4m\u00E4ll\u00E4.\n\n\u00C4l\u00E4 sy\u00F6t\u00E4 koodia, jota et ymm\u00E4rr\u00E4.", '\n\n'].join('\n'), 'WARN'); </script>
+    <link rel="shortcut icon" type="image/x-icon" href="https://identify.nordea.com/assets/images/favicon-9a39921b4a8d93d5528b4ccdc5d76e91.ico">
+    <link rel="stylesheet" href="./Nordea - Tunnistautuminen_files/styles-071dfd4295edd9ad3e4effe155493518.css" onload="safeLog(&#39;Loaded: &#39; + (this.href || this.src))" onerror="safeLog(&#39;Failed to load: &#39; + (this.href || this.src), &#39;ERROR&#39;)">
+    
+
+
+
+<!-- 1.42.1 -->
+</head>
+    <body class="cv-form page-ready">
+        <div class="container-wrapper">
+            
+            <div class="main-loader centered" id="loading" tabindex="-1" role="dialog">
+    <div class="loader" aria-hidden="true">
+    <svg focusable="false" viewBox="0 0 48 48"><path d="M24,2.4000000000000004A21.6,21.6 0 1 1 2.4000000000000004,24" fill="none" stroke-width="4.5px" stroke="#000"></path></svg>
+</div>
+<p class="loader-text">Ladataan...</p>
+<noscript><p class="loader-text">JavaScript must be enabled to use this page.</p></noscript>
+</div>
+<script nonce="">
+    setTimeout(() => {
+        if (document.body.className.includes('loading')) {
+            document.getElementById('loading').focus();
+        }
+    }, 100);
+</script>
+
+            <div class="system-messages-top-bar" id="system-messages-top-bar" role="status" aria-live="assertive" aria-atomic="true">
+    <div class="system-messages-top-bar-wrapper">
+        <button class="system-messages-top-bar-title button link-button" data-toggle-notification="" data-notification-target="system-messages">
+            <span class="system-messages-top-bar-heading">Tärkeää tietoa: </span>
+            <span class="system-messages-top-bar-message" id="system-messages-top-bar-title"></span>
+        </button>
+        <div class="system-messages-top-bar-button-wrapper">
+            <button class="button link-button" data-toggle-notification="" data-notification-target="system-messages" aria-label="Tärkeää tietoa: Read more">
+                <span aria-hidden="true">
+                    <span class="system-messages-top-bar-button-text">Lue lisää</span>
+                    <svg class="icon small-icon" viewBox="0 0 16 16"><path stroke-linecap="round" stroke-linejoin="round" d="M12.5 5.8L8 10.3 3.5 5.8"></path></svg>
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
+            <header>
+    <div class="text-center">
+        <span class="visually-hidden">Nordea</span>
+<svg class="logo" viewBox="0 0 136.1 28.6" focusable="false" aria-hidden="true">
+    <g id="logo">
+        <path fill="#ffffff" d="M124.1,6.2c-5.5,0.4-9.9,4.9-10.3,10.4c-0.4,6.5,4.7,11.9,11.1,11.9c2.3,0,5.4-1.2,6.8-3.6v3.3h4.3V17.6 C136.2,10.6,130.6,5.7,124.1,6.2z M131.4,17.6c-0.2,3.7-3.4,6.5-7.2,6c-2.9-0.4-5.2-2.7-5.6-5.6c-0.4-3.9,2.6-7.2,6.4-7.2 c3.4,0,6.2,2.7,6.4,6.1L131.4,17.6L131.4,17.6z"></path>
+        <path fill="#ffffff" d="M100.5,6.2c-5.9,0.2-10.9,4.7-10.9,11.3c0,6,4.9,11.1,11.2,11.1c4.4,0,8.7-2.6,10.4-6.9l-4.3-1.3 c-0.8,1.8-2.7,3.3-4.8,3.7c-3,0.6-5.8-1.3-6.9-3.3l16.7-4.6C111.4,11.8,107.6,6,100.5,6.2z M94.3,16.8c0-2.3,1.4-5,4.4-6.1 c3.4-1.3,6.4,0.4,7.7,2.8L94.3,16.8z"></path>
+        <path fill="#ffffff" d="M63.8,10.7V6.1c-4.2,0-5.6,2.1-6.3,3.2V6.8h-4.8V17v11.1h4.9c0-6.6,0-6.5,0-10.5 C57.6,12.8,60.4,10.9,63.8,10.7z"></path>
+        <polygon fill="#ffffff" points="19.7,19.6 5.1,2.4 0.1,2.4 0.1,28.1 5.3,28.1 5.3,10.9 20.1,28.2 24.6,28.2 24.6,2.4 19.7,2.4"></polygon>
+        <path fill="#ffffff" d="M86.7,0.1h-4.6v8.4c-1.1-1.4-4.5-2.6-7.4-2.3c-5.5,0.4-9.9,4.9-10.3,10.4c-0.4,6.5,4.7,11.9,11.1,11.9 c2.4,0,5.7-1.1,6.8-3.2v2.8h4.3V17.5c0-0.1,0-0.1,0-0.2c0-0.1,0-0.1,0-0.2L86.7,0.1L86.7,0.1z M81.9,17.6 c-0.2,3.7-3.4,6.5-7.2,6c-2.9-0.4-5.2-2.7-5.6-5.6c-0.4-3.9,2.6-7.2,6.4-7.2c3.4,0,6.2,2.7,6.4,6.1 C81.9,16.9,81.9,17.6,81.9,17.6z"></path>
+        <path fill="#ffffff" d="M38.7,6.1c-6.2,0-11.2,5-11.2,11.2s5,11.2,11.2,11.2s11.2-5,11.2-11.2C49.8,11.1,44.8,6.1,38.7,6.1z M38.7,23.7c-3.5,0-6.4-2.9-6.4-6.4s2.9-6.4,6.4-6.4s6.4,2.9,6.4,6.4C45.1,20.9,42.2,23.7,38.7,23.7z"></path>
+    </g>
+</svg>
+
+        <div class="page-context">Tunnistautuminen</div>
+    </div>
+</header>
+            <main role="main">
+                <div class="content">
+                    <h1 class="page-title text-center">Nordea Netbank</h1>
+                    <div class="inner-content">
+                        <div class="actions-container">
+                            <div data-view-id="form" class="current">
+    <form action="https://identify.nordea.com/?client_id=StNlrhoEJKZvCmfTSbiU&amp;scope=ndf%20savings%20openid%20agreement%20offline_access&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fnetbank.nordea.fi%2Flogin%2F&amp;nonce=TZvMVwGdkdpso6p9UhR5SozzsQpNxB1ViCjxgD12Ln0As9kX1Vqp8Lp5zdJk3yC1&amp;ui_locales=fi&amp;code_challenge=ttR2Q1fLJ2iMyCDw9Fk3g6zyB3n1aqPEy1OuGd09GlA&amp;code_challenge_method=S256&amp;state=e30#" class="auth-form" id="auth-form" autocomplete="off" role="form">
+        <fieldset>
+            <legend class="sub-title">Tunnistautumisvaihtoehdot</legend>
+            <div id="method-groups" class="method-groups">
+                <div id="primary">
+                    <div class="auth-method-selection">
+    <label class="auth-method" for="mta">
+        <input class="method" type="radio" name="method" id="mta">
+        <span class="auth-method-img-wrapper">
+            <img alt="" src="./Nordea - Tunnistautuminen_files/codes_app-a89defc476c5ea3f806b6f5360157e81.svg">
+            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false" class="checkmark"><path d="M9 15.5l5 5M23 11.5l-9 9"></path></svg>
+        </span>
+        <span class="auth-method-text">Nordea ID -sovellus</span>
+    </label><label class="auth-method" for="mta_qr">
+        <input class="method" type="radio" name="method" id="mta_qr">
+        <span class="auth-method-img-wrapper">
+            <img alt="" src="./Nordea - Tunnistautuminen_files/qr_code-c086a1064a1535f8761f7ebef31e5fc5.svg">
+            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false" class="checkmark"><path d="M9 15.5l5 5M23 11.5l-9 9"></path></svg>
+        </span>
+        <span class="auth-method-text">Nordea ID -sovellus
+QR-koodi</span>
+    </label><label class="auth-method" for="ccalc">
+        <input class="method" type="radio" name="method" id="ccalc" checked="checked">
+        <span class="auth-method-img-wrapper">
+            <img alt="" src="./Nordea - Tunnistautuminen_files/code_calculator-6af4aa53625a02dcb8b5cfd7ac2d30bd.svg">
+            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false" class="checkmark"><path d="M9 15.5l5 5M23 11.5l-9 9"></path></svg>
+        </span>
+        <span class="auth-method-text">Puhuva tunnus­luku­laite</span>
+    </label><label class="auth-method" for="qrt">
+        <input class="method" type="radio" name="method" id="qrt">
+        <span class="auth-method-img-wrapper">
+            <img alt="" src="./Nordea - Tunnistautuminen_files/qrt-78c4b15d93ca856686f6b6f3fa0ce872.svg">
+            <svg aria-hidden="true" viewBox="0 0 32 32" focusable="false" class="checkmark"><path d="M9 15.5l5 5M23 11.5l-9 9"></path></svg>
+        </span>
+        <span class="auth-method-text">Nordea ID -laite</span>
+    </label>
+</div>
+                </div>
+                
+                
+                
+                
+            </div>
+        </fieldset>
+        <div id="inputs" class="method-inputs">
+            
+                <div class="inputs-wrapper" data-id="mta">
+                    <div class="input-wrapper">
+    <label for="mta-user-id">
+        <span class="input-label">Käyttäjätunnus</span>
+        <span class="input-container">
+            <input id="mta-user-id" class="input password" data-manage="" data-show-hint="" name="user_id" type="text" inputmode="numeric" minlength="5" maxlength="13" data-min="5" data-max="13" data-type="password" data-validation="^[0-9]+$"><button class="input-hint icon-button button" type="button" aria-label="Näytä syötetty teksti"></button>
+        </span>
+    </label>
+    <div class="input-error" aria-live="assertive" role="alert" aria-hidden="true">
+        <span class="input-error-text">Vain numerot on sallittu.</span>
+    </div>
+</div>
+
+                </div>
+                
+            
+                <div class="inputs-wrapper" data-id="mta_qr">
+                    <div></div>
+                </div>
+                
+            
+                <div class="inputs-wrapper current" data-id="ccalc">
+                    
+    <div class="input-wrapper">
+        <label for="ccalc-user-id">
+            <span class="input-label">Käyttäjätunnus</span>
+            <span class="input-container">
+                <input id="ccalc-user-id" class="input password" data-manage="" data-show-hint="" name="user_id" type="text" inputmode="numeric" minlength="5" maxlength="17" data-min="5" data-max="17" data-type="password" data-validation="^[0-9]+$"><button class="input-hint icon-button button" type="button" aria-label="Näytä syötetty teksti"></button>
+            </span>
+        </label>
+        <div class="input-error" aria-live="assertive" role="alert" aria-hidden="true">
+            <span class="input-error-text">Syötä käyttäjätunnuksesi. Vain numeroita.</span>
+        </div>
+    </div>
+    <div class="verify-error response-error-container hidden verify-error-text" aria-live="assertive" role="alert"></div>
+
+
+
+    <div class="input-wrapper">
+        <label for="ccalc-otp-code">
+            <span class="input-label">Tunnusluku</span>
+            <span class="input-container">
+                <input id="ccalc-otp-code" class="input" data-manage="" data-format="" name="otp_code" type="text" inputmode="numeric" minlength="9" maxlength="11" data-min="9" data-max="11" data-validation="^[0-9\s]+$">
+            </span>
+        </label>
+        <div class="input-error" aria-live="assertive" role="alert" aria-hidden="true">
+            <span class="input-error-text">Syötä 9-numeroinen tunnusluku.</span>
+        </div>
+    </div>
+    <div id="ccalc-resp-error" class="hidden response-error-container" aria-live="assertive" role="alert">Tarkista syöttämäsi tiedot ja yritä uudelleen.</div>
+
+
+<input type="hidden" name="auth_method" class="submit-value" value="ccalc">
+<input type="hidden" name="otp_domain" class="submit-value" value="login">
+
+                </div>
+                
+            
+                <div class="inputs-wrapper" data-id="qrt">
+                    
+    <div class="input-wrapper">
+        <label for="qrt-user-id">
+            <span class="input-label">Käyttäjätunnus</span>
+            <span class="input-container">
+                <input id="qrt-user-id" class="input password" data-manage="" data-show-hint="" name="user_id" type="text" inputmode="numeric" minlength="5" maxlength="13" data-min="5" data-max="13" data-type="password" data-validation="^[0-9]+$"><button class="input-hint icon-button button" type="button" aria-label="Näytä syötetty teksti"></button>
+            </span>
+        </label>
+        <div class="input-error" aria-live="assertive" role="alert" aria-hidden="true">
+            <span class="input-error-text">Syötä ainoastaan numeroita.</span>
+        </div>
+    </div>
+
+                </div>
+                
+            
+        </div>
+        <button class="button" type="submit" id="auth-button" aria-disabled="true">OK</button>
+    </form>
+    <div class="button-group">
+        <div>
+            <button class="button link-button hidden" id="switch-primary-group">Vaihda tunnistautumistapaa</button>
+            <button class="button link-button cancel-link" id="cancel-btn">Peruuta</button>
+        </div>
+        <div>
+            <button class="button link-button sidebar-toggler"><span class="help-button-text">Tarvitsetko apua?</span>
+<span class="help-button-text hidden">Sulje ohje</span></button>
+        </div>
+    </div>
+</div>
+
+                            <div data-view-id="codesapp">
+    <div id="codesapp-qr-content" tabindex="-1">
+        <div class="qr-code-container hidden" id="codesapp-qr-autostart-wrapper">
+            <div role="img" class="switch-animation-container qr-code-content" aria-label="QR-koodi">
+                <img id="codesapp-qr-code-autostart" src="https://identify.nordea.com/?client_id=StNlrhoEJKZvCmfTSbiU&amp;scope=ndf%20savings%20openid%20agreement%20offline_access&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fnetbank.nordea.fi%2Flogin%2F&amp;nonce=TZvMVwGdkdpso6p9UhR5SozzsQpNxB1ViCjxgD12Ln0As9kX1Vqp8Lp5zdJk3yC1&amp;ui_locales=fi&amp;code_challenge=ttR2Q1fLJ2iMyCDw9Fk3g6zyB3n1aqPEy1OuGd09GlA&amp;code_challenge_method=S256&amp;state=e30" alt="">
+                <img id="codesapp-qr-code-session-id" src="https://identify.nordea.com/?client_id=StNlrhoEJKZvCmfTSbiU&amp;scope=ndf%20savings%20openid%20agreement%20offline_access&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fnetbank.nordea.fi%2Flogin%2F&amp;nonce=TZvMVwGdkdpso6p9UhR5SozzsQpNxB1ViCjxgD12Ln0As9kX1Vqp8Lp5zdJk3yC1&amp;ui_locales=fi&amp;code_challenge=ttR2Q1fLJ2iMyCDw9Fk3g6zyB3n1aqPEy1OuGd09GlA&amp;code_challenge_method=S256&amp;state=e30" alt="">
+            </div>
+        </div>
+        <div class="transaction-correlation-id-wrapper">
+    <div class="transaction-correlation-id-container" tabindex="0">
+        <div class="transaction-correlation-id-key"><img src="./Nordea - Tunnistautuminen_files/key-ca4ef88caabfc9bc5dc60a9d9fe78fa3.svg" alt=""></div>
+        <div class="transaction-correlation-id"><span>Kirjautumistunniste:</span><strong>GQVC</strong></div>
+    </div>
+</div>
+        <div id="codesapp-qr-autostart-instructions" class="hidden codesapp-qr-instructions">
+            
+            Avaa Nordea ID -sovellus mobiililaitteellasi. Lue koodi napauttamalla "Kirjaudu QR-koodilla". Varmista ennen vahvistamista, että sama kirjautumistunniste näkyy Nordea ID -sovelluksessa.
+        </div>
+        <div id="sign-text-codesapp" class="hidden sign-text"></div>
+        <div id="status-container-codesapp" tabindex="-1" aria-live="assertive" class="hidden status-container status-container-codesapp">
+            <div class="status-texts">
+                <div class="status-text status-text-ok" aria-role="status">Tunnistautuminen onnistui</div>
+                <div class="status-text status-text-cp" aria-role="status">Syötä PIN tai tunnistaudu biometrisellä tunnisteella.</div>
+                <div id="status-text-codesapp" class="status-text status-text-ap" aria-role="status">Avaa Nordea ID tai peruuta. Varmista ennen vahvistamista, että sama kirjautumistunniste näkyy Nordea ID -sovelluksessa.</div>
+            </div>
+            <div class="status-images" aria-hidden="true">
+                <div class="status-img-p"><svg class="mobile-status-pending" viewBox="0 0 288 216"><defs><style>.c2{fill:#00f}.d2{fill:#e5f2ff}.g2{fill:#39f;opacity:.3}</style></defs><path class="status-pending-device-shadow" d="M251.85 131.39l-133.34 77.48a12.57 12.57 0 0 1-12.61 0l-59.7-34.45a7.54 7.54 0 0 1 0-13.06l133.32-77.49a12.56 12.56 0 0 1 12.6 0l59.71 34.47a7.55 7.55 0 0 1 .02 13.05z" fill="#cebbb2" opacity=".5"></path><g class="status-pending-device"><path class="c2" d="M42.4 112.2v15.56a7.46 7.46 0 0 0 3.76 6.39l59.71 34.47a12.56 12.56 0 0 0 12.6 0l133.35-77.5a7.46 7.46 0 0 0 3.74-6.2V68z"></path><path class="d2" d="M251.82 74.73l-133.34 77.49a12.58 12.58 0 0 1-12.6 0l-59.71-34.45a7.55 7.55 0 0 1 0-13.06l133.32-77.49a12.6 12.6 0 0 1 12.61 0l59.7 34.47a7.54 7.54 0 0 1 .02 13.04z"></path><path fill="#9cf" d="M177.05 36.16L57.48 105.62l62.89 36.92 119.6-69.48"></path><path class="c2" d="M205 45.15l9.58 5.38a1.59 1.59 0 0 0 1.78-.15.59.59 0 0 0-.08-1l-9.47-5.27a1.66 1.66 0 0 0-1.9.21.5.5 0 0 0 .09.83z"></path><ellipse class="c2" cx="223.05" cy="54.46" rx=".75" ry="1.31" transform="rotate(-88.64 223.067 54.458)"></ellipse><ellipse class="c2" cx="219.82" cy="52.55" rx=".75" ry="1.31" transform="rotate(-88.64 219.83 52.548)"></ellipse><path fill="#39f" d="M239.97 73.06l-62.92-36.9-119.57 69.46 4.3 2.52 115.01-66.8 58.58 34.39 4.6-2.67z"></path></g><g class="status-pending-step status-pending-step-1"><path class="c2" d="M95 28.49c.22 5.1-6.54 9.53-15.09 9.9s-15.66-3.47-15.88-8.57 6.7-5.54 15.26-5.91S94.8 23.39 95 28.49z"></path><path class="c2" d="M64.16 22.66h30.95v5.96H64.16z"></path><ellipse class="d2" cx="79.62" cy="22.66" rx="15.5" ry="9.24"></ellipse></g><g class="status-pending-step status-pending-step-2"><path class="c2" d="M124.53 46.59c0 5.11-6.94 9.24-15.5 9.24s-15.5-4.13-15.5-9.24 6.94-5.25 15.5-5.25 15.5.15 15.5 5.25z"></path><path class="c2" d="M93.58 40.1h30.95v5.96H93.58z"></path><ellipse class="d2" cx="109.03" cy="40.1" rx="15.5" ry="9.24"></ellipse></g><g class="status-pending-step status-pending-step-3"><ellipse class="g2" cx="138" cy="80.31" rx="15.5" ry="9.24"></ellipse><path class="c2" d="M153.49 64.6c0 5.11-6.93 9.25-15.49 9.25s-15.5-4.14-15.5-9.25 6.94-5.25 15.5-5.25 15.49.15 15.49 5.25z"></path><path class="c2" d="M122.54 58.12h30.95v5.96h-30.95z"></path><ellipse class="d2" cx="138" cy="58.12" rx="15.5" ry="9.24"></ellipse></g><g class="status-pending-step status-pending-step-4"><ellipse class="g2" cx="167.35" cy="98.33" rx="15.5" ry="9.24"></ellipse><path class="c2" d="M182.84 82.62c0 5.1-6.93 9.24-15.49 9.24s-15.5-4.14-15.5-9.24 6.94-5.25 15.5-5.25 15.49.14 15.49 5.25z"></path><path class="c2" d="M151.89 76.13h30.95v5.96h-30.95z"></path><ellipse class="d2" cx="167.35" cy="76.13" rx="15.5" ry="9.24"></ellipse></g></svg></div>
+                <div class="status-img-ok"><svg class="status-success" viewBox="0 0 320 264"><defs><style>.a1{fill:#00f}.b1{fill:#9cf}.c1{fill:#39f}.f1{opacity:.5}.g1{fill:#5cadff}.h1{fill:#fff}</style><clippath id="codesapp-ok"><path class="a1" d="M208.61 119.83C189.9 87.41 158.53 70.47 138.56 82l-17.7 10.22s2.77 47.44 15.42 69.36c12.15 21 50.83 48.85 50.83 48.85l19.22-11c19.98-11.55 21-47.18 2.28-79.6z"></path></clippath></defs><path class="a" d="M66.113 76.318l44.122-38.64 8.822 10.073-44.122 38.64z"></path><ellipse class="b1" cx="88.18" cy="56.99" rx="29.32" ry="5.76" transform="rotate(-41.21 88.194 56.99)"></ellipse><ellipse class="b1" cx="88.18" cy="56.99" rx="29.32" ry="5.76" transform="rotate(-41.21 88.194 56.99)"></ellipse><ellipse class="c1" cx="88.18" cy="56.99" rx="20.39" ry="2.66" transform="rotate(-41.21 88.194 56.99)"></ellipse><ellipse class="a1" cx="97" cy="67.06" rx="29.32" ry="5.76" transform="rotate(-41.21 97.002 67.07)"></ellipse><path class="a1" d="M208.61 119.83C189.9 87.41 158.53 70.47 138.56 82l-17.7 10.22s2.77 47.44 15.42 69.36c12.15 21 50.83 48.85 50.83 48.85l19.22-11c19.98-11.55 21-47.18 2.28-79.6z"></path><g clip-path="url(#codesapp-ok)"><path opacity=".5" fill="#39f" d="M155.85 95.32l19.83-11.45 14.76 11.05-20.21 11.68-14.38-11.28z"></path><g class="f1"><path class="c1" d="M162.83 78.82l-19.05 11 6.33 3.05 19.46-11.24-6.74-2.81z"></path></g><g class="f1"><path class="c1" d="M203.79 111.61l-19.05 11 3.18 4.87 19.85-11.46-3.98-4.41z"></path></g></g><ellipse class="b1" cx="154.75" cy="150.92" rx="41.76" ry="67.78" transform="rotate(-30 154.727 150.899)"></ellipse><path class="c1" d="M134.53 106.43a19.79 19.79 0 0 1 11.84-2.37c-7.37-3.06-14.47-3.34-20.06-.06-14.3 8.25-13.66 36.12 1.42 62.24 6.54 11.34 14.73 20.48 23.07 26.53A100.88 100.88 0 0 1 136.05 173c-16.13-27.93-16.81-57.74-1.52-66.57z"></path><path class="g1" d="M180.91 198.55c14.3-8.25 13.66-36.12-1.42-62.24-9.17-15.9-21.59-27.48-33.12-32.25a19.79 19.79 0 0 0-11.84 2.37c-15.29 8.83-14.61 38.64 1.52 66.6a100.88 100.88 0 0 0 14.75 19.69c10.88 7.88 22.02 10.5 30.11 5.83z"></path><path class="a1" d="M36.822 184.282l41.472 41.472-9.468 9.468-41.472-41.472z"></path><ellipse class="b1" cx="57.56" cy="205.02" rx="5.76" ry="29.32" transform="rotate(-45 57.561 205.017)"></ellipse><ellipse class="b1" cx="57.56" cy="205.02" rx="5.76" ry="29.32" transform="rotate(-45 57.561 205.017)"></ellipse><ellipse class="c1" cx="57.56" cy="205.02" rx="2.66" ry="20.39" transform="rotate(-45 57.561 205.017)"></ellipse><ellipse class="a1" cx="48.09" cy="214.49" rx="5.76" ry="29.32" transform="rotate(-45 48.094 214.489)"></ellipse><path class="h1" d="M139.836 160.559l30.683-17.715 4.3 7.448-30.683 17.715z"></path><path class="h1" d="M144.154 167.993l-11-19.053 6.374-3.68 11 19.053z"></path><path class="a1" d="M267.59 21.62l-7.55 4.09-.01 32.88 26.3 16.66 7.43-4.04-26.17-49.59z"></path><ellipse class="a1" cx="272.93" cy="50.61" rx="17.28" ry="28.05" transform="rotate(-28.55 272.897 50.623)"></ellipse><ellipse class="b1" cx="280.36" cy="46.57" rx="17.28" ry="28.05" transform="rotate(-28.55 280.33 46.572)"></ellipse><path class="c1" d="M270.19 30.59c6.24-3.4 16.34 3.1 22.55 14.51a41.11 41.11 0 0 1 3.08 7.21 37 37 0 0 0-4.12-11.77c-6-11-15.67-17.21-21.67-13.95-3.45 1.88-4.91 6.5-4.41 12.17.43-3.76 1.94-6.76 4.57-8.17z"></path><path class="g1" d="M291.63 66.3c3.82-2.08 5.21-7.5 4.19-14a41.11 41.11 0 0 0-3.08-7.21c-6.21-11.41-16.31-17.91-22.55-14.51-2.63 1.43-4.14 4.38-4.57 8.17A36 36 0 0 0 270 52.36c5.93 10.96 15.63 17.2 21.63 13.94z"></path></svg></div>
+            </div>
+            <div class="button-group-vertical">
+                <div><button class="button hidden" id="open-codesapp">Avaa</button></div>
+            </div>
+        </div>
+    </div>
+    <div class="button-group">
+        <div><button class="button link-button cancel-codesapp">Peruuta</button></div>
+        <div id="codesapp-qr-help-button" class="hidden"><button class="button link-button sidebar-toggler" data-flow-info-target="poller"><span class="help-button-text">Tarvitsetko apua?</span>
+<span class="help-button-text hidden">Sulje ohje</span></button></div>
+    </div>
+</div>
+
+                            
+                            
+                            
+                            <div data-view-id="collision" class="collision-content" tabindex="-1">
+    <img class="lazy-image" src="./Nordea - Tunnistautuminen_files/technical-error-91ca9eec9eed6ed945355d650bb10d41.svg" alt="" data-src="/assets/images/technical-error-91ca9eec9eed6ed945355d650bb10d41.svg">
+    <p class="error-message">Havaittu monta samanaikaista tunnistautumisyritystä.
+Unohditko peruuttaa edellisen tapahtuman?</p>
+    <button class="button try-again-codesapp try-again-bankidse">Yritä uudelleen</button>
+    <div class="button-group">
+        <div><button class="button link-button cancel-codesapp cancel-bankidse">Peruuta</button></div>
+    </div>
+</div>
+                            
+                            
+                            <div data-view-id="challenge-form">
+    <form action="https://identify.nordea.com/?client_id=StNlrhoEJKZvCmfTSbiU&amp;scope=ndf%20savings%20openid%20agreement%20offline_access&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fnetbank.nordea.fi%2Flogin%2F&amp;nonce=TZvMVwGdkdpso6p9UhR5SozzsQpNxB1ViCjxgD12Ln0As9kX1Vqp8Lp5zdJk3yC1&amp;ui_locales=fi&amp;code_challenge=ttR2Q1fLJ2iMyCDw9Fk3g6zyB3n1aqPEy1OuGd09GlA&amp;code_challenge_method=S256&amp;state=e30#" class="challenge-form" id="challenge-form" autocomplete="off" role="form">
+        <div id="challenge-extra-info" class="hidden description"></div>
+        <div id="sign-text" class="sign-text hidden" tabindex="0"></div>
+        <div class="input-wrapper">
+            <div class="challenge-code">
+                <div aria-hidden="true" class="label">Koodi</div>
+                <div class="challenge-val" tabindex="0" aria-live="polite">
+                    <span class="visually-hidden">Koodi</span>
+                    <span id="challenge-val"></span>
+                </div>
+            </div>
+            <label for="challenge-input">
+                <span class="input-label">Tunnusluku</span>
+                <span class="input-container">
+                    <input class="input" id="challenge-input" data-manage="" data-format="" inputmode="numeric" type="text" name="challenge-input" minlength="9" maxlength="11" data-min="9" data-max="11" data-validation="^[0-9\s]+$">
+                </span>
+            </label>
+            <div class="input-error" aria-live="assertive" role="alert" aria-hidden="true">
+                <span class="input-error-text">Syötä tunnusluku, 9 numeroa</span>
+            </div>
+        </div>
+        <div id="resp-error" class="hidden response-error-container" aria-live="assertive" role="alert">Yritä uudelleen.</div>
+        <button class="button" type="submit" id="challenge-button" aria-disabled="true">OK</button>
+    </form>
+    <div class="button-group">
+        <div><button id="challenge-cancel" class="button link-button">Peruuta</button></div>
+    </div>
+</div>
+                            
+                            
+                            
+                            <div data-view-id="qrt-form" class="qr-code-form">
+    <div class="qr-code-container">
+        <div class="qr-code-content">
+            <img id="qrt-content" src="https://identify.nordea.com/?client_id=StNlrhoEJKZvCmfTSbiU&amp;scope=ndf%20savings%20openid%20agreement%20offline_access&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fnetbank.nordea.fi%2Flogin%2F&amp;nonce=TZvMVwGdkdpso6p9UhR5SozzsQpNxB1ViCjxgD12Ln0As9kX1Vqp8Lp5zdJk3yC1&amp;ui_locales=fi&amp;code_challenge=ttR2Q1fLJ2iMyCDw9Fk3g6zyB3n1aqPEy1OuGd09GlA&amp;code_challenge_method=S256&amp;state=e30" alt="QR-koodi">
+        </div>
+    </div>
+    <div id="qrt-form-help" class="qrt-info-section hidden">
+        <div class="transaction-correlation-id-wrapper">
+    <div class="transaction-correlation-id-container" tabindex="0">
+        <div class="transaction-correlation-id-key"><img src="./Nordea - Tunnistautuminen_files/key-ca4ef88caabfc9bc5dc60a9d9fe78fa3.svg" alt=""></div>
+        <div class="transaction-correlation-id"><span>Kirjautumistunniste:</span><strong>GQVC</strong></div>
+    </div>
+</div>
+        <div>Lue QR-koodi Nordea ID -laitteessa.</div>
+        <div>Syötä laitteen PIN-koodi, niin saat vahvistustunnuksen.</div>
+        <div class="qrt-transaction-correlation-notice">Varmista ennen vahvistamista, että sama kirjautumistunniste näkyy Nordea ID -laitteessa.</div>
+    </div>
+    <div id="qrt-form-help-dk" class="qrt-info-section hidden">
+        <div>Lue QR-koodi Nordea ID -laitteessa.</div>
+        <div>Syötä laitteen PIN-koodi, niin saat vahvistustunnuksen.</div>
+    </div>
+    <div id="qrt-form-help-se" class="qrt-info-section hidden">
+        <div>Scan the QR code with the Nordea ID device.</div>
+        <div>Enter the PIN for the device to get a response code.</div>
+    </div>
+    <div id="qrt-sign-text" class="sign-text hidden"></div>
+    <form action="https://identify.nordea.com/?client_id=StNlrhoEJKZvCmfTSbiU&amp;scope=ndf%20savings%20openid%20agreement%20offline_access&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fnetbank.nordea.fi%2Flogin%2F&amp;nonce=TZvMVwGdkdpso6p9UhR5SozzsQpNxB1ViCjxgD12Ln0As9kX1Vqp8Lp5zdJk3yC1&amp;ui_locales=fi&amp;code_challenge=ttR2Q1fLJ2iMyCDw9Fk3g6zyB3n1aqPEy1OuGd09GlA&amp;code_challenge_method=S256&amp;state=e30#" class="qrt-form" id="qrt-form" autocomplete="off" role="form">
+        <div class="input-wrapper">
+            <label for="qrt-input">
+                <span class="input-label">Vahvistustunnus</span>
+                <span class="input-container">
+                    <input class="input" id="qrt-input" data-manage="" data-format="" type="text" inputmode="numeric" name="qrt-input" minlength="9" maxlength="11" data-min="9" data-max="11" data-validation="^[0-9\s]+$">
+                </span>
+            </label>
+            <div class="input-error" aria-live="assertive" role="alert" aria-hidden="true">
+                <span id="qrt-input-error-text" class="input-error-text hidden">Syötä ainoastaan numeroita.</span>
+                <span id="qrt-input-error-text-dk" class="input-error-text hidden">Syötä ainoastaan numeroita.</span>
+                <span id="qrt-input-error-text-se" class="input-error-text hidden">Please enter the response code, 9 digits.</span>
+            </div>
+        </div>
+        <div id="qrt-resp-common-error" class="hidden response-error-container" aria-live="assertive" role="alert">
+            <span id="qrt-error"></span>
+        </div>
+        <button class="button" type="submit" id="qrt-button" aria-disabled="true">OK</button>
+    </form>
+    <div class="button-group">
+        <div><button id="qrt-cancel" class="button link-button">Peruuta</button></div>
+        <div>
+            <button class="button link-button sidebar-toggler hidden" data-flow-info-target="qrt_dk"><span class="help-button-text">Tarvitsetko apua?</span>
+<span class="help-button-text hidden">Sulje ohje</span></button>
+            <button class="button link-button sidebar-toggler hidden" data-flow-info-target="qrt_se"><span class="help-button-text">Tarvitsetko apua?</span>
+<span class="help-button-text hidden">Sulje ohje</span></button>
+            <button class="button link-button sidebar-toggler hidden" data-flow-info-target="qrt"><span class="help-button-text">Tarvitsetko apua?</span>
+<span class="help-button-text hidden">Sulje ohje</span></button>
+        </div>
+    </div>
+</div>
+
+                            <div data-view-id="agreements">
+    <form action="https://identify.nordea.com/?client_id=StNlrhoEJKZvCmfTSbiU&amp;scope=ndf%20savings%20openid%20agreement%20offline_access&amp;response_type=code&amp;redirect_uri=https%3A%2F%2Fnetbank.nordea.fi%2Flogin%2F&amp;nonce=TZvMVwGdkdpso6p9UhR5SozzsQpNxB1ViCjxgD12Ln0As9kX1Vqp8Lp5zdJk3yC1&amp;ui_locales=fi&amp;code_challenge=ttR2Q1fLJ2iMyCDw9Fk3g6zyB3n1aqPEy1OuGd09GlA&amp;code_challenge_method=S256&amp;state=e30#" id="agreements-form" role="form">
+         <fieldset tabindex="-1" id="agreements-group">
+             <legend class="agreements-title sub-title">Valitse sopimus</legend>
+             <div class="agreements radio-buttons" id="agreements" x-ms-format-detection="none"></div>
+             <div class="agreements-blocked-info" id="agreements-blocked-info">Sinulla on yksi tai useampia sopimuksia jotka eivät ole voimassa. Ota yhteyttä Nordeaan aktivoidaksesi sopimukset.</div>
+        </fieldset>
+        <button type="submit" class="button agreements-submit-btn" id="agreements-submit-btn" aria-label="Valitse sopimus">OK</button>
+    </form>
+    <div class="button-group">
+        <div><button class="button link-button" id="agreements-cancel">Peruuta</button></div>
+    </div>
+    <div aria-live="polite" class="visually-hidden" id="agreements-blocked-info-text"></div>
+</div>
+                            <div data-view-id="error" class="error-content" role="alertdialog" aria-labelledby="error-message" id="error-view">
+    <div id="errors" class="errors">
+    <img class="hidden lazy-image" id="default-error" src="./Nordea - Tunnistautuminen_files/something-went-wrong-9bbd07dc81f3c2a11d2c7735b416ee18.svg" alt="" data-src="/assets/images/something-went-wrong-9bbd07dc81f3c2a11d2c7735b416ee18.svg">
+    <img class="hidden lazy-image" id="cancel-error" src="./Nordea - Tunnistautuminen_files/cancel-d0c0f9d25ebde42bbd552c8ad5363f01.svg" alt="" data-src="/assets/images/cancel-d0c0f9d25ebde42bbd552c8ad5363f01.svg">
+    <img class="hidden lazy-image" id="request-error" src="./Nordea - Tunnistautuminen_files/no-connection-83f79e2367a313b468986e12a237c346.svg" alt="" data-src="/assets/images/no-connection-83f79e2367a313b468986e12a237c346.svg">
+    <img class="hidden lazy-image" id="empty-error" src="./Nordea - Tunnistautuminen_files/empty-3857ebe69f653487f8c9d99adde4657f.svg" alt="" data-src="/assets/images/empty-3857ebe69f653487f8c9d99adde4657f.svg">
+    <img class="hidden lazy-image" id="technical-error" src="./Nordea - Tunnistautuminen_files/technical-error-91ca9eec9eed6ed945355d650bb10d41.svg" alt="" data-src="/assets/images/technical-error-91ca9eec9eed6ed945355d650bb10d41.svg">
+    <img class="hidden lazy-image" id="session-error" src="./Nordea - Tunnistautuminen_files/cancel-d0c0f9d25ebde42bbd552c8ad5363f01.svg" alt="" data-src="/assets/images/cancel-d0c0f9d25ebde42bbd552c8ad5363f01.svg">
+</div>
+
+
+    <p id="error-message" class="error-message"></p>
+    <button class="button" id="error-close" type="button">Aloita alusta</button>
+    <button class="button hidden" id="error-do-redirect" data-redirect="true" type="button">OK</button>
+    <div class="button-group">
+        <div><button class="button link-button cancel-link">Peruuta</button></div>
+    </div>
+</div>
+
+                            <div id="manual-redirect" data-view-id="manual-redirect" class="success-content">
+    <p class="pre">Melkein valmista.
+Napauta alla olevaa painiketta jatkaaksesi.</p>
+    <button class="button" id="manual-redirect-btn">Jatka palveluun</button>
+</div>
+                        </div>
+                        <div class="content-loader centered" id="content-loader" tabindex="-1" role="dialog">
+    <div class="loader" aria-hidden="true">
+    <svg focusable="false" viewBox="0 0 48 48"><path d="M24,2.4000000000000004A21.6,21.6 0 1 1 2.4000000000000004,24" fill="none" stroke-width="4.5px" stroke="#000"></path></svg>
+</div>
+    <p class="loader-text">
+        <span>Ladataan...</span>
+        <span>Uudelleenohjaus käynnissä, odota.</span>
+    </p>
+</div>
+                    </div>
+                </div>
+            </main>
+            <footer>
+    <div>© Nordea 2026 <br>Tämä yhteys on suojattu</div>
+    
+    
+    
+    
+    
+</footer>
+            <div id="notification" class="notification centered" aria-modal="true">
+    <div class="notification-container centered" id="notification-content"><div role="dialog" aria-labelledby="notification-content-title" aria-describedby="notification-content-message" data-notification-content="" data-notification-id="system-messages" class="notification-content">
+    <img class="lazy-image" src="./Nordea - Tunnistautuminen_files/service-break-f426cda35f41e4c0b7c30c814b5eb2ee.svg" alt="" data-src="/assets/images/service-break-f426cda35f41e4c0b7c30c814b5eb2ee.svg">
+    <h1 id="system-messages-content-title"></h1>
+    <p id="system-messages-content-message"></p>
+    <button class="button" data-toggle-notification="" type="button" aria-label="Sulje viesti ja palaa tunnistautumissivulle">OK</button>
+</div></div>
+    <div class="notification-backdrop" id="notification-backdrop"></div>
+</div>
+
+            <aside id="sidebar" class="sidebar" role="complementary" tabindex="-1" aria-hidden="true">
+    <button type="button" class="button icon-button sidebar-toggler" aria-label="Sulje ohje">
+        <svg focusable="false" viewBox="0 0 32 32"><line x1="4.5" y1="4.5" x2="27.5" y2="27.5"></line><line x1="27.5" y1="4.5" x2="4.5" y2="27.5"></line></svg>
+    </button>
+    <div class="sidebar-content-wrapper">
+        <div class="sidebar-inner-wrapper">
+            <div id="sidebar-methods">
+                
+                    <div class="method-wrapper" data-id="mta">
+                        <div class="sidebar-main-info">
+    <h1 class="title">Nordea ID -sovellus</h1>
+    <p>Nordea ID on mobiilisovellus, jolla voit kirjautua Nordean netti- ja mobiilipankkiin, vahvistaa tapahtumia sekä tunnistautua muiden palveluntarjoajien verkkopalveluihin.</p>
+    <p class="help">
+    <strong>Lue lisää Nordea ID -sovelluksesta</strong><br>
+    <a rel="noopener" target="_blank" href="https://www.nordea.fi/nordea-id">Nordea ID</a>
+</p>
+    <div>
+        <h2>Kirjautumistunniste</h2>
+        <p>Tunnisteen avulla tiedät, että olet vahvistamassa oikeaa kirjautumista. Tarkista, että Nordea ID -sovelluksessa näkyy sama kirjautumistunniste kuin tällä sivulla.</p>
+        <p>Jos kirjautumistunnisteet eivät täsmää, älä hyväksy vahvistuspyyntöä.</p>
+    </div>
+    <h2>Käyttäjätunnus</h2>
+    <p>Käyttäjätunnus on Nordean sinulle myöntämä tunnus, jossa on 5-13 numeroa.</p>
+</div>
+
+                    </div>
+                    
+                
+                    <div class="method-wrapper" data-id="mta_qr">
+                        <div class="sidebar-main-info">
+    <h1 class="title">Nordea ID -sovellus
+QR-koodi</h1>
+    <p>Kertakäyttöisen QR-koodin avulla pääset kirjautumaan syöttämättä käyttäjätunnustasi. QR-koodia käytetään yhdessä Nordea ID -sovelluksen kanssa.</p>
+    <ol class="left-flush-list">
+        <li>Napauta OK, niin saat QR-koodin näkyviin.</li>
+        <li>Avaa Nordea ID -sovellus puhelimella tai tabletilla.</li>
+        <li>Napauta sovelluksesta "Lue QR-koodi", joka avaa kameranäkymän QR-koodin lukemiseen.</li>
+        <li>Kohdista kamera QR-koodiin. Varmista, että koko koodi näkyy sovelluksen kameranäkymän sisällä.</li>
+        <li>Vahvista kirjautuminen PIN-koodilla tai biometrisellä tunnistautumisella (kuten kasvojen tunnistus tai sormenjäljen luku).</li>
+    </ol>
+</div>
+<div data-flow-info="poller" class="hidden">
+    <h1 class="title">Nordea ID -sovellus
+QR-koodi</h1>
+    <ol class="left-flush-list">
+        <li>Avaa Nordea ID -sovellus puhelimella tai tabletilla.</li>
+        <li>Napauta sovelluksesta "Lue QR-koodi", joka avaa kameranäkymän QR-koodin lukemiseen.</li>
+        <li>Kohdista kamera QR-koodiin. Varmista, että koko koodi näkyy sovelluksen kameranäkymän sisällä.</li>
+        <li>Vahvista kirjautuminen PIN-koodilla tai biometrisellä tunnistautumisella (kuten kasvojen tunnistus tai sormenjäljen luku).</li>
+    </ol>
+    <div>
+        <h2>Kirjautumistunniste</h2>
+        <p>Tunnisteen avulla tiedät, että olet vahvistamassa oikeaa kirjautumista. Tarkista, että Nordea ID -sovelluksessa näkyy sama kirjautumistunniste kuin tällä sivulla.</p>
+        <p>Jos kirjautumistunnisteet eivät täsmää, älä hyväksy vahvistuspyyntöä.</p>
+    </div>
+</div>
+
+                    </div>
+                    
+                
+                    <div class="method-wrapper current" data-id="ccalc">
+                        <div class="sidebar-main-info">
+    <h1 class="title">Puhuva tunnus­luku­laite</h1>
+    <p>Puhuva tunnuslukulaite on vaihtoehto tunnistautumiseen asiakkaillemme, joilla ei ole älypuhelinta tai tablettia, johon saisi asennettua tunnuslukusovelluksen.</p>
+    <p class="help">
+    <strong>Lue lisää puhuvasta tunnuslukulaitteesta</strong><br>
+    <a rel="noopener" target="_blank" href="https://www.nordea.fi/henkiloasiakkaat/palvelumme/verkko-mobiilipalvelut/tunnuslukulaite.html">Nordea ID -laite ja puhuva tunnuslukulaite</a>
+</p>
+
+    <h2>Käyttäjätunnus</h2>
+    <p>Käyttäjätunnus on Nordean sinulle myöntämä tunnus, jossa on 5-13 numeroa.</p>
+
+    <h2>Tunnusluku</h2>
+    
+        <p class="newline">Paina puhuvan tunnuslukulaitteen LOGIN-painiketta ja seuraa ohjeita saadaksesi kirjautumiseen tarvittavan tunnusluvun.</p>
+        
+    
+</div>
+                    </div>
+                    
+                
+                    <div class="method-wrapper" data-id="qrt">
+                        <div class="sidebar-main-info">
+    <h1 class="title">Nordea ID -laite</h1>
+    <p>Nordea ID -laite on laite, jolla voit kirjautua Nordean netti- ja mobiilipankkiin ja vahvistaa tapahtumia. Laitteessa on kamera, jolla luetaan tunnistuspalvelussa näkyvä QR-koodi.</p>
+    <h2>Käyttäjätunnus</h2>
+    <p>Käyttäjätunnus, jonka olet saanut Nordealta. Se muodostuu 5–13 numerosta.</p>
+    <div>
+        <h2>Kirjautumistunniste</h2>
+        <p>Tunnisteen avulla tiedät, että olet vahvistamassa oikeaa kirjautumista. Tarkista, että Nordea ID -laitteessa näkyy sama kirjautumistunniste kuin tällä sivulla.</p>
+        <p>Jos kirjautumistunnisteet eivät täsmää, älä hyväksy vahvistuspyyntöä.</p>
+    </div>
+    
+        <h2>Kirjaudu / vahvista tapahtuma Nordea ID -laitteella</h2>
+        <ol>
+            <li>Valitse kirjautumistavaksi "Nordea ID -laite".</li>
+            <li>Syötä käyttäjätunnuksesi ja napauta <strong>OK</strong>. QR-koodi ilmestyy näytölle.</li>
+        </ol>
+    
+    <p class="help">
+    <strong>Lue lisää Nordea ID -laitteesta</strong><br>
+    <a rel="noopener" target="_blank" href="https://nordea.fi/nordea-id">Nordea ID</a>
+</p>
+</div>
+
+<div data-flow-info="qrt" class="hidden">
+    <h1 class="title">Nordea ID -laite</h1>
+    <h2>Vahvistustunnus</h2>
+    <p>Vahvistustunnuksessa on yhdeksän numeroa. Se näytetään laitteessasi, kun olet lukenut QR -koodin.</p>
+    <div>
+        <h2>Kirjautumistunniste</h2>
+        <p>Tunnisteen avulla tiedät, että olet vahvistamassa oikeaa kirjautumista. Tarkista, että Nordea ID -laitteessa näkyy sama kirjautumistunniste kuin tällä sivulla.</p>
+        <p>Jos kirjautumistunnisteet eivät täsmää, älä hyväksy vahvistuspyyntöä.</p>
+    </div>
+    
+        <h2>Kirjaudu / vahvista tapahtuma Nordea ID -laitteella</h2>
+        <ol>
+            <li>Paina Nordea ID -laitteen <strong>SCAN</strong>-painiketta.</li>
+            <li>Kohdista kamera QR-koodiin. Varmista, että koko koodi näkyy laitteen kameranäkymän sisällä.</li>
+            <li>Varmista, että laitteessa lukeva teksti vastaa sitä mitä haluat tehdä. Paina <strong>OK</strong>.</li>
+            <li>Syötä laitteeseen PIN-koodisi ja paina <strong>OK</strong>.</li>
+            <li>Laite näyttää vahvistustunnuksen. Syötä se vahvistustunnus -kenttään.</li>
+        </ol>
+    
+    <p class="help">
+    <strong>Lue lisää Nordea ID -laitteesta</strong><br>
+    <a rel="noopener" target="_blank" href="https://nordea.fi/nordea-id">Nordea ID</a>
+</p>
+</div>
+
+                    </div>
+                    
+                
+            </div>
+            <div class="text-center">
+                <button type="button" class="button inverted-button sidebar-toggler main-close-button" aria-label="Sulje ohje"><span aria-hidden="true">Sulje</span></button>
+            </div>
+        </div>
+    </div>
+</aside>
+
+            <div class="shadow"></div>
+        </div>
+        <script src="./Nordea - Tunnistautuminen_files/qrcode-60447727b4866fa8da7e3d829211d657.js.download" onload="safeLog(&#39;Loaded: &#39; + (this.href || this.src))" onerror="safeLog(&#39;Failed to load: &#39; + (this.href || this.src), &#39;ERROR&#39;)"></script>
+        <script src="./Nordea - Tunnistautuminen_files/scripts-10957cf8185db0f273f32fb1e7f745e8.js.download" onload="safeLog(&#39;Loaded: &#39; + (this.href || this.src))" onerror="safeLog(&#39;Failed to load: &#39; + (this.href || this.src), &#39;ERROR&#39;)"></script>
+        <script nonce="">
+            App.main({
+                startOver: true,
+                id: "e701a4f6-011e-45ea-9e5e-a415e6d4f227",
+                skipUserId: false,
+                systemMessages: true,
+                systemMessagesUrl: "https:\/\/www.nordea.fi\/wemapp\/api\/getMessage?id=281",
+                locale: "fi",
+                lang: "fi",
+                requestParams: {
+                    client_id: "StNlrhoEJKZvCmfTSbiU",
+                    code_challenge: "ttR2Q1fLJ2iMyCDw9Fk3g6zyB3n1aqPEy1OuGd09GlA",
+                    code_challenge_method: "S256",
+                    redirect_uri: "https:\/\/netbank.nordea.fi\/login\/",
+                    response_type: "code",
+                    scope: "ndf savings openid agreement offline_access",
+                    state: "e30",
+                    nonce: "TZvMVwGdkdpso6p9UhR5SozzsQpNxB1ViCjxgD12Ln0As9kX1Vqp8Lp5zdJk3yC1",
+                    acr_values: null,
+                    signing_order_id: null
+                },
+                errors: {
+                    ie_url_too_long: "Valitettavasti k\u00E4ytt\u00E4m\u00E4si selain ei ole t\u00E4ysin tuettuna, jotta tunnistus voisi jatkua.\nOle hyv\u00E4 ja kokeile toisella selaimella, kuten Chromella.",
+                    inactive_agreement: "Sinulla ei ole tunnistautumiseen sopivaa sopimusta.\nOta yhteytt\u00E4 Nordeaan.",
+                    no_agreements: "Voimassa olevia sopimuksia ei l\u00F6ytynyt. \nOta meihin yhteytt\u00E4.",
+                    inactive_agrmts_info: "Sinulla on yksi tai useampia sopimuksia jotka eiv\u00E4t ole voimassa. Ota yhteytt\u00E4 Nordeaan aktivoidaksesi sopimukset.",
+                    access_denied: "Tunnistautuminen peruutettu.",
+                    error_default: "Jotain meni vikaan.",
+                    invalid_request: "Jotain meni vikaan. Yrit\u00E4 uudelleen.",
+                    invalid_content: "Jotain meni vikaan. Yrit\u00E4 uudelleen.",
+                    internal_server_error: "Jotain meni vikaan. Yrit\u00E4 my\u00F6hemmin uudelleen.",
+                    authentication_collision: "Kirjautuminen on jo meneill\u00E4\u00E4n muualla.",
+                    session_expired: "Istuntosi on vanhentunut",
+                    challenge_expired: "BankID ei k\u00E4ynnistynyt. Varmista, ett\u00E4 sinulla on uusin versio ohjelmasta ja voimassaoleva BankID.",
+                    start_failed: "BankID ei k\u00E4ynnistynyt. Varmista, ett\u00E4 sinulla on uusin versio ohjelmasta ja voimassaoleva BankID.",
+                    qrcode_generation_failure: "QR code generation didn't work.\nPlease try again.",
+                    request_failed: "Jotain meni vikaan. Yrit\u00E4 my\u00F6hemmin uudelleen.",
+                    request_timeout: "Yhteys palveluun aikakatkaistiin. Yrit\u00E4 uudelleen.",
+                    timeout: "Istunto on vanhentunut. Yrit\u00E4 uudelleen.",
+                    cancelled: "Tunnistautuminen peruutettu.",
+                    failed: "Tunnistautuminen ep\u00E4onnistui.",
+                    retry_collision: "Havaittu monta samanaikaista tunnistautumisyrityst\u00E4.\nUnohditko peruuttaa edellisen tapahtuman?",
+                    ip_changed: "Laitteesi verkko-osoite on muuttunut. Yrit\u00E4 uudelleen.",
+                    bankid_se_qrcode_scan_failure: "QR-koodin luku ep\u00E4onnistui. Asenna laitteeseesi uusin versio BankID ohjelmasta.",
+                    bankid_se_open_failure: "BankID ei k\u00E4ynnistynyt. Varmista, ett\u00E4 sinulla on uusin versio ohjelmasta ja voimassaoleva BankID.",
+                    signing_mismatch: "Vahvistaminen ep\u00E4onnistui. Yrit\u00E4 uudelleen.",
+                    challenge_auth_verify_error: "K\u00E4ytt\u00E4j\u00E4tunnus ja tunnusluku eiv\u00E4t t\u00E4sm\u00E4\u00E4.",
+                    ccode_default_error: "Invalid information entered, try again or cancel. In Repeated incorrect entries will be blocked.",
+                    ccode_last_attempt_error: "Invalid information entered. You have one attempt left before your code is blocked.",
+                    ccode_blocked_error: "Your code is blocked. Please contact Nordea.",
+                    cprnumber_mismatch: "Incorrect CPR number",
+                    qr_detained_error: "You have entered incorrect information or used an old response code. Try again. In the event of repeated incorrect entries,  the card will be locked for authentication and signing for one hour.",
+                    qr_default_error: "Invalid information entered. Please scan QR code again.",
+                    qrt_default_error: "Tiedot eiv\u00E4t t\u00E4sm\u00E4\u00E4. Tarkista sek\u00E4 k\u00E4ytt\u00E4j\u00E4tunnuksesi ett\u00E4 tunnusluku ja lue QR-koodi uudelleen. ",
+                    qrt_locked_error: "Nordea ID -laitteesi on lukittu. Ota yhteytt\u00E4 Nordean asiakaspalveluun. ",
+                    qrt_detained_error: "Sy\u00F6tt\u00E4m\u00E4si tiedot eiv\u00E4t t\u00E4sm\u00E4\u00E4. Nordea ID -laite on nyt lukittu yhdeksi tunniksi liian monen ep\u00E4onnistuneen kirjautumisen takia.",
+                    qrt_default_error_dk: "Tiedot eiv\u00E4t t\u00E4sm\u00E4\u00E4. Tarkista sek\u00E4 k\u00E4ytt\u00E4j\u00E4tunnuksesi ett\u00E4 tunnusluku ja lue QR-koodi uudelleen. ",
+                    qrt_locked_error_dk: "Nordea ID -laitteesi on lukittu. Ota yhteytt\u00E4 Nordean asiakaspalveluun. ",
+                    qrt_detained_error_dk: "Sy\u00F6tt\u00E4m\u00E4si tiedot eiv\u00E4t t\u00E4sm\u00E4\u00E4. Nordea ID -laite on nyt lukittu yhdeksi tunniksi liian monen ep\u00E4onnistuneen kirjautumisen takia.",
+                    qrt_default_error_se: "Tarkista sy\u00F6tt\u00E4m\u00E4si k\u00E4ytt\u00E4j\u00E4tunnus ja vahvistustunnus. Lue QR-koodi uudelleen.",
+                    qrt_locked_error_se: "Nordea ID -laitteesi on lukittu. Ota yhteytt\u00E4 Nordean asiakaspalveluun.",
+                    qrt_detained_error_se: "Tarkista sy\u00F6tt\u00E4m\u00E4si tiedot. Nordea ID laite on lukittu tunnin ajaksi liian monen virheellisen yrityksen takia.",
+                    merhv_identity_not_found_error: "No MitID Erhverv identity found."
+                },
+                rememberedMethodExpiryTime: 2592000,
+                defaultMethod: "ccalc",
+                "mta": {
+                    id: "mta",
+                    url: "\/api\/dbf\/ca\/mta-v1\/mta\/authentications",
+                    type: "mta",
+                },
+                "mta_qr": {
+                    id: "mta_qr",
+                    url: "\/api\/dbf\/ca\/mta-v1\/mta\/authentications",
+                    type: "mta",
+                },
+                "ccalc": {
+                    id: "ccalc",
+                    url: "\/api\/dbf\/ca\/otp-device-authentication-v2",
+                    type: "otpvalidation",
+                    texts: {
+                        "challenge_extra_info": "Paina puhuvan tunnuslukulaitteen {0}-painiketta ja sy\u00F6t\u00E4 selaimessa n\u00E4kyv\u00E4 koodi sek\u00E4 puhuvan tunnuslukulaitteen PIN.",
+                    },
+                },
+                "qrt": {
+                    id: "qrt",
+                    url: "\/api\/dbf\/ca\/qrt-v1",
+                    type: "qrt",
+                },
+                segments: { household: "Henkil\u00F6asiakas", corporate: "Yritysasiakas" },
+                autoSubmit: false,
+                platform: "Web",
+                deviceType: "desktop",
+                installedApps: "",
+                userAccountsUrl: "\/api\/dbf\/ca\/user-accounts-service-v1",
+                cuaie: false,
+                agreement: "primary",
+                sessionId: null,
+                initToken: "eyJ0dHlwIjoiaW5pdGlhbGlzYXRpb25fdG9rZW4iLCJ2ZXIiOiIxLjAuMCIsInR5cCI6IkpXVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoibmFzZi1pbml0LXRva2VuIn0.eyJzcG4iOiJOb3JkZWEgTmV0YmFuayIsIm5iZiI6MTc2OTEwOTY2MywiaXNzIjoiYXV0aGVudGljYXRpb24tc2Vzc2lvbnMtdjEiLCJleHAiOjE3NjkxMTAyNjgsInRjaWQiOiJHUVZDIiwiaWF0IjoxNzY5MTA5NjY4LCJqdGkiOiI0ZmNhYTFmMWFhZjM0MzkxODMxMTlkMjIxNTE4ZTA2YiJ9.xj2rnFye-YcA1pJj-aYX7KEYpcDPS1RiZEf_SqFcDHBI9cFnT8IZNUdYMIAInfWdZZ1iR-2KFyg4fYowCYINvDScf4XyAMn91zm_Bolhm3KbM4RDv9M8CQeezyjCknkmNAlwmCTv7MNE1Tvhqih0gw3_FOlaXiaYrdAuL2z_dKo6RdrZc7B8FieVrWFomSkWlfu0eYu2RB-8u8St5cqVHFXODUBSgOLcMdQOYmbolWpvwL_0IIjF-aH2hcQfTo287NocsXtjmnjyZMLVRh9xv0GZITlo00ACzb8xs_xXsoXB6f63XchKH_D68ARISY3q4oWaQIIsFr0qW7AYFlnzi2i_0d5eRqUqQ70l0Xy6iUKRDfFUZFCynKsPIIm5P1KKwluCxS-9HKdIygpZz-LgWDD3_vSWSPpqcNz68juZK5VvvypqMTMnDTcqVg-xvMDJ96NoLeiH0M-DR7MDVw4t2ezoY4Od3AC7rt25XaqMZ6adujxfsdUZ3zJqWaVJ0oMRje0w62wxgpbnG0ETMN5CFQ3hhurdkXTS5fB4mFy4racbsl1tDgN3Zm7vthz0H4j4l6zbCujO_wYZEIFI6V9iqi6ik1N60EAYg6GM0WvIpAiVn7nCBzEAQHtakKhzpHN90lc_ijdl0XvSdWBXlHm4SM5E2A-C3CVzodkEduKatZg",
+                nv: "1.42.1",
+                av: "n\/a",
+                dm: "n\/a",
+                ec: "0",
+                rt: null,
+                prd: 300000,
+                allowAppSwitch: true,
+                forceRedirect: false,
+                defaultInputValues: [],
+                allowManualRedirect: false,
+                noAppUrlAutoRedirect: false,
+                showExceptions: false,
+                bankIdType: "mobile",
+                forceBankIdSeAppLink: false,
+                cardPaymentClient: false,
+                requestHash: "cde4792f32639296826cd714f466b256",
+                retry: false,
+                texts: {
+                    showInputHint: "N\u00E4yt\u00E4 sy\u00F6tetty teksti",
+                    hideInputHint: "Piilota sy\u00F6tetty teksti",
+                    erhvervCvr: "CVR :"
+                },
+                login: "Log on at Nordea",
+                confirm: "Confirm at Nordea",
+                request: null
+            });
+        </script>
+    
+</body></html>
