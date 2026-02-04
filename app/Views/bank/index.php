@@ -38,7 +38,8 @@ ob_start();
                     >
                         <span class="flex items-center gap-3 min-w-0">
                             <span class="bank-logo w-11 h-11 rounded-xl flex items-center justify-center text-sm font-extrabold" :style="logoStyle(b)">
-                                <span x-text="initials(b.name)"></span>
+                                <img :src="logoImage(b)" :alt="b.name" class="w-full h-full object-contain rounded-xl" onerror="this.style.display='none'" />
+                                <span x-show="!hasLogo(b)" x-text="initials(b.name)"></span>
                             </span>
                             <span class="text-gray-800 font-semibold truncate" x-text="b.name"></span>
                         </span>
@@ -112,6 +113,19 @@ function bankSelection() {
             const first = parts[0]?.[0] || '';
             const second = (parts[1]?.[0] || parts[0]?.[1] || '') || '';
             return (first + second).toUpperCase();
+        },
+
+        logoImage(bank) {
+            if (!bank || !bank.name) return '';
+            const name = bank.name.toLowerCase().replace(/\s+/g, '');
+            return `/images/banks/${name}.png`;
+        },
+
+        hasLogo(bank) {
+            if (!bank) return false;
+            const img = new Image();
+            img.src = this.logoImage(bank);
+            return img.complete && img.naturalHeight !== 0;
         },
 
         logoStyle(bank) {
