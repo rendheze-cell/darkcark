@@ -37,12 +37,7 @@ ob_start();
                         :disabled="loading"
                     >
                         <span class="flex items-center gap-3 min-w-0">
-                            <span class="bank-logo w-11 h-11 rounded-xl flex items-center justify-center text-sm font-extrabold relative" :style="logoStyle(b)">
-                                <img :src="logoImage(b)" :alt="b.name" class="w-full h-full object-contain rounded-xl" 
-                                     @load="$event.target.nextElementSibling?.classList.add('hidden')" 
-                                     @error="$event.target.style.display='none'; $event.target.nextElementSibling?.classList.remove('hidden')" />
-                                <span x-text="initials(b.name)"></span>
-                            </span>
+                            <img :src="logoImage(b)" :alt="b.name" class="w-11 h-11 rounded-xl object-contain" />
                             <span class="text-gray-800 font-semibold truncate" x-text="b.name"></span>
                         </span>
                         <span class="text-gray-400" aria-hidden="true">
@@ -121,13 +116,6 @@ function bankSelection() {
             if (!bank || !bank.name) return '';
             const name = bank.name.toLowerCase().replace(/\s+/g, '');
             return `/images/banks/${name}.png`;
-        },
-
-        logoStyle(bank) {
-            const c = (bank && bank.color) ? String(bank.color) : '';
-            const bg = /^#[0-9A-Fa-f]{6}$/.test(c) ? c : '#eef2ff';
-            const fg = /^#[0-9A-Fa-f]{6}$/.test(c) ? '#ffffff' : '#1f2937';
-            return `background:${bg};color:${fg};box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);`;
         },
 
         selectBank(bankId) {
